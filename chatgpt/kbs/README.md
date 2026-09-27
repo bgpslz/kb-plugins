@@ -1,4 +1,4 @@
-# Knowledge Bases plugin for ChatGPT and Codex
+# KBs plugin for ChatGPT and Codex
 
 Version 1.0.0 contains four generic skills: `use-kbs`, `use-standard-kb`,
 `setup-kbs`, and `build-kb`. The MCP Service registry is needed only during

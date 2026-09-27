@@ -1,14 +1,14 @@
 {
   "name": "kb-plugins",
   "interface": {
-    "displayName": "Knowledge Base Plugins"
+    "displayName": "KB Plugins"
   },
   "plugins": [
     {
-      "name": "knowledge-bases",
+      "name": "kbs",
       "source": {
         "source": "local",
-        "path": "./chatgpt/knowledge-bases"
+        "path": "./chatgpt/kbs"
       },
       "policy": {
         "installation": "AVAILABLE",

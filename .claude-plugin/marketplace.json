@@ -5,8 +5,8 @@
   },
   "plugins": [
     {
-      "name": "knowledge-bases",
-      "source": "./claude/knowledge-bases",
+      "name": "kbs",
+      "source": "./claude/kbs",
       "description": "Discover, configure, use, capture to, and deliberately build multiple independent knowledge bases."
     }
   ],

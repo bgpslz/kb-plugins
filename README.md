@@ -1,11 +1,11 @@
-# Knowledge Bases plugins
+# KB plugins
 
 Versioned marketplace packages for the generic multi-knowledge-base workflow.
 
-- `chatgpt/knowledge-bases` serves ChatGPT and Codex. It contains OpenAI
+- `chatgpt/kbs` serves ChatGPT and Codex. It contains OpenAI
   invocation metadata and expects ChatGPT bearer-token connections or Codex
   OAuth connections to be configured per service.
-- `claude/knowledge-bases` serves Claude Chat, Desktop, mobile, and Claude Code.
+- `claude/kbs` serves Claude Chat, Desktop, mobile, and Claude Code.
   It preserves OAuth connections and uses Claude's explicit-invocation
   metadata for setup and build workflows.
 

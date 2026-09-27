@@ -1,0 +1,6 @@
+interface:
+  display_name: "Build a knowledge base"
+  short_description: "Enrich a KB using its service-owned build guide"
+  default_prompt: "Use $build-kb to enrich the configured knowledge base I choose."
+policy:
+  allow_implicit_invocation: false

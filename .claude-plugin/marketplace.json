@@ -1,0 +1,16 @@
+{
+  "name": "kb-plugins",
+  "owner": {
+    "name": "Bruno Prior"
+  },
+  "plugins": [
+    {
+      "name": "knowledge-bases",
+      "source": "./claude/knowledge-bases",
+      "description": "Discover, configure, use, capture to, and deliberately build multiple independent knowledge bases."
+    }
+  ],
+  "metadata": {
+    "description": "Private marketplace for generic multi-knowledge-base plugins."
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "knowledge-bases",
+  "version": "1.0.0",
+  "description": "Discover, configure, use, capture to, and deliberately build multiple independent knowledge bases.",
+  "author": {"name": "Bruno Prior"},
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Knowledge Bases",
+    "shortDescription": "Use and manage multiple independent KB services.",
+    "longDescription": "Routes conversations across configured personal and organisation knowledge bases without making the registry a runtime dependency. Includes standard retrieval, idempotent setup/reconciliation, capture policy, and generic build orchestration using service-owned build guidance.",
+    "developerName": "Bruno Prior",
+    "category": "Productivity",
+    "capabilities": ["Read", "Search", "Write"],
+    "defaultPrompt": [
+      "Run setup-kbs and reconcile my configured knowledge bases.",
+      "Use the relevant configured knowledge bases for this request.",
+      "Run build-kb for a knowledge base I choose."
+    ]
+  }
+}

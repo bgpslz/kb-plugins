@@ -1,0 +1,20 @@
+{
+  "name": "kb-plugins",
+  "interface": {
+    "displayName": "Knowledge Base Plugins"
+  },
+  "plugins": [
+    {
+      "name": "knowledge-bases",
+      "source": {
+        "source": "local",
+        "path": "./chatgpt/knowledge-bases"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

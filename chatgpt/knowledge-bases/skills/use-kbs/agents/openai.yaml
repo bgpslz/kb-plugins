@@ -1,0 +1,6 @@
+interface:
+  display_name: "Use knowledge bases"
+  short_description: "Route and capture across configured KB services"
+  default_prompt: "Use $use-kbs to apply my configured KB routing and capture policies."
+policy:
+  allow_implicit_invocation: true

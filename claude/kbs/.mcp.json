@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "mcp-service": {
+      "type": "http",
+      "url": "https://mcp-service.summerleaze.com/mcp"
+    },
+    "pkb-service": {
+      "type": "http",
+      "url": "https://bruno-rag.summerleaze.com/mcp"
+    }
+  }
+}

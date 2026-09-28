@@ -3,7 +3,7 @@ name: setup-kbs
 description: Explicit-only, idempotent initial setup and reconciliation for the KBs plugin, MCP Service registry, KB connections, compatibility, and surface-specific standing instructions.
 disable-model-invocation: true
 metadata:
-  version: "1.1.2"
+  version: "1.1.3"
 ---
 
 # Setup KBs
@@ -11,9 +11,9 @@ metadata:
 Use only when explicitly asked to install, set up, update, repair, or reconcile knowledge bases.
 
 1. Verify all four plugin skills are installed. Do not reinstall an already-correct plugin.
-2. Configure or verify the separate MCP Service connection with OAuth. In Claude web, Desktop, and mobile, use the remote OAuth connector. In Claude Code, use a separately configured OAuth MCP server. Reconnect the existing service when needed rather than creating duplicates, and never assume either connection configures the other or another machine.
+2. Configure or verify the separate MCP Service connection with OAuth. In Claude web, Desktop, and mobile, use the remote OAuth connector. In Claude Code, use this plugin's bundled `mcp-service` server and complete its OAuth authorization through `/mcp`; do not add a duplicate user-, project-, or local-scoped server. Reconnect the existing service when needed, and never assume either connection configures the other or another machine.
 3. Call MCP Service `check_connection`, then `list_knowledge_bases`. If unavailable, report that grants/revocations cannot be reconciled; do not invent entitlements or disable already-configured KB runtime connections.
-4. Compare active entitlements with KB Services currently available on each applicable surface. For each missing service, guide the user through its OAuth connection: a remote connector for Claude web, Desktop, and mobile, or a separately configured OAuth MCP server for Claude Code. Never ask MCP Service to issue or relay a KB token. For a trusted PKB Service connector, select **Always allow** for its tools if the user wants to avoid approval prompts; explain that this permits tool use without asking. Configure Claude Code tool permissions separately when the user wants the same behavior there, and verify each setting before reporting a no-recurring-approval setup complete.
+4. Compare active entitlements with KB Services currently available on each applicable surface. For each missing service, guide the user through its OAuth connection. In Claude web, Desktop, and mobile, use a remote connector. In Claude Code, prefer a server bundled by this plugin, including `pkb-service` for the personal PKB, and complete OAuth authorization through `/mcp`; do not create a duplicate manually configured server. Guide connection of an unbundled entitled KB Service only when needed. Never ask MCP Service to issue or relay a KB token. For a trusted PKB Service connector, select **Always allow** for its tools if the user wants to avoid approval prompts; explain that this permits tool use without asking. Configure Claude Code tool permissions separately when the user wants the same behavior there, and verify each setting before reporting a no-recurring-approval setup complete.
 5. Verify each connection's `kb_protocol_version` and capabilities. Do not require unavailable optional capabilities. A `build` declaration requires `get_build_guide`.
 6. Detect revoked/removed entries, remove them from standing configuration, and tell the user the stale connector can be removed. Security still depends on the KB Service revoking credentials server-side.
 7. Preserve correct configuration and rewrite only the managed standing-instruction block for each applicable instruction store when inventory or protocol metadata changed.

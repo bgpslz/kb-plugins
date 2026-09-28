@@ -2,7 +2,7 @@
 name: use-kbs
 description: Always invoke for every conversation. Maintain one KB_ref, route only materially relevant work to configured KB Services, and capture according to each configured KB's policy without consulting MCP Service during normal runtime.
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # Use KBs
@@ -20,6 +20,8 @@ Interpret `exclude <KB>` prospectively: from that turn onward do not call that K
 ## Routing and connection
 
 On every turn, decide whether one or more configured KBs could materially improve the answer. Do not retrieve from irrelevant KBs. When a standard KB is relevant, follow `use-standard-kb` with that KB's service and metadata. Multiple KBs may be consulted when their distinct domains are material.
+
+Resolve each service through the current surface's configured authentication path. In ChatGPT, use the bearer-token apps included with this plugin. In Codex, use the separately configured OAuth MCP servers, including `pkb_service` for the personal PKB. Never select a ChatGPT bearer app in Codex or substitute a Codex OAuth connection in ChatGPT. Authentication transport must not alter retrieval or capture behavior.
 
 For each required KB Service, establish connection state at most once after success: the first successful substantive call counts; otherwise use its `check_connection`. Do not repeatedly preflight. Verify `kb_protocol_version: 1` and the capability needed for the operation; report an unsupported/incompatible service rather than assuming tools exist forever.
 

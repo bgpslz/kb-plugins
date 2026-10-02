@@ -2,18 +2,18 @@
 name: use-kbs
 description: Always invoke for every conversation. Maintain one KB_ref, route only materially relevant work to configured KB Services, and send each eligible turn once to MCP Service for human-reviewed routing.
 metadata:
-  version: "1.2.0"
+  version: "1.2.1"
 ---
 
 # Use KBs
 
 This is the cheap, always-on conversation router. Unconditional invocation does not mean unconditional retrieval.
 
-Use the KB inventory in the current surface's standing instructions. Never call MCP Service to refresh that inventory during ordinary conversation; `setup-kbs` owns discovery and reconciliation. The only ordinary-runtime MCP Service call is the final, fail-soft capture append described below.
+Use the KB inventory in the current surface's standing instructions. Never call MCP Service to refresh that inventory during ordinary conversation; `setup-kbs` owns discovery and reconciliation. The only ordinary-runtime MCP Service call is the fail-soft capture append described below.
 
 ## Conversation state
 
-On the first reply, generate a random six-character uppercase alphanumeric reference and show `[KB_ref:XXXXXX]` exactly once. Reuse it for the full conversation and every MCP Service capture. Retain, independently per KB: connection established, capture excluded, and whether that KB is relevant to the current turn.
+On the first reply, generate a random six-character uppercase alphanumeric reference. Reuse it for the full conversation and every MCP Service capture, and show it as `[KB_ref:XXXXXX]` on the closing line of every turn, as described under "Turn shape". Do not show it anywhere else in the reply. Retain, independently per KB: connection established, capture excluded, and whether that KB is relevant to the current turn.
 
 Interpret `exclude <KB>` prospectively: from that turn onward, omit that KB's policy when deciding whether a turn is eligible for central capture. `include <KB>` removes only that KB's exclusion and restores its configured policy from that turn onward. Neither instruction implies retrospective deletion or backfill, and neither changes other KBs. If another non-excluded KB makes the turn eligible, the destination-independent capture still enters review; exclusion does not pre-decide the human's later routing choice.
 
@@ -29,7 +29,7 @@ MCP Service failure does not disable already-configured KBs. A KB authorization 
 
 ## Capture
 
-After composing the reply, independently evaluate each configured KB's policy unless that KB is excluded:
+After writing the reply, independently evaluate each configured KB's policy unless that KB is excluded:
 
 - `all_conversations`: capture every turn.
 - `relevant_conversations`: capture only a turn relevant to that KB.
@@ -37,6 +37,22 @@ After composing the reply, independently evaluate each configured KB's policy un
 
 If at least one non-excluded policy qualifies, call MCP Service's Capture Protocol v1 `capture_chat_turn` exactly once with the same `KB_ref`, verbatim user message, complete assistant reply, and attachment names. This capture is pre-destination: do not select a KB, classify retention value, or judge wiki relevance. The Capture Review Application handles destinations later.
 
-Never call a KB Service's legacy `capture_chat_turn` from this router and never fall back to per-KB fan-out when MCP Service is unavailable. Capture is the last action of the turn; do not retry or announce routine capture failures. MCP Service capture failure is non-fatal and does not affect direct KB retrieval.
+Never call a KB Service's legacy `capture_chat_turn` from this router and never fall back to per-KB fan-out when MCP Service is unavailable.
+
+### Turn shape
+
+Every captured turn has three parts, in this order:
+
+1. The reply, written as normal visible text.
+2. The single `capture_chat_turn` call. No other tool call may follow it.
+3. One closing line of visible text.
+
+Never end a turn on a tool call. The Claude chat interface treats a turn that ends on a tool call as working steps and folds all of its text out of view, so the user sees no reply. Ending on text keeps the whole reply visible.
+
+The closing line is always the conversation's tag, `[KB_ref:XXXXXX]`, alone on its line with nothing else. Write the complete reply before the call, so that nothing meaningful follows it, and do not include the closing line in `assistant_text`; the reference travels in the `kb_ref` argument. Do not mention the capture.
+
+Write the closing line whether or not the capture call succeeds. Do not retry or announce routine capture failures. MCP Service capture failure is non-fatal and does not affect direct KB retrieval.
+
+On a turn where no capture is made, end the reply with the same closing line.
 
 Pass `source: "claude"` and the known Claude surface and model when available; omit optional values rather than guessing.

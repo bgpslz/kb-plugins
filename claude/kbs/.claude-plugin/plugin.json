@@ -1,6 +1,6 @@
 {
   "name": "kbs",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Discover, configure, use, centrally capture for review, and deliberately build multiple independent knowledge bases.",
   "author": {"name": "Bruno Prior"}
 }

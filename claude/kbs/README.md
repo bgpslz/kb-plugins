@@ -1,6 +1,6 @@
 # KBs plugin for Claude
 
-Version 1.3.0 contains `use-kbs`, `use-standard-kb`, `setup-kbs` and `build-kb`.
+Version 1.3.1 contains `use-kbs`, `use-standard-kb`, `setup-kbs` and `build-kb`.
 Retrieval and build guidance go directly to relevant KB Services. MCP Service owns
 registry reconciliation and Capture Protocol v1; the model has no capture duties.
 
@@ -20,3 +20,8 @@ Cloud Claude profile preferences and local Claude Code user instructions in
 `~/.claude/CLAUDE.md` are reconciled independently. `setup-kbs` and `build-kb`
 are user-invoked only; `use-kbs` remains model-invoked because it is the
 standing conversation router.
+
+`build-kb` uses the service-declared wiki lifecycle: an explicitly authorised
+bootstrap build may submit validated publication batches; live wikis retain
+the normal reviewed proposal workflow. Missing lifecycle metadata defaults to
+review. The skill never performs the controller's lifecycle transition.

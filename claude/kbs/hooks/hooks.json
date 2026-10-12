@@ -1,0 +1,26 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f \"$HOME/.local/share/kbs-capture/capture.py\" ]; then python3 \"$HOME/.local/share/kbs-capture/capture.py\" hook --source claude; fi",
+            "timeout": 3
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f \"$HOME/.local/share/kbs-capture/capture.py\" ]; then python3 \"$HOME/.local/share/kbs-capture/capture.py\" hook --source claude; fi",
+            "timeout": 3
+          }
+        ]
+      }
+    ]
+  }
+}

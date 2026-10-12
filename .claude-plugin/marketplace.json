@@ -7,7 +7,7 @@
     {
       "name": "kbs",
       "source": "./claude/kbs",
-      "description": "Discover, configure, use, capture to, and deliberately build multiple independent knowledge bases."
+      "description": "Discover, configure, retrieve from and build independent KBs, with local session capture setup."
     }
   ],
   "metadata": {

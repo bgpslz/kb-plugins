@@ -1,6 +1,8 @@
 {
   "name": "kbs",
-  "version": "1.2.1",
-  "description": "Discover, configure, use, centrally capture for review, and deliberately build multiple independent knowledge bases.",
-  "author": {"name": "Bruno Prior"}
+  "version": "1.3.0",
+  "description": "Discover, configure, retrieve from and deliberately build independent knowledge bases; install local session capture.",
+  "author": {
+    "name": "Bruno Prior"
+  }
 }

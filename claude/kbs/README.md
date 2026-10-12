@@ -1,16 +1,18 @@
 # KBs plugin for Claude
 
-Version 1.2.1 contains four generic skills: `use-kbs`, `use-standard-kb`,
-`setup-kbs`, and `build-kb`. Normal retrieval, wiki work, and build guidance go
-directly to materially relevant KB Services. MCP Service supplies the registry
-during setup and Capture Protocol v1 at runtime: each eligible turn is appended
-once, pre-destination and fail-soft, for human routing in the Capture Review
-Application. Runtime never queries registry inventory or falls back to legacy
-per-KB capture fan-out.
+Version 1.3.0 contains `use-kbs`, `use-standard-kb`, `setup-kbs` and `build-kb`.
+Retrieval and build guidance go directly to relevant KB Services. MCP Service owns
+registry reconciliation and Capture Protocol v1; the model has no capture duties.
+
+Three routes feed the same human review queue: Open WebUI server capture, local
+Claude Code/Codex session capture, and manual paste for other surfaces. See
+[local capture installation](../../local-capture/README.md). Install and verify
+local capture before replacing old instructions or installing retrieval-only skills.
+`capture_policy` remains review metadata; in-chat exclude/include is retired.
 
 Claude web, Desktop, and mobile use remote OAuth connectors for MCP Service and
 each KB Service. Claude Code loads the plugin's bundled `mcp-service` for
-registry reconciliation and central capture, plus its bundled
+registry reconciliation, plus its bundled
 `pkb-service`, from `.mcp.json`; users complete OAuth authorization through
 `/mcp` without adding duplicate servers. Authentication
 transport does not change the retrieval protocol.

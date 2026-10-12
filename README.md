@@ -14,10 +14,8 @@ Both packages contain the same four logical skills: `use-kbs`,
 all retrieval, ingestion, and wiki tools remain in the individual KB services
 rather than this repository.
 
-MCP Service owns the registry and Capture Protocol v1. `setup-kbs` uses it for
-registry reconciliation and capture compatibility checks. During normal
-conversations, retrieval still goes directly to materially relevant KB
-Services; after an eligible reply is composed, `use-kbs` makes one fail-soft,
-pre-destination `capture_chat_turn` append to MCP Service for later human
-routing in the Capture Review Application. It never fans capture out to KB
-Services or queries MCP Service inventory at runtime.
+MCP Service owns the registry and Capture Protocol v1. `setup-kbs` reconciles
+services and installs local capture; `use-kbs` only routes relevant retrieval.
+Open WebUI server capture, local session capture and manual paste feed the same
+Capture Store and human review queue. See [local capture](local-capture/README.md).
+Source updates do not reconcile installed plugins or personal standing instructions.

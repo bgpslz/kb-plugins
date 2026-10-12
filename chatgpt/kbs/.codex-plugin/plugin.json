@@ -1,7 +1,7 @@
 {
   "name": "kbs",
-  "version": "1.2.0+codex.20260929163943",
-  "description": "Discover, configure, use, centrally capture for review, and deliberately build multiple independent knowledge bases.",
+  "version": "1.3.0",
+  "description": "Discover, configure, retrieve from and deliberately build independent knowledge bases; install local session capture.",
   "author": {
     "name": "Bruno Prior"
   },
@@ -10,7 +10,7 @@
   "interface": {
     "displayName": "KBs",
     "shortDescription": "Use and manage multiple independent KB services.",
-    "longDescription": "Routes retrieval across configured personal and organisation knowledge bases, then sends each eligible turn once to MCP Service for human-reviewed destination routing. Includes standard retrieval, idempotent setup/reconciliation, capture policy, and generic build orchestration using service-owned build guidance.",
+    "longDescription": "Routes retrieval across configured knowledge bases. Includes standard retrieval, idempotent setup with local session capture, and build orchestration using service-owned guidance. Capture routes feed human review independently of model instructions.",
     "developerName": "Bruno Prior",
     "category": "Productivity",
     "capabilities": [

@@ -4,6 +4,7 @@
 Never changes notify or standing instructions. Preserves unrelated hooks and
 settings. Token entry is an interactive Keychain operation, never a CLI token
 argument. Use Python 3.11+ for TOML validation. --home permits isolated dry runs.
+The CLI rejects non-macOS platforms before writing any hook or runtime files.
 """
 import argparse
 from datetime import datetime, timezone
@@ -116,6 +117,8 @@ def main():
     parser.add_argument('--home', type=Path, default=Path.home())
     parser.add_argument('--activate', action='store_true', help='Prompt for Keychain token and load launchd')
     args = parser.parse_args()
+    if sys.platform != "darwin":
+        parser.error("Local capture currently supports macOS only; see the setup-kbs platform guide. Windows and Linux/WSL adapters are not implemented.")
     __import__('os').umask(0o077)
     install(args.home, args.account, args.activate)
     print('Prepared local capture. Review/trust Codex hooks using /hooks. Verify a new turn on each app before retiring old instructions.')

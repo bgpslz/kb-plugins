@@ -5,7 +5,12 @@ extracts completed visible turns from Claude Code and Codex JSONL sessions and
 sends Capture Protocol v1 to MCP Service. `install.py` installs a per-machine
 runtime, Stop/SessionEnd hooks, and a daily launchd sweep on macOS.
 
-Use a durable Python 3.11+ interpreter to run:
+For user/laptop setup, prefer [the assistant-guided platform guide](SETUP.md).
+The installed plugin already includes these scripts: no source clone or Git
+knowledge is needed. macOS capture is implemented; Windows and Linux/WSL
+credential/scheduler adapters and bundled-runtime installers are planned.
+
+For developers with a source checkout, use a durable Python 3.11+ interpreter to run:
 
 ```sh
 python3.11 local-capture/install.py --account your-email --activate

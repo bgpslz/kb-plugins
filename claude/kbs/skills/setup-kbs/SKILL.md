@@ -3,7 +3,7 @@ name: setup-kbs
 description: Explicit-only, idempotent initial setup and reconciliation for the KBs plugin, MCP Service registry, KB connections, compatibility, and surface-specific standing instructions.
 disable-model-invocation: true
 metadata:
-  version: "1.3.2"
+  version: "1.3.3"
 ---
 
 # Setup KBs
@@ -68,6 +68,8 @@ capture surfaces and remaining targets separately; cloud settings and other Macs
 are independent migrations.
 
 ## Local session capture installation
+
+For a local-capture setup request, read the packaged [platform guide](references/local-capture-setup.md). Run setup on the requested computer, detect its OS and native/WSL environment, and use this installed skill's scripts; do not require the user to clone a repository or know Git. Prefer assistant-guided setup from a local coding desktop session. Discover a persistent Python 3.11+ interpreter before offering installation; do not assume Homebrew, a bundled Python runtime or another machine's paths. The current capture implementation supports macOS only. On Windows or Linux, explain the missing credential/scheduler adapters and the current capture alternatives rather than running the macOS installer or claiming activation.
 
 Use the packaged [installer](scripts/install.py) with a durable Python 3.11+ interpreter:
 `python3.11 <skill-directory>/scripts/install.py --account <MCP-Service-email> --activate`.

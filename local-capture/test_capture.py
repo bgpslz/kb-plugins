@@ -1,9 +1,12 @@
 """Fixture tests for defensive extraction, retries, MCP handshake and installation."""
 import importlib.util
+import io
+from contextlib import redirect_stderr
 import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 
 def module(name):
@@ -110,6 +113,17 @@ class CaptureTests(unittest.TestCase):
         self.assertEqual(client.capture({'source': 'codex', 'cwd': '/private', 'timestamp': 'now', 'raw_user_text': 'Prompt'}), 'cap')
         self.assertEqual(requests[2][1]['Mcp-session-id'], 'session-header')
         self.assertNotIn('cwd', requests[2][0]['params']['arguments'])
+
+    def test_cli_rejects_unsupported_platforms_before_writing_files(self):
+        for platform in ("win32", "linux"):
+            with self.subTest(platform=platform), tempfile.TemporaryDirectory() as tmp:
+                home = Path(tmp) / "unwritten-home"
+                with patch.object(install.sys, "platform", platform), patch.object(install.sys, "argv", ["install.py", "--account", "test@example.com", "--home", str(home)]), redirect_stderr(io.StringIO()) as stderr:
+                    with self.assertRaises(SystemExit) as error:
+                        install.main()
+                self.assertEqual(error.exception.code, 2)
+                self.assertIn("supports macOS only", stderr.getvalue())
+                self.assertFalse(home.exists())
 
     def test_installer_is_idempotent_preserves_notify_hooks_and_policy(self):
         with tempfile.TemporaryDirectory() as tmp:

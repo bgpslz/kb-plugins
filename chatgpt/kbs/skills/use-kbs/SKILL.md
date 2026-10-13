@@ -2,10 +2,14 @@
 name: use-kbs
 description: Always invoke for every conversation. Route materially relevant requests to configured KB Services and preserve connection state.
 metadata:
-  version: "1.3.0"
+  version: "1.3.2"
 ---
 
 # Use KBs
+
+Chat capture is handled by external clients. Do not generate capture references or
+tags, call chat capture tools for routine replies, evaluate capture policies, or
+implement in-chat exclude/include commands. `capture_policy` is review metadata.
 
 Invoke for every conversation; retrieve only when a configured KB is materially relevant.
 Use the KB inventory in the current standing instructions. `setup-kbs` owns discovery

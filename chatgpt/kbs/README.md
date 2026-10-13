@@ -1,6 +1,6 @@
 # KBs plugin for ChatGPT and Codex
 
-Version 1.3.1 contains `use-kbs`, `use-standard-kb`, `setup-kbs` and `build-kb`.
+Version 1.3.2 contains `use-kbs`, `use-standard-kb`, `setup-kbs` and `build-kb`.
 Retrieval and build guidance go directly to relevant KB Services. MCP Service owns
 registry reconciliation and Capture Protocol v1; the model has no capture duties.
 
@@ -24,3 +24,8 @@ transport stays outside the retrieval protocol.
 bootstrap build may submit validated publication batches; live wikis retain
 the normal reviewed proposal workflow. Missing lifecycle metadata defaults to
 review. The skill never performs the controller's lifecycle transition.
+
+When upgrading from in-chat capture, reconcile managed instructions to v2 after
+local intake verification and inspect active skill paths for duplicate older
+installations. Start a fresh session to verify the new behaviour; source changes
+alone do not update installed skills or cloud preferences.

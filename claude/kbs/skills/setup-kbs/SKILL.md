@@ -3,14 +3,14 @@ name: setup-kbs
 description: Explicit-only, idempotent initial setup and reconciliation for the KBs plugin, MCP Service registry, KB connections, compatibility, and surface-specific standing instructions.
 disable-model-invocation: true
 metadata:
-  version: "1.3.0"
+  version: "1.3.2"
 ---
 
 # Setup KBs
 
 Use only when explicitly asked to install, set up, update, repair, or reconcile knowledge bases.
 
-1. Verify all four plugin skills are installed. Do not reinstall an already-correct plugin.
+1. Verify all four plugin skills are installed and inspect the active skill paths and versions. Check for duplicate installations from different marketplaces or workspace sources; a current source checkout does not prove the active plugin is current. Update stale installations through the supported plugin manager, preserving working connections. Do not reinstall an already-correct plugin or edit generated cache files as a deployment method.
 2. Configure or verify the separate MCP Service connection with OAuth. It owns the setup-time registry and the capture ingress used by external capture clients. In Claude web, Desktop, and mobile, use the remote OAuth connector. In Claude Code, use this plugin's bundled `mcp-service` server and complete its OAuth authorization through `/mcp`; do not add a duplicate user-, project-, or local-scoped server. Reconnect the existing service when needed, and never assume either connection configures the other or another machine.
 3. Call MCP Service `check_connection`, verify Capture Protocol version 1 and the availability of `capture_chat_turn`, then call `list_knowledge_bases`. If unavailable or incompatible, report that registry reconciliation or central capture cannot be verified as applicable; do not invent entitlements, disable already-configured KB retrieval connections, or configure legacy per-KB capture as a fallback.
 4. Compare active entitlements with KB Services currently available on each applicable surface. For each missing service, guide the user through its OAuth connection. In Claude web, Desktop, and mobile, use a remote connector. In Claude Code, prefer a server bundled by this plugin, including `pkb-service` for the personal PKB, and complete OAuth authorization through `/mcp`; do not create a duplicate manually configured server. Guide connection of an unbundled entitled KB Service only when needed. Never ask MCP Service to issue or relay a KB token. For a trusted PKB Service connector, select **Always allow** for its tools if the user wants to avoid approval prompts; explain that this permits tool use without asking. Configure Claude Code tool permissions separately when the user wants the same behavior there, and verify each setting before reporting a no-recurring-approval setup complete.
@@ -51,6 +51,21 @@ user's approval before changing their personal `~/.claude/CLAUDE.md`. Reconcile 
 preferences independently; do not claim that source edits update installed plugins or
 cloud settings. If a surface cannot be updated programmatically, provide its complete
 block and verify placement after the user applies it.
+
+## Migration verification
+
+After intake verification, check each applicable standing-instruction store for a
+legacy managed block and reconcile it to v2. Check project instructions as well as
+global instructions without replacing unrelated project rules. Confirm only the
+intended plugin installation supplies the runtime skills. Removal of a duplicate
+plugin requires an explicit removal request; obtain it when needed.
+
+Start a fresh session after changing instructions or installed skills. Verify that
+a simple completed exchange is captured by the local route without a model-generated
+reference tag or chat-capture call. Existing sessions can retain old instructions.
+Report source version, installed version, instruction targets changed, verified
+capture surfaces and remaining targets separately; cloud settings and other Macs
+are independent migrations.
 
 ## Local session capture installation
 

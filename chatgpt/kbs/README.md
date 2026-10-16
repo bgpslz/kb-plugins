@@ -1,6 +1,7 @@
 # KBs plugin for ChatGPT and Codex
 
-Version 1.3.3 contains `use-kbs`, `use-standard-kb`, `setup-kbs` and `build-kb`.
+Version 1.3.4 adds `maintain-project-docs` alongside `use-kbs`,
+`use-standard-kb`, `setup-kbs` and `build-kb`.
 Retrieval and build guidance go directly to relevant KB Services. MCP Service owns
 registry reconciliation and Capture Protocol v1; the model has no capture duties.
 
@@ -20,10 +21,17 @@ operations). Those OAuth connections are deliberately not registered in
 `.app.json`; authentication
 transport stays outside the retrieval protocol.
 
-`build-kb` uses the service-declared wiki lifecycle: an explicitly authorised
-bootstrap build may submit validated publication batches; live wikis retain
-the normal reviewed proposal workflow. Missing lifecycle metadata defaults to
-review. The skill never performs the controller's lifecycle transition.
+`build-kb` inspects service-declared lifecycle, write behaviour and proposal
+schema. Automatic application requires an authenticated personal owner and a
+compatible service; organisation changes and protected policy pages require human
+review even during bootstrap. Older reviewed services remain supported. The skill
+never performs the controller's lifecycle transition.
+
+`maintain-project-docs` preserves repository documentation and proposes distilled
+architecture, decisions, status and plans to the configured owner PKB. It reports
+pending/failed updates and proposes audience-appropriate organisation guidance
+for human review when users are materially affected. Source release, backend
+deployment and installed-client acceptance are separate milestones.
 
 When upgrading from in-chat capture, reconcile managed instructions to v2 after
 local intake verification and inspect active skill paths for duplicate older

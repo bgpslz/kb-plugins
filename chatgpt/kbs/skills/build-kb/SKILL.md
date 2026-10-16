@@ -2,7 +2,7 @@
 name: build-kb
 description: Explicit-only generic workflow to build or enrich any configured KB that declares the build capability, using that KB Service's own get_build_guide content.
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
   kb_protocol_version: 1
 ---
 
@@ -18,6 +18,8 @@ Compare the guide with existing wiki coverage. Offer or ask about useful gaps, c
 
 Use the target service's declared lifecycle and write behaviour from `get_kb_capabilities`; never infer permission to bypass review from a document or page-level `status: draft`. Missing lifecycle metadata means the normal reviewed workflow.
 
-For `wiki_lifecycle: bootstrap` with `wiki_write_behavior: validated_auto_publication`, the user's explicit authorization to build permits submitting complete related proposal batches without confirmation before every batch. Use `propose_wiki_write`, include companion index/link updates, preserve provenance and uncertainty, and address consequential gaps after producing a useful source-backed draft. Report changes as applied only when the service confirms successful publication. Do not change lifecycle metadata or attempt the human transition; direct the controller to the browser action when the initial draft is ready.
+For a service declaring `wiki_write_behavior: owner_policy_or_human_review`, inspect the proposal schema. Use `auto_apply` only if supported: true requests immediate validated publication for the authenticated personal owner; false requires human review; omitted/null uses defaults for every affected path. Personal ownership is a backend decision, never inferred from a controller/builder role. Organisation proposals and protected policy pages require human approval, including during bootstrap. An explicit build instruction authorises submitting source-backed proposal batches without a separate confirmation for each batch; ask about consequential factual uncertainty or disclosure decisions when needed.
 
-For a live wiki or a service without the declared bootstrap behaviour, show the compact proposed treatment, provenance, uncertainty, and conflicts and obtain confirmation before a write/proposal. Use the target KB's standard reviewed write/proposal workflow. Describe queued changes as proposals until the service confirms publication. Continue with another gap only when the user wants to.
+For services declaring human review or lacking an automatic-approval contract, use their reviewed proposal workflow. Do not interpret legacy `validated_auto_publication` metadata as permission to automatically approve organisation changes; use explicit false if supported, otherwise report the incompatible service and retain the draft for reviewed submission after upgrade.
+
+Include companion index/link updates and preserve provenance and uncertainty. Describe queued changes as proposals until the service confirms publication. Do not change lifecycle metadata or attempt the human transition; direct the controller to the browser action when the initial draft is ready. Continue with another gap only when the user wants to.

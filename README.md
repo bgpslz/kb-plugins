@@ -37,3 +37,11 @@ code changes, with rationale, scope and implementation/publication status.
 Maintain repository documentation and distilled personal project documentation
 through the configured wiki proposal service; report pending or failed updates
 explicitly. Source drafts and unreleased skills do not imply live publication.
+
+## Architecture alignment handover
+
+See [the 22 October handover](docs/architecture-alignment-handover.md) for the
+proposed plugin/skill restructuring, current architecture, per-surface scope,
+system-wiki dependency and acceptance criteria. Codex/Claude Code setup includes
+retrieval and external local capture; ChatGPT/Claude-chat setup is retrieval only.
+The handover does not indicate that restructuring has been implemented.

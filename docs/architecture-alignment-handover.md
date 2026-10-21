@@ -21,22 +21,27 @@ hooks and capture receipts. Do not edit generated plugin-cache files as a releas
 method. Source changes, published packages, installed packages and live behaviour
 are separate states and must be reported separately.
 
-## Explicit scope by client — Bruno's clarification
+## Explicit scope by client and execution environment — Bruno's clarification
 
 | Client/surface | Retrieval configuration | Capture configuration in this work |
 | --- | --- | --- |
-| Codex CLI and desktop | Direct KB connections and appropriate runtime guidance | External local session-history capture, verified separately per surface |
-| Claude Code CLI and desktop Code tab | Direct KB connections and appropriate runtime guidance | External local session-history capture, verified separately per surface |
+| Local Codex CLI and desktop sessions | Direct KB connections and appropriate runtime guidance | External local session-history capture, verified separately per surface |
+| Local Claude Code CLI and desktop Code-tab sessions | Direct KB connections and appropriate runtime guidance | External local session-history capture, verified separately per surface |
+| Cloud Codex sessions | Direct KB connections and appropriate runtime guidance | None: retrieval only |
+| Cloud Claude Code sessions | Direct KB connections and appropriate runtime guidance | None: retrieval only |
 | ChatGPT web, desktop and mobile chat | KB connections and retrieval guidance only | None: do not configure chat capture |
 | Claude web, desktop Chat and mobile chat | KB connections and retrieval guidance only | None: do not configure chat capture |
 | Open WebUI | Its existing automatic retrieval filter and OAuth connections | Its separate server-side capture integration; preserve rather than recreate it in a skill |
 
 Claude desktop Chat and its Code tab are different surfaces. Likewise, Codex and
 ChatGPT chat must not be conflated merely because they share OpenAI packaging or
-an application brand. Select the actual surface before proposing setup actions.
+an application brand. Identify both the actual surface and where the Code session
+runs before proposing setup actions. A cloud Code task viewed in a desktop app
+remains retrieval only; the local UI does not establish local execution or access
+to local session history.
 The original model-driven capture plan is superseded: no skill should make an
 assistant capture a conversation. Manual paste remains an optional human workflow
-outside ChatGPT/Claude-chat configuration, not evidence of automatic chat capture.
+outside chat and cloud Code configuration, not evidence of automatic capture.
 
 ## Architecture to preserve
 
@@ -61,13 +66,14 @@ outside ChatGPT/Claude-chat configuration, not evidence of automatic chat captur
   `<kb-context>` before queuing the original conversation.
 - Local Codex and Claude Code use session-history capture, with installed hooks
   and a scheduled backstop. The existing implementation supports macOS only.
-- ChatGPT and Claude chat receive retrieval setup only. Do not install capture
-  hooks or capture-client credentials there, add capture directives to their profiles, require a
-  capture test, or claim those chats are collected. A user can separately choose
+- Cloud Codex, cloud Claude Code, ChatGPT and Claude chat receive retrieval setup
+  only. Do not install capture hooks or capture-client credentials there, add
+  capture directives to their profiles, require a capture test, or claim those
+  sessions are collected. A user can separately choose
   to paste a transcript into Capture Review; that is outside this setup scope.
   An MCP Service discovery/reconciliation connection may still be needed; that
   connection is not configuration of a chat-capture client. Where supported,
-  expose only the relevant discovery/retrieval tools to these chat surfaces;
+  expose only the relevant discovery/retrieval tools to these retrieval-only surfaces;
   retain central capture tools for the external capture clients that need them.
 - Never restore model-generated conversation references, KB_ref tags, routine
   capture-tool calls, per-KB capture fan-out, in-chat include/exclude commands or
@@ -146,11 +152,14 @@ fragile operations into tested scripts with small client-specific adapters.
 
 The setup workflow should:
 
-1. Detect the client, machine, active plugin/version and applicable configuration
-   stores. Find duplicates without automatically uninstalling anything.
+1. Detect the client, actual execution environment (local or cloud), machine,
+   active plugin/version and applicable configuration stores. Do not infer local
+   execution from a desktop interface. Find duplicates without automatically
+   uninstalling anything.
 2. Establish the MCP Service bootstrap connection, then fetch entitled KBs during
    setup/reconciliation. Preserve already configured retrieval during outages.
-   ChatGPT/Claude-chat setup uses this for discovery/reconciliation only; do not
+   Cloud Code and ChatGPT/Claude-chat setup use this for discovery/reconciliation
+   only; do not
    require central capture capabilities or capture-specific credentials/tests as
    a condition of completing retrieval-only setup.
 3. Compare discovered KB identities with existing client connections. Distinguish
@@ -169,7 +178,8 @@ The setup workflow should:
    user/project rules. Personal `~/.claude/CLAUDE.md` edits need Bruno's approval.
 9. Install or check external capture separately where supported, preserving its
    original capture boundary, receipts, exclusions and unrelated hooks. Run this
-   step only for Codex/Claude Code local capture, not ChatGPT or Claude chat.
+   step only for supported local Codex/Claude Code sessions. Cloud Code, ChatGPT
+   and Claude chat require retrieval setup only.
 10. Report connection readiness, guidance loading and capture readiness separately,
     including independent cloud/desktop/CLI/machine results.
 
@@ -195,9 +205,10 @@ that wiki is reachable. Normal startup should supply a short index and fetch
 detail only when needed. Keep KB-specific capabilities, tool contracts, build
 guides and authorization rules in each KB Service.
 
-Write surface-specific bootstrap/profile content. ChatGPT and Claude-chat
-instructions cover retrieval only and must not inherit local coding-capture
-installation or model-driven capture duties. Coding-client bootstrap may explain
+Write bootstrap/profile content specific to the surface and execution environment.
+Cloud Code, ChatGPT and Claude-chat instructions cover retrieval only and must not
+inherit local coding-capture installation or model-driven capture duties. Local
+coding-client bootstrap may explain
 that an external capture client handles retention without asking the model to do it.
 
 Shrink or retire the always-invoked `use-kbs`, and move `use-standard-kb`'s general
@@ -212,7 +223,11 @@ with a TTL, fail softly to the cache and preserve unrelated hooks. Keep caches
 separate for different accounts/services; handle authorization failures without
 silently serving protected stale content. Do not add per-turn registry checks.
 
-The 19 October temporary hook audit found:
+A retrieval-guidance startup mechanism is separate from a capture hook. Cloud
+Code may load retrieval guidance through a verified supported mechanism, but must
+not install a local capture client or imply that cloud session history is captured.
+
+The 19 October temporary hook audit covered local sessions and found:
 
 | Surface | Evidence then |
 | --- | --- |
@@ -222,7 +237,8 @@ The 19 October temporary hook audit found:
 | Claude desktop Code tab | Context injection passed |
 
 Re-test current installed versions and fresh sessions. These were separate tests,
-not proof that CLI results apply to desktop. Temporary test hooks were removed.
+not proof that CLI results apply to desktop or cloud sessions. Temporary test
+hooks were removed.
 Use a short static instruction to load the index where injection is unavailable;
 report it as a weaker fallback. Do not retire working instructions until verified.
 
@@ -284,11 +300,14 @@ do not create extra approval gates merely from a recommendation in this document
 - Prove authenticated KB capability and wiki reads separately on each client.
 - No KB capture requirement, no model-driven capture and no extra Open WebUI
   retrieval loop. Central capture and existing Bruno compatibility remain intact.
-- Capture installation, retry/deduplication, original boundary/exclusion preservation
+- For supported local Code sessions, capture installation, retry/deduplication,
+  original boundary/exclusion preservation
   and receipt verification pass independently of retrieval readiness.
-- ChatGPT and Claude-chat setup completes using retrieval acceptance alone: no
+- Cloud Codex, cloud Claude Code, ChatGPT and Claude-chat setup completes using
+  retrieval acceptance alone: no
   capture hooks, capture-only credentials, model capture directives or capture
-  receipt requirements. Verify desktop Chat versus Code-tab scope explicitly.
+  receipt requirements. Verify both Chat versus Code and local versus cloud Code
+  routing explicitly, including a cloud task viewed through a desktop app.
 - System-index injection, cache/outage fallback and unavailable-hook behaviour are
   checked in fresh sessions per surface. Keep instructions short and measure the
   context/latency cost rather than assuming it is negligible.

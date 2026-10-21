@@ -42,6 +42,7 @@ explicitly. Source drafts and unreleased skills do not imply live publication.
 
 See [the 22 October handover](docs/architecture-alignment-handover.md) for the
 proposed plugin/skill restructuring, current architecture, per-surface scope,
-system-wiki dependency and acceptance criteria. Codex/Claude Code setup includes
-retrieval and external local capture; ChatGPT/Claude-chat setup is retrieval only.
+system-wiki dependency and acceptance criteria. Local Codex/Claude Code setup
+includes retrieval and external local capture; cloud Code and ChatGPT/Claude-chat
+setup is retrieval only.
 The handover does not indicate that restructuring has been implemented.

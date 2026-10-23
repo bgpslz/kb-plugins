@@ -47,12 +47,15 @@ acceptance. Earlier phase observations remain in the
 
 ## Cross-repository dependencies
 
-The personal-rag reader and thirteen pages are implemented. The inspected reader
-still lacks `get_system_wiki_capabilities`, content_revision and cache_visibility.
-The approved client therefore selects fallback rather than fabricate metadata.
-See the [narrow backend follow-up](personal-rag-system-wiki-contract-followup.md).
-No system-wiki tool is exposed in this chat; no live backend revision has been
-contacted by the new loader. Its deployment requires that project's approvals.
+The personal-rag descriptor/revision/cache contract is now implemented at
+bb13522 and deployed as c9ad645 on 23 October, using the normal release chain.
+A native resource acceptance failure exposed rejected standard request metadata;
+a narrow tested transport correction was included in c9ad645. The existing OAuth
+connection now lists all thirteen resources and delivers complete index/local-Codex
+pages into this chat, matching source bytes and one revision. This is live read
+acceptance in an existing context, not fresh-session startup acceptance.
+See personal-rag `docs/system_wiki_deployment_20261023.md`; the
+[backend handover](personal-rag-system-wiki-contract-followup.md) is resolved.
 
 Open WebUI must inject operating instructions into actual answerer/planner/worker
 calls, independently of KB evidence. The
@@ -64,20 +67,21 @@ not implemented elsewhere or sent to another chat.
 
 | Surface | Current evidence | Outstanding |
 | --- | --- | --- |
-| This Codex desktop chat | Existing OAuth PKB capabilities and substantive wiki reads work; exposed installed skill paths remain 1.3.4 | Backend contract/deployment; new-source installation and fresh context-delivery proof |
+| This Codex desktop chat | Existing OAuth PKB capabilities and substantive wiki reads work; exposed installed skill paths remain 1.3.4 | New-source installation and fresh startup/context-delivery proof |
 | Codex CLI | Earlier native parser smoke accepted HTTP shape; current source tests pass | Actual authenticated bridge, fresh CLI loading and separate capture acceptance |
 | Claude Code CLI | Earlier isolated native save smoke; installed 1.3.3 was observed on 22 October | Recheck installation, prove authenticated loading; personal instruction edits need approval |
 | Claude desktop Code tab | Source routing only | Verify local execution, actual loading and capture independently |
 | Cloud Code / ChatGPT / Claude Chat | Source routes to other-harnesses without local capture | Each supported account/cloud store and instruction-based loading acceptance |
 | Open WebUI | Separate filter/capture source inspected | Role-specific instruction delivery and live evidence in owui-deploy |
 
-No surface is claimed migrated. Source 1.3.5 has not been published or installed;
-no hook, credential, account grant, live cache, personal instruction store or VPS
-was changed. Existing runtime instructions in this chat still apply. Current
+No client surface is claimed migrated. Source 1.3.5 has not been published or
+installed; no hook, credential, account grant, live cache or personal instruction
+store was changed. The separate authorised backend deployment changed application
+code and restarted only MCP Service. Existing runtime instructions in this chat still apply. Current
 source capability is not evidence about other installed clients or machines.
 
-First complete and deploy the backend extension through its normal approvals.
-Then prove an uncached authenticated index-plus-surface load enters the first
+The backend extension/deployment and live native reads are now verified.
+Next prove an uncached authenticated index-plus-surface startup enters the first
 host's model context before useful work, using permitted request/transcript and
 harmless marker/behaviour evidence. A hook receipt or model assertion is insufficient.
 No authenticated native hook bridge is established here; instruction-based

@@ -53,11 +53,11 @@ index-plus-surface startup core, the small use-kbs instruction bootstrap, a shor
 shared fallback, and explicit build/development workflows. use-standard-kb remains
 packaged until replacement acceptance. Installed clients are unchanged.
 
-Personal-rag has implemented the system-wiki reader and pages. Its remaining
-[contract extension](docs/personal-rag-system-wiki-contract-followup.md) and approved
-deployment are dependencies; the client preserves validation and falls back until
-they exist. No authenticated native hook bridge or model-context delivery has
-been verified. Instruction-based loading is weaker and needs independent proof.
+Personal-rag has implemented and deployed the system-wiki contract as c9ad645.
+Authenticated native resource listing and complete index/local-Codex reads passed
+in this existing chat. The [contract handover](docs/personal-rag-system-wiki-contract-followup.md)
+is resolved. A native startup bridge and fresh-session instruction-based loading
+still need independent proof before installed guidance is retired.
 
 Open WebUI's separate [filter handover](docs/owui-system-wiki-handover.md) covers
 system instructions for answerer/planner/worker, avoiding persisted/captured

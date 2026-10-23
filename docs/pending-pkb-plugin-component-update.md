@@ -11,6 +11,18 @@ blindly retry or run the server-suggested global Git exception. Re-read/reconcil
 the canonical page and inspect proposal state after the service owner fixes its
 repository access. No VPS change or recovery was attempted here.
 
+Subsequent deployment addendum, 23 October: the backend metadata contract was
+implemented at personal-rag bb13522 and deployed at c9ad645, including the native
+resource request-metadata correction. Authenticated OAuth resource listing and
+complete index/local-Codex reads now pass in this existing chat, with matching
+source bytes and one revision. The two pages total 8,330 UTF-8 bytes. The final
+backend correction passed 89 relevant tests and the six-case loader integration
+script. Fresh-session startup, plugin installation and Open WebUI instruction
+injection remain pending. No additional PKB proposal was attempted because the
+previous repository-ownership failure has not been confirmed repaired. Before
+any retry, reconcile this addendum with the live canonical page and inspect
+unknown durable proposal state; the failed payload below is a historical snapshot.
+
 The complete proposed page follows. It updates the current component page,
 not the deprecated personal-rag compatibility page or old full-section drafts.
 

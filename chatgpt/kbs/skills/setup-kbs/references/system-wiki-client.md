@@ -111,12 +111,15 @@ Fixtures cover identity/connection/service separation, auth denials, revision
 changes, protected content, expiry, tampering, response envelopes, detail reads,
 timeouts, concurrency, permissions, quotas and secret-safe failures.
 
-These tests are not authenticated backend or startup acceptance. Personal-rag's
-reader and thirteen-page bundle now exist, inspected at source `9d39527` on
-23 October. The descriptor/revision/classification extension is still absent;
-see repository document `docs/personal-rag-system-wiki-contract-followup.md`.
-The exposed tool catalogue in this chat contains no system-wiki calls. No live
-backend revision was contacted through this loader.
+The backend contract is implemented in personal-rag bb13522 and deployed as
+c9ad645 on 23 October, including a native resource request-metadata correction.
+The actual plugin loader passed the backend's isolated authentication/dispatch
+integration script. Native OAuth resource listing and complete index/local-Codex
+reads also passed against production in this existing chat, with source-identical
+bytes and matching revision/classification. That is live read/context delivery,
+not fresh-session startup or a verified abstract Python bridge. The named tool
+catalogue in this chat predates deployment; resource access required no new login.
+See personal-rag's `docs/system_wiki_deployment_20261023.md` for the receipt.
 
 Startup returns `kind=system_wiki_startup`, complete/degraded status, the required
 URIs, validated page text, one revision and metrics. The combined instruction

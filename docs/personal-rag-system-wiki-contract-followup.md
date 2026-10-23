@@ -1,5 +1,11 @@
 # Extend the existing system-wiki reader for client integration
 
+Resolved: implemented in personal-rag bb13522 and deployed as c9ad645 on
+23 October 2026, including the native resource request-metadata correction.
+Authenticated native resource listing and complete index/local-Codex reads now
+work in this existing chat. Fresh-session bootstrap remains separate acceptance.
+The request below is retained as a historical handover, not outstanding backend work.
+
 23 October 2026. Follow-up to personal-rag's `docs/kb_plugins_completion_brief.md`.
 This is a handover for that repository, not a second reader or deployment approval.
 

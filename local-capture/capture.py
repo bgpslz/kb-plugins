@@ -5,6 +5,7 @@ Only recognised visible text and completed turns enter Capture Protocol v1.
 Hooks detach a worker; a launchd sweep retries recent sessions. Credentials live
 in macOS Keychain. SQLite holds hashes/receipts, never transcript text or tokens.
 Unknown records are ignored and incomplete turns are held for the next trigger.
+--version reports the collector version and a process-stable source-content hash.
 """
 from __future__ import annotations
 
@@ -20,6 +21,17 @@ import subprocess
 import sys
 import time
 from urllib.request import Request, urlopen
+
+VERSION = '1.1.0'
+try:
+    BUILD_ID = 'sha256:' + hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+except OSError:
+    BUILD_ID = None  # Diagnostics must not disable fail-soft capture.
+
+
+def version_info():
+    return {'service': 'kbs-local-capture', 'version': VERSION, 'build_id': BUILD_ID}
+
 
 ENDPOINT = 'https://mcp-service.summerleaze.com/mcp'
 KEYCHAIN_SERVICE = 'kbs-local-capture'
@@ -209,7 +221,7 @@ class McpClient:
 
     def initialise(self):
         value = self.request('initialize', {'protocolVersion': '2025-03-26', 'capabilities': {},
-                             'clientInfo': {'name': 'kbs-local-capture', 'version': '1.0.0'}}, 1)
+                             'clientInfo': {'name': 'kbs-local-capture', 'version': VERSION}}, 1)
         if value.get('error') or not self.session:
             raise ValueError('MCP initialise failed')
         self.request('notifications/initialized', {})
@@ -300,6 +312,7 @@ def run_worker(args):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--version', action='version', version=json.dumps(version_info(), sort_keys=True))
     parser.add_argument('mode', choices=['hook', 'worker', 'sweep'])
     parser.add_argument('--source', choices=['claude', 'codex'])
     parser.add_argument('--path')

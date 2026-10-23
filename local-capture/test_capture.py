@@ -5,6 +5,8 @@ from contextlib import redirect_stderr
 import json
 from pathlib import Path
 import tempfile
+import subprocess
+import sys
 import unittest
 from unittest.mock import patch
 
@@ -25,6 +27,14 @@ def event(kind, **kwargs):
 
 
 class CaptureTests(unittest.TestCase):
+    def test_version_is_read_only_and_reports_actual_collector_source(self):
+        result = subprocess.run([sys.executable, '-B', str(Path(capture.__file__)), '--version'],
+                                capture_output=True, text=True, timeout=10)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        info = json.loads(result.stdout)
+        self.assertEqual(info, capture.version_info())
+        self.assertTrue(info['build_id'].startswith('sha256:'))
+
     def test_codex_modern_uses_visible_items_only_and_holds_incomplete(self):
         rows = [
             {'type': 'unknown', 'payload': []},
@@ -105,6 +115,7 @@ class CaptureTests(unittest.TestCase):
         def opener(req, timeout):
             value = json.loads(req.data); requests.append((value, dict(req.header_items())))
             if value['method'] == 'initialize':
+                self.assertEqual(value['params']['clientInfo']['version'], capture.VERSION)
                 return Response(b'{"result": {}}', {'Mcp-Session-Id': 'session-header'})
             if value['method'] == 'notifications/initialized': return Response(b'', {})
             return Response(b'event: message\ndata: {"result":{"structuredContent":{"status":"queued","capture_id":"cap"}}}\n\n', {})

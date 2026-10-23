@@ -1,6 +1,6 @@
 # KBs plugin for Claude
 
-Source 1.3.5 is unreleased. `use-kbs` is now a small instruction-based bootstrap
+Source 1.4.0 is unreleased. `use-kbs` is now a small instruction-based bootstrap
 for the system-wiki index plus applicable surface page; `setup-kbs` supplies
 setup adapters and the startup/cache core. Explicit `build-kb` and
 `maintain-project-docs` remain. `use-standard-kb` stays packaged until replacement

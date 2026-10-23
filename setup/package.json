@@ -1,5 +1,11 @@
 {
-  "version": "1.3.5",
+  "version": "1.4.0",
   "status": "unreleased",
-  "skills": ["setup-kbs", "use-kbs", "use-standard-kb", "build-kb", "maintain-project-docs"]
+  "skills": [
+    "setup-kbs",
+    "use-kbs",
+    "use-standard-kb",
+    "build-kb",
+    "maintain-project-docs"
+  ]
 }

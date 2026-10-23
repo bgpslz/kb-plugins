@@ -67,3 +67,7 @@ intentionally being reinstated.
 References: [Codex hooks](https://learn.chatgpt.com/docs/hooks),
 [Claude Code hooks](https://code.claude.com/docs/en/hooks).
 No cloud hooks, scraping or Compliance API integration is part of this component.
+
+Source collector 1.1.0 supports `python3 local-capture/capture.py --version`
+for side-effect-free version/source-hash inspection. This source change does
+not upgrade an installed collector or establish capture readiness.

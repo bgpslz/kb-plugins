@@ -1,8 +1,9 @@
 # Plugin and collector versions
 
-23 October 2026. Source package 1.4.0 and local collector 1.1.0 are unreleased.
-Existing installed versions are independent; no cache or client installation was
-changed by this implementation.
+23 October 2026. Source package 1.4.0 was published at 3fa8198. Supported marketplace commands
+installed Codex 1.4.0 and updated Claude 1.3.3 to 1.4.0 (restart to load).
+The installed local collector now reports 1.1.0; credentials, receipts, exclusions
+and hook configuration were preserved. Other machines/cloud clients are unverified.
 
 Before a significant commit, Codex and Claude Code must propose the affected
 patch/minor bumps and rationale; see AGENTS.md and CLAUDE.md. Application,
@@ -36,3 +37,28 @@ The PKB memory update failed with the existing repository-ownership error; its
 complete content and unknown-publication boundary are retained in
 [pending memory update](pending-pkb-service-versioning.md). Repository rules are
 saved; shared-memory publication is unconfirmed.
+
+
+## Deployment and acceptance follow-up — 23 October 2026
+
+Backend release c77cbe4 now reports MCP Service 1.3.0 and PKB Service 1.1.0
+through normal authenticated check_connection/get_kb_capabilities tools, including
+application/build/Git metadata. All twelve backend application health checks pass.
+The two legacy Bruno PKB MCP units now run as rag:rag through scoped systemd
+overrides; bruno performed administration, rag application/Git operations. No
+sudo grant, credential replacement or blanket Git trust exception was introduced.
+
+A fresh ephemeral Codex CLI model context using installed plugin 1.4.0 read the
+bootstrap, fetched the complete system-wiki descriptor/index/local-Codex page
+through existing OAuth and applied its guidance. This is new CLI instruction-based
+loading evidence, not native hook/cache or desktop/cloud acceptance. Working
+fallbacks remain. The installed collector executable reports build
+sha256:e4d946ba58ae45435f3d231ae929ee69490d7dd48dacb801d00fb51cd6b222df;
+no new capture delivery was invoked as an acceptance test.
+
+The earlier preference ownership error is resolved. Canonical OAuth proposals
+62 (preference) and 63 (project decisions) returned status=applied for Bruno’s PKB
+wiki. The retained draft statuses are historical and superseded by those receipts.
+Open WebUI filters still require the established admin-authenticated installer;
+JSON import rejected existing IDs without updating them. Source validation and
+these live checks remain separate evidence.

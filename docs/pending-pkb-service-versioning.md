@@ -1,3 +1,7 @@
+> Reconciled 23 October 2026: canonical OAuth preference change 62 and project
+> decision change 63 returned status=applied. The failed attempt below is retained
+> as history, not a pending retry. Current wiki pages were re-read before applying.
+
 # Service versioning memory update — submission failed
 
 The shared project decision page below is also retained for later reconciliation;
@@ -17,7 +21,7 @@ inspect pending state after the service owner repairs repository access.
 The rule is saved in AGENTS.md and CLAUDE.md in all three affected repositories.
 Shared PKB publication is unconfirmed. The complete proposed section follows:
 
-+<a id="sec_3a1709"></a>
+<a id="sec_3a1709"></a>
 ## Coding Agent Workflow
 
 - Read existing docs and code before proposing changes.

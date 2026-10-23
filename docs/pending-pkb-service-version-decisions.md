@@ -1,3 +1,7 @@
+> Reconciled 23 October 2026: canonical OAuth preference change 62 and project
+> decision change 63 returned status=applied. The failed attempt below is retained
+> as history, not a pending retry. Current wiki pages were re-read before applying.
+
 # Service-versioning project update — not submitted
 
 Destination: projects/knowledge-base-system/decisions.md (whole page).
@@ -8,7 +12,7 @@ under the authorised project-documentation workflow; publication is unconfirmed.
 
 Complete proposed page:
 
-+---
+---
 type: project
 title: Knowledge Base System Decisions
 description: Significant system choices, rationale and development documentation workflow.

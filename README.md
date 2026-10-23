@@ -48,16 +48,17 @@ and [bootstrap contract](docs/system-wiki-bootstrap-contract.md). The current
 [implementation and acceptance status](docs/setup-implementation.md) supersedes
 the earlier audit's implementation observations.
 
-Source **1.4.0 is unreleased**. Both distributions include setup adapters, the
+Source **1.4.0 is published** (main 3fa8198); local Codex and Claude marketplace installations report 1.4.0. Both distributions include setup adapters, the
 index-plus-surface startup core, the small use-kbs instruction bootstrap, a short
 shared fallback, and explicit build/development workflows. use-standard-kb remains
-packaged until replacement acceptance. Installed clients are unchanged.
+packaged until replacement acceptance. Other machines and cloud installations remain unverified.
 
 Personal-rag has implemented and deployed the system-wiki contract as c9ad645.
 Authenticated native resource listing and complete index/local-Codex reads passed
 in this existing chat. The [contract handover](docs/personal-rag-system-wiki-contract-followup.md)
-is resolved. A native startup bridge and fresh-session instruction-based loading
-still need independent proof before installed guidance is retired.
+is resolved. A fresh local Codex CLI context has now loaded the installed bootstrap and complete
+authenticated system-wiki index/surface pages. Native startup bridges and other
+surfaces remain independent acceptance work; fallback guidance is retained.
 
 Open WebUI's separate [filter handover](docs/owui-system-wiki-handover.md) covers
 system instructions for answerer/planner/worker, avoiding persisted/captured

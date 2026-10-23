@@ -2,7 +2,7 @@
 name: maintain-project-docs
 description: Maintain repository documentation and distil material development changes into configured personal and organisation KB wikis when that project workflow is authorised. Excludes ordinary KB retrieval.
 metadata:
-  version: "1.0.0"
+  version: "1.3.5"
   kb_protocol_version: 1
 ---
 
@@ -13,6 +13,8 @@ Use during material development work when the user has authorised a project docu
 Preserve the project's existing repository documentation contract, including architecture, implementation details, rationale, history, operations and outstanding work. Read the repository instructions and current documents first.
 
 Maintain three independently intelligible layers: full documentation in repositories; distilled current architecture, significant decisions and rationale, status, open questions, plans and workflows in the owner's personal KB wiki; and capabilities, benefits, limitations and usage guidance in the organisation KB wiki. Information flows from repositories to the personal KB, then to the organisation KB. Tailor each layer to its audience, avoiding unnecessary duplication and cross-links between layers. Repository-local provenance belongs in repository records; a wiki synthesis must be understandable without opening code or private source records.
+
+For this KB system, shared user-facing operating guidance belongs in personal-rag's Git-managed system wiki, served read-only by MCP Service. Do not duplicate that guidance into Summerleaze OKB wiki. The owner's PKB retains project-development knowledge; organisation-specific knowledge and authorised organisation documentation still use their own reviewed workflow. System-wiki edits follow repository/release rules, not KB proposal tools.
 
 Use the configured KB routing/authentication for this surface. Read the destination's root index and relevant existing pages, verify protocol v1 and wiki/build capabilities, and inspect the current proposal tool schema. Do not edit a local wiki mirror as a substitute for updating the canonical service. Do not change authentication or submit private content to a different KB after a failure.
 

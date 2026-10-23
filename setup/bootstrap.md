@@ -1,0 +1,49 @@
+---
+name: use-kbs
+description: Load KB system operating instructions before substantive work in each new or restored model context. Use the configured inventory; setup owns reconciliation.
+metadata:
+  version: "1.3.5"
+---
+
+# Load KB system instructions
+
+Use once before substantive work in each conversation or separate agent context.
+After compaction/resume, restore the instructions if they are no longer present.
+Keep loaded pages in context; do not append copies or reload on every turn.
+This is instruction-based loading, not deterministic host injection.
+
+Use the existing authenticated MCP Service connection. Determine actual execution
+location: local Codex uses `system-wiki://local-codex.md`; local Claude Code
+(including its desktop Code tab) uses `system-wiki://local-claude-code.md`.
+Cloud Code, ChatGPT chat, Claude Chat and unknown locality use
+`system-wiki://other-harnesses.md`. Unknown harness support needs verification.
+Open WebUI uses its filter and no plugin loading or second retrieval loop.
+
+If the required read-only tools are absent, use the fallback without inventing
+a tool call. If the pages are not already delivered in this context, call
+`get_system_wiki_capabilities` once. Require service_id `mcp-service`, protocol
+field `system_wiki_protocol_version=1`, capability `system_wiki_read`, nonempty
+service-local account_id and content_revision, and index_uri
+`system-wiki://index.md`. Read the complete index and exactly the applicable
+surface page with `read_system_wiki_page` on that same connection. Require both
+pages' matching URI/revision, mimeType `text/markdown`, nonempty text and explicit
+cache_visibility (`public_guidance` or `protected`). Follow the resulting
+operating instructions; fetch deeper linked guidance only when needed.
+
+Use one five-second startup allowance where the host can enforce it, not five
+seconds per call. Do not claim an enforced budget when the host cannot supply
+one. No truncation, invented descriptor, mixed revisions or partial success.
+If either required page/interface is unavailable, or access is denied, use the
+[packaged fallback](references/fallback.md) as one coherent degraded instruction
+set. Never bypass denial through another credential. The Python loader in
+setup-kbs can enforce these rules where a host supplies an authenticated bridge;
+settings discovery alone is not a bridge. Without a trusted auth binding, use
+live-only reads and no persistent cache reuse.
+
+Preserve this surface's configured authentication and KB inventory. Never query
+the registry as a loading side effect, capture conversations through model calls,
+or install local capture based on desktop branding. Setup, explicit build and
+authorised project documentation remain separate workflows. Still-active user
+instructions remain in force during staged migration; legacy runtime manuals
+are retained in the package until replacement acceptance, not preloaded beside
+a successful system-wiki bundle.

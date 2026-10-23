@@ -1,28 +1,49 @@
 ---
 name: use-kbs
-description: Always invoke for every conversation. Route materially relevant requests to configured KB Services and preserve connection state.
+description: Load KB system operating instructions before substantive work in each new or restored model context. Use the configured inventory; setup owns reconciliation.
 metadata:
-  version: "1.3.2"
+  version: "1.3.5"
 ---
 
-# Use KBs
+# Load KB system instructions
 
-Chat capture is handled by external clients. Do not generate capture references or
-tags, call chat capture tools for routine replies, evaluate capture policies, or
-implement in-chat exclude/include commands. `capture_policy` is review metadata.
+Use once before substantive work in each conversation or separate agent context.
+After compaction/resume, restore the instructions if they are no longer present.
+Keep loaded pages in context; do not append copies or reload on every turn.
+This is instruction-based loading, not deterministic host injection.
 
-Invoke for every conversation; retrieve only when a configured KB is materially relevant.
-Use the KB inventory in the current standing instructions. `setup-kbs` owns discovery
-and reconciliation; do not query MCP Service for inventory during ordinary conversation.
+Use the existing authenticated MCP Service connection. Determine actual execution
+location: local Codex uses `system-wiki://local-codex.md`; local Claude Code
+(including its desktop Code tab) uses `system-wiki://local-claude-code.md`.
+Cloud Code, ChatGPT chat, Claude Chat and unknown locality use
+`system-wiki://other-harnesses.md`. Unknown harness support needs verification.
+Open WebUI uses its filter and no plugin loading or second retrieval loop.
 
-For each relevant standard KB, follow `use-standard-kb` with its service and metadata.
-Maintain connection state per service. The first successful substantive call establishes
-connection; otherwise use `check_connection`. After success, do not preflight again.
-Verify KB Protocol version 1 and the capability required for the operation. A registry
-outage does not disable an already-configured KB; runtime authorization belongs to the
-KB Service.
+If the required read-only tools are absent, use the fallback without inventing
+a tool call. If the pages are not already delivered in this context, call
+`get_system_wiki_capabilities` once. Require service_id `mcp-service`, protocol
+field `system_wiki_protocol_version=1`, capability `system_wiki_read`, nonempty
+service-local account_id and content_revision, and index_uri
+`system-wiki://index.md`. Read the complete index and exactly the applicable
+surface page with `read_system_wiki_page` on that same connection. Require both
+pages' matching URI/revision, mimeType `text/markdown`, nonempty text and explicit
+cache_visibility (`public_guidance` or `protected`). Follow the resulting
+operating instructions; fetch deeper linked guidance only when needed.
 
-Use the authentication path configured for the current surface. In ChatGPT use the
-plugin's bearer-token apps; in Codex use separately configured OAuth MCP servers
-(`pkb_service` for My PKB); in Claude use remote OAuth connectors or the Claude Code
-plugin's bundled OAuth servers. Do not substitute another surface's authentication.
+Use one five-second startup allowance where the host can enforce it, not five
+seconds per call. Do not claim an enforced budget when the host cannot supply
+one. No truncation, invented descriptor, mixed revisions or partial success.
+If either required page/interface is unavailable, or access is denied, use the
+[packaged fallback](references/fallback.md) as one coherent degraded instruction
+set. Never bypass denial through another credential. The Python loader in
+setup-kbs can enforce these rules where a host supplies an authenticated bridge;
+settings discovery alone is not a bridge. Without a trusted auth binding, use
+live-only reads and no persistent cache reuse.
+
+Preserve this surface's configured authentication and KB inventory. Never query
+the registry as a loading side effect, capture conversations through model calls,
+or install local capture based on desktop branding. Setup, explicit build and
+authorised project documentation remain separate workflows. Still-active user
+instructions remain in force during staged migration; legacy runtime manuals
+are retained in the package until replacement acceptance, not preloaded beside
+a successful system-wiki bundle.

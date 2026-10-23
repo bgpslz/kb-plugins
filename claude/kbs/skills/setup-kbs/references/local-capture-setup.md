@@ -78,8 +78,9 @@ Windows-native installation must not be represented as covering WSL sessions.
 
 All local projects are included from the first install time; historical turns are
 not backfilled. Exclusions are explicit globs in the private capture configuration.
-One shared runtime services both apps; cloud/web/mobile chats still use manual paste
-or the Open WebUI route.
+One shared runtime services both local apps. Cloud Code and web/mobile chat receive
+retrieval setup only. Human paste into Capture Review is optional and outside that
+setup; Open WebUI retains its separate server-side route.
 
 ## Windows: current instructions and implementation requirements
 

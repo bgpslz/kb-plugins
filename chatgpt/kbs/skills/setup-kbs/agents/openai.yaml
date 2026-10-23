@@ -1,6 +1,6 @@
 interface:
   display_name: "Set up knowledge bases"
-  short_description: "Set up KB services, instructions and local capture"
-  default_prompt: "Use $setup-kbs to set up KB services and local chat capture on this computer, detect my operating system, and use the packaged installer."
+  short_description: "Check KB connections and surface-specific setup"
+  default_prompt: "Use $setup-kbs to identify my client and execution environment, reconcile KB connections and instructions, and report retrieval and capture readiness separately."
 policy:
   allow_implicit_invocation: false

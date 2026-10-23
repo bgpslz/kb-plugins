@@ -1,7 +1,7 @@
 {
   "name": "kbs",
-  "version": "1.3.4",
-  "description": "Discover, configure, retrieve from and deliberately build independent knowledge bases; install local session capture.",
+  "version": "1.3.5",
+  "description": "Set up KB connections, load system operating instructions and run explicit build/documentation workflows; verify local Code capture separately.",
   "author": {
     "name": "Bruno Prior"
   },
@@ -10,7 +10,7 @@
   "interface": {
     "displayName": "KBs",
     "shortDescription": "Use and manage multiple independent KB services.",
-    "longDescription": "Routes retrieval across configured knowledge bases. Includes standard retrieval, idempotent setup with local session capture, and build orchestration using service-owned guidance. Capture routes feed human review independently of model instructions.",
+    "longDescription": "Setup and system-wiki instruction loading for native assistants, with explicit KB build and project documentation workflows. Open WebUI uses separate retrieval and capture filters without this plugin. Local Code capture is verified independently.",
     "developerName": "Bruno Prior",
     "category": "Productivity",
     "capabilities": [

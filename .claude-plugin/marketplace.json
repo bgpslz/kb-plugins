@@ -7,7 +7,7 @@
     {
       "name": "kbs",
       "source": "./claude/kbs",
-      "description": "Discover, configure, retrieve from and build independent KBs, with local session capture setup."
+      "description": "Set up KB connections and system instructions, run explicit workflows and verify local Code capture separately."
     }
   ],
   "metadata": {

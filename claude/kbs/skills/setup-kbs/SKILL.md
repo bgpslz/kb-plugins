@@ -1,97 +1,106 @@
 ---
 name: setup-kbs
-description: Explicit-only, idempotent initial setup and reconciliation for the KBs plugin, MCP Service registry, KB connections, compatibility, and surface-specific standing instructions.
+description: Explicit-only installation, check, repair and reconciliation of KB connections, protocol compatibility and surface-specific instructions; local Code capture is verified separately.
 disable-model-invocation: true
 metadata:
-  version: "1.3.3"
+  version: "1.3.5"
 ---
 
 # Setup KBs
 
-Use only when explicitly asked to install, set up, update, repair, or reconcile knowledge bases.
+Use when explicitly asked to install, check, add, repair or reconcile KB setup.
 
-1. Verify all four plugin skills are installed and inspect the active skill paths and versions. Check for duplicate installations from different marketplaces or workspace sources; a current source checkout does not prove the active plugin is current. Update stale installations through the supported plugin manager, preserving working connections. Do not reinstall an already-correct plugin or edit generated cache files as a deployment method.
-2. Configure or verify the separate MCP Service connection with OAuth. It owns the setup-time registry and the capture ingress used by external capture clients. In Claude web, Desktop, and mobile, use the remote OAuth connector. In Claude Code, use this plugin's bundled `mcp-service` server and complete its OAuth authorization through `/mcp`; do not add a duplicate user-, project-, or local-scoped server. Reconnect the existing service when needed, and never assume either connection configures the other or another machine.
-3. Call MCP Service `check_connection`, verify Capture Protocol version 1 and the availability of `capture_chat_turn`, then call `list_knowledge_bases`. If unavailable or incompatible, report that registry reconciliation or central capture cannot be verified as applicable; do not invent entitlements, disable already-configured KB retrieval connections, or configure legacy per-KB capture as a fallback.
-4. Compare active entitlements with KB Services currently available on each applicable surface. For each missing service, guide the user through its OAuth connection. In Claude web, Desktop, and mobile, use a remote connector. In Claude Code, prefer a server bundled by this plugin, including `pkb-service` for the personal PKB, and complete OAuth authorization through `/mcp`; do not create a duplicate manually configured server. Guide connection of an unbundled entitled KB Service only when needed. Never ask MCP Service to issue or relay a KB token. For a trusted PKB Service connector, select **Always allow** for its tools if the user wants to avoid approval prompts; explain that this permits tool use without asking. Configure Claude Code tool permissions separately when the user wants the same behavior there, and verify each setting before reporting a no-recurring-approval setup complete.
-5. Verify each KB Service connection's `kb_protocol_version` and capabilities for direct retrieval and other declared operations. Do not require a KB Service to expose legacy chat capture, and do not require unavailable optional capabilities. A `build` declaration requires `get_build_guide`.
-6. Detect revoked/removed entries, remove them from standing configuration, and tell the user the stale connector can be removed. Security still depends on the KB Service revoking credentials server-side.
-7. Preserve correct configuration and reconcile the managed standing-instruction block after local capture verification, when inventory or protocol metadata changed.
+## Identify and reconcile
 
-## Standing-instruction reconciliation
+1. Identify the actual client/surface, machine and execution environment before
+   selecting actions. A cloud Code task viewed in a desktop app remains cloud.
+   Open WebUI is the primary surface for capturable ordinary chat. ChatGPT and Claude Chat receive retrieval/guidance setup with no assumed automatic capture. Unknown execution permits retrieval
+   setup but no capture installation. Open WebUI retains its separate filter/OAuth
+   and server capture; add no second retrieval loop or model tool attachment.
+2. Inspect source/package/active skill paths and versions independently. The current
+   package inventory is in scripts/package.json. use-kbs is the transition
+   instruction loader; use-standard-kb remains until replacement acceptance. Diagnose duplicate active sources without uninstalling
+   them. Historical caches alone are not duplicate active installations. Use the
+   supported plugin manager; never release by editing generated plugin caches.
+3. Read the [client connection guide](references/client-setup.md) for the target
+   authentication and instruction stores. Preserve existing connections and native
+   credentials. During explicit setup only, establish MCP Service, verify Registry
+   Protocol 1 and fetch entitled KBs. Registry outage/incomplete results preserve
+   configured retrieval. Capture Protocol/tools/credentials are not prerequisites.
+4. Match immutable KB UID, service ID and actual connection ID separately; display
+   names and OAuth client IDs are not interchangeable. Reuse bundled/native servers
+   before adding an entitled service. Use actual client callback/resource/scope
+   values and diagnose missing broker grants separately from user login. Preserve
+   old callbacks. Never request secrets in chat or reuse another client's secret.
+5. Verify each KB's authenticated capability response, KB Protocol 1 and required
+   capabilities, then a substantive authenticated wiki read. Login alone is
+   insufficient. A declared build capability requires get_build_guide; optional
+   capability failures are separate from retrieval. Runtime 401/403 takes precedence
+   over cached inventory. A complete authoritative registry response can remove a
+   revoked KB from managed inventory; client removal does not revoke credentials.
 
-Treat these as independent configuration targets:
+For repeatable diagnostics and instruction drafts, use the packaged
+[evidence helper](scripts/reconcile.py) following its
+[schema/manual path](references/setup-evidence.md). It reads supplied evidence and
+prints JSON; it does not log in, discover native settings or mutate configuration.
+Report unassessed checks honestly. Do not require a source clone to use it.
 
-- **Cloud Claude profile preferences:** edited in Claude's account settings under the profile preferences prompt; stored with the Claude account and used by cloud Claude conversations, including web, Desktop, and mobile.
-- **Local Claude Code user instructions:** stored in `~/.claude/CLAUDE.md`; local per machine and used by Claude Code sessions on that machine.
+For native Code configuration discovery and additive persistence, use the
+[native adapter](scripts/native.py) with its
+[supported stores and save procedure](references/native-setup.md). Inspect/plan
+first. An explicit save is separate from a report/source-only request. Preserve
+existing endpoints across scopes/plugins, and verify authentication/loading
+independently of file read-back. Cloud/unknown execution cannot save host-local
+settings; account Chat preferences retain their manual/native UI path.
 
-When the user uses both cloud Claude and Claude Code, reconcile both stores. Updating or verifying either store does not establish that the other has been updated. Do not describe Claude Desktop profile preferences as a route to local Claude Code instructions. Reconcile `~/.claude/CLAUDE.md` on each machine where the user runs Claude Code.
+## Instructions and readiness
 
-Generate a separate surface-appropriate managed `kbs-instructions v2` block for each
-applicable target. Include every active KB's name, type/domain description, service,
-KB Protocol version and capabilities. Retain `capture_policy` as registry metadata for
-human review only; it must not govern model behaviour or automated intake.
+Reconcile only the managed `kbs-instructions v2` block. Preserve unrelated rules;
+malformed/ambiguous legacy blocks require explicit reconciliation, not replacement
+of the whole file. The helper can read an existing file and output a proposed
+replacement. Apply through the client's supported setting only within authorised
+scope; personal `~/.claude/CLAUDE.md` changes require Bruno's approval. Reconcile
+account preferences and each machine/cloud Code instruction store independently.
 
-The block must state: invoke `use-kbs`; retrieve only from materially relevant configured
-KBs; follow `use-standard-kb`; establish connection state once after success (otherwise
-use `check_connection`); verify KB Protocol version 1 and required capabilities; never
-query MCP Service for inventory during normal runtime. Preserve the appropriate
-surface's existing OAuth or bearer-app authentication path.
+Use use-kbs as the small instruction-based bootstrap: before substantive work,
+load the complete system-wiki index plus the applicable surface page at one
+validated revision. Restore missing instructions after compaction/resume or in
+a separate agent context. Do not preload the legacy manual beside successful
+loading. Keep use-standard-kb available during staged replacement; remove it
+only after live and degraded acceptance on affected surfaces. Generate managed
+blocks and their short fallback from the packaged canonical sources.
 
-Describe the three capture routes: Open WebUI is the main captured chat surface, with
-server-side capture; local Claude Code and Codex use session-history capture installed
-on each machine; other web, desktop, mobile and cloud coding sessions are pasted into
-the Capture Review Application. Capture destinations are selected by a human there.
-No in-chat reference generation, tags, tool calls, capture-policy evaluation or
-exclude/include commands remain. This does not change direct KB retrieval.
+Use the packaged retrieval fallback unless MCP Service actually declares the
+compatible system-wiki interface. That interface is a separate dependency, not
+assumed deployed. A static instruction is weaker than tested startup injection.
+A startup hook alone is insufficient: prove the complete required pages reach
+the model before useful work, including fresh, resumed and separate contexts.
+Do not retire working guidance or mark a surface complete before that evidence.
 
-For a local machine, complete the installation below before removing old capture rules.
-Only replace the delimited managed block; preserve all other instructions. Obtain the
-user's approval before changing their personal `~/.claude/CLAUDE.md`. Reconcile cloud
-preferences independently; do not claim that source edits update installed plugins or
-cloud settings. If a surface cannot be updated programmatically, provide its complete
-block and verify placement after the user applies it.
+For explicit loader integration work, read the
+[system-wiki client guide](references/system-wiki-client.md). The packaged core
+provides load_startup(context, surface, execution) for the two-page bundle. Its
+host integration remains inactive: it requires an authenticated bridge and optional
+trusted account/auth binding. Do not manufacture either from a config entry.
 
-## Migration verification
+Report registry reconciliation, retrieval readiness, guidance loading and capture
+readiness independently. Start a fresh session after changing installed skills or
+instructions. Chat/cloud Code setup completes with retrieval acceptance alone:
+no capture hooks, capture-only credentials, model capture directives or receipts.
+Local capture health must not block retrieval setup or instruction generation.
 
-After intake verification, check each applicable standing-instruction store for a
-legacy managed block and reconcile it to v2. Check project instructions as well as
-global instructions without replacing unrelated project rules. Confirm only the
-intended plugin installation supplies the runtime skills. Removal of a duplicate
-plugin requires an explicit removal request; obtain it when needed.
+## Supported local capture only
 
-Start a fresh session after changing instructions or installed skills. Verify that
-a simple completed exchange is captured by the local route without a model-generated
-reference tag or chat-capture call. Existing sessions can retain old instructions.
-Report source version, installed version, instruction targets changed, verified
-capture surfaces and remaining targets separately; cloud settings and other Macs
-are independent migrations.
+For supported **local Codex/Claude Code on macOS**, read the
+[capture guide](references/local-capture-setup.md) and use the packaged
+[installer](scripts/install.py). Detect OS/native versus WSL and a durable Python
+3.11+ first. No Windows/Linux installer is shipped. Unsupported local capture
+does not prevent retrieval setup. Human paste is optional and outside setup.
 
-## Local session capture installation
-
-For a local-capture setup request, read the packaged [platform guide](references/local-capture-setup.md). Run setup on the requested computer, detect its OS and native/WSL environment, and use this installed skill's scripts; do not require the user to clone a repository or know Git. Prefer assistant-guided setup from a local coding desktop session. Discover a persistent Python 3.11+ interpreter before offering installation; do not assume Homebrew, a bundled Python runtime or another machine's paths. The current capture implementation supports macOS only. On Windows or Linux, explain the missing credential/scheduler adapters and the current capture alternatives rather than running the macOS installer or claiming activation.
-
-Use the packaged [installer](scripts/install.py) with a durable Python 3.11+ interpreter:
-`python3.11 <skill-directory>/scripts/install.py --account <MCP-Service-email> --activate`.
-The shared implementation is maintained in `kb-plugins/local-capture`; both packages
-carry identical installer/runtime copies. Never request a token in chat or pass it as
-an argument. The installer prompts directly through macOS Keychain for the user's
-MCP Service bearer token, created at `https://mcp-service.summerleaze.com/account`.
-This token is separate from the app's retrieval OAuth connections.
-
-Installation preserves unrelated config, including Codex `notify`, and writes Stop and
-SessionEnd hooks plus a daily launchd backstop. It defaults to all local projects from
-installation time. Optional `excluded_projects` shell glob patterns match the session
-working directory in `~/Library/Application Support/kbs-capture/config.json`; an empty
-list includes all. This is a machine setting, not an in-chat command. Preserve existing
-exclusions and the original capture boundary on reinstall.
-
-Codex requires review/trust of the exact new hook definitions through `/hooks`.
-Verify one new completed turn from each used surface reaches the Capture Review queue,
-and test Claude desktop's Code tab separately. Check local `capture.log` for failures.
-Only after successful intake verification reconcile the old managed instruction blocks
-and install the retrieval-only `use-kbs` release. Do not claim activation merely because
-files were written. Offline failures remain eligible for the next hook or sweep.
-
-There are no cloud-session hooks, share-link scrapers, web export automation or Compliance
-API capture routes. Keep Capture Protocol v1's field names, limits and queue contract.
+Preserve the capture boundary, exclusions, receipts and unrelated hooks/notify.
+Credentials are entered directly through the native Keychain prompt, never chat,
+arguments or logs; they are separate from retrieval OAuth. Preserve hook trust.
+Verify real new hook-triggered turns/receipts for each used CLI/desktop surface
+and machine before claiming capture readiness. Keep working external capture
+while updating retrieval guidance; reconcile any legacy capture migration using
+the capture guide. No capture setup applies to cloud Code or ordinary chat.

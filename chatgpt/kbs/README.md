@@ -1,14 +1,17 @@
 # KBs plugin for ChatGPT and Codex
 
-Version 1.3.4 adds `maintain-project-docs` alongside `use-kbs`,
-`use-standard-kb`, `setup-kbs` and `build-kb`.
-Retrieval and build guidance go directly to relevant KB Services. MCP Service owns
-registry reconciliation and Capture Protocol v1; the model has no capture duties.
+Source 1.3.5 is unreleased. `use-kbs` is now a small instruction-based bootstrap
+for the system-wiki index plus applicable surface page; `setup-kbs` supplies
+setup adapters and the startup/cache core. Explicit `build-kb` and
+`maintain-project-docs` remain. `use-standard-kb` stays packaged until replacement
+acceptance; installed instructions have not been retired.
 
-Three routes feed the same human review queue: Open WebUI server capture, local
+Open WebUI is the primary surface for capturable ordinary chat, using its own
+filters without a KB plugin. Three routes feed the same human review queue: Open WebUI server capture, local
 Claude Code/Codex session capture, and manual paste for other surfaces. See
-[local capture installation](../../local-capture/README.md). Install and verify
-local capture before replacing old instructions or installing retrieval-only skills.
+[local capture installation](../../local-capture/README.md). Local Code capture is
+verified separately per surface and machine. Cloud Code and ChatGPT chat receive
+retrieval setup only; capture is not a prerequisite for retrieval or its guidance.
 `capture_policy` remains review metadata; in-chat exclude/include is retired.
 
 The plugin's `.app.json` registers the ChatGPT bearer-token apps for MCP Service
@@ -29,14 +32,21 @@ never performs the controller's lifecycle transition.
 
 `maintain-project-docs` preserves repository documentation and proposes distilled
 architecture, decisions, status and plans to the configured owner PKB. It reports
-pending/failed updates and proposes audience-appropriate organisation guidance
-for human review when users are materially affected. Source release, backend
+pending/failed updates and maintains authorised organisation documentation.
+Shared system-use guidance belongs in the system wiki, not Summerleaze OKB wiki. Source release, backend
 deployment and installed-client acceptance are separate milestones.
 
-When upgrading from in-chat capture, reconcile managed instructions to v2 after
-local intake verification and inspect active skill paths for duplicate older
-installations. Start a fresh session to verify the new behaviour; source changes
-alone do not update installed skills or cloud preferences.
+When migrating a working local capture route, preserve and verify its replacement
+before retiring it. Reconcile retrieval instructions independently and inspect
+active skill paths for duplicates. Fresh-session tests, source changes, installed
+skills and cloud preferences are separate states.
+
+The setup revision adds native adapters, a read-only evidence/report helper and
+managed-instruction drafts; see its [guide](skills/setup-kbs/references/setup-evidence.md).
+The helper does not log in or save settings. The native adapter can save an
+explicit approved plan with backups and stale-plan checks. Startup integration
+still needs the backend contract extension and actual context-delivery proof;
+see the [client guide](skills/setup-kbs/references/system-wiki-client.md).
 
 For assistant-guided laptop setup without a source checkout, ask `setup-kbs` to
 install local capture on this computer. See the [platform guide](skills/setup-kbs/references/local-capture-setup.md).

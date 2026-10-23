@@ -59,6 +59,8 @@ no new capture delivery was invoked as an acceptance test.
 The earlier preference ownership error is resolved. Canonical OAuth proposals
 62 (preference) and 63 (project decisions) returned status=applied for Bruno’s PKB
 wiki. The retained draft statuses are historical and superseded by those receipts.
-Open WebUI filters still require the established admin-authenticated installer;
-JSON import rejected existing IDs without updating them. Source validation and
+Bruno subsequently ran the established admin-authenticated installer for both
+Open WebUI filters. Runtime logs and exact source hashes verify capture 0.4.0 and
+retrieval 0.3.0; active/global flags and stored valves match the pre-update backup.
+The earlier failed JSON import is superseded by this completed installation. Source validation and
 these live checks remain separate evidence.

@@ -23,3 +23,11 @@ prohibitions remain until the feature and system-wiki changes are released.
 Validation: source package parity passes; Python 3.12 setup/bootstrap/native tests
 pass 88 cases and local collector tests pass 8. Source publication and installed
 plugin/standing-instruction updates are separate; no installed cache was edited.
+
+Source implementation commit **21fef40** is published on the existing GitHub main.
+The backend release is live: normal authenticated discovery reports registry
+protocol 2, no removed field on either record, and no capture label on My PKB's
+discovery capabilities. Both system-guide changes and central migration are
+verified. Bruno PKB documentation changes 97/98 are applied, including the deferred
+opt-out. Installed plugin metadata, saved instructions and fresh-client acceptance
+remain separate from source publication; collector runtime was not changed.

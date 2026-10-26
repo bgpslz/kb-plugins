@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Generate or check shared source-package resources; never edit installed caches."""
+"""Generate/check both plugin packages from shared instruction/helper sources.
+
+Canonical setup, bootstrap, retrieval and fallback text live in setup/. This
+script writes source-package copies only; it never edits installed caches.
+"""
 import argparse
 from pathlib import Path
 import sys
@@ -13,6 +17,7 @@ def resources(root):
             text = text.replace(b'\nmetadata:\n', b'\ndisable-model-invocation: true\nmetadata:\n', 1)
         yield skill / 'SKILL.md', text
         yield root / platform / 'kbs/skills/use-kbs/SKILL.md', (root / 'setup/bootstrap.md').read_bytes()
+        yield root / platform / 'kbs/skills/use-standard-kb/SKILL.md', (root / 'setup/retrieval.md').read_bytes()
         yield root / platform / 'kbs/skills/use-kbs/references/fallback.md', (root / 'setup/fallback.md').read_bytes()
         for source, target in (
             ('setup/reconcile.py', 'scripts/reconcile.py'),

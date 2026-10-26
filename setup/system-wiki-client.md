@@ -2,9 +2,10 @@
 
 `scripts/system_wiki.py` in the packaged skill (source `setup/system_wiki.py`)
 implements the approved read/cache/fallback behaviour. Python 3.11+ is required.
-No startup hook is installed. use-kbs is now a transition instruction loader;
-use-standard-kb remains packaged until acceptance. Installed guidance is unchanged. This
-core does not discover tokens, read a credential store, perform HTTP/OAuth,
+This core does not install a startup hook. `use-kbs` supplies instruction-based
+loading; `use-standard-kb` is an optional retrieval helper, independent of whether
+this core is integrated. This core does not discover tokens, read a credential
+store, perform HTTP/OAuth,
 reconcile registry inventory or configure capture.
 
 ## Authenticated bridge boundary
@@ -135,7 +136,7 @@ after compaction/resume or in a new agent; disk cache does not prove delivery.
 instruction-based path through the host's normal model-visible MCP tools. It
 requires the same complete contract and falls back without inventing metadata.
 It does not enforce a tool deadline where the host exposes none. Successful
-loading does not preload use-standard-kb or the conditional fallback. Unknown
+loading does not preload the optional retrieval helper or the conditional fallback. Unknown
 locality uses other-harnesses; Open WebUI is excluded from this native loader.
 
 Before activation, prove an online uncached read and context delivery in one

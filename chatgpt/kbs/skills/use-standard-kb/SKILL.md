@@ -1,17 +1,37 @@
 ---
 name: use-standard-kb
-description: Generic retrieval workflow for a configured KB Service using the standard OKF/RAG protocol. Invoke through use-kbs only for KBs materially relevant to the current request.
+description: Retrieve maintained knowledge and source evidence from a selected configured KB Service. Use when retrieval detail is needed after KB operating instructions have been loaded; does not set up connections or load the system guide.
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   kb_protocol_version: 1
 ---
 
 # Use a standard KB
 
-Infer the target KB/service from `use-kbs`; if ambiguous, ask which configured KB rather than querying all of them. Require protocol version 1 and only call declared capabilities.
+This is an optional retrieval helper, not a transitional instruction loader.
+`use-kbs` loads the system-wiki operating instructions; this skill supplies
+retrieval detail for a KB relevant to the user's request. Follow already-loaded
+guidance without reloading it. If guidance is missing, load it through `use-kbs`
+first; when unavailable, its packaged fallback preserves direct retrieval.
+Neither path requires this helper to be invoked for every question.
 
-For deterministic personal or organisation knowledge, use the target KB's wiki first. Start at `wiki://index.md` unless a canonical relevant URI is already reliably known in this conversation. Follow links efficiently, read whole relevant pages, backtrack promptly, and avoid listing or brute-force search when traversal is sufficient.
+Select the relevant KB from the configured inventory. If the user's intended KB
+is ambiguous, ask rather than querying all KBs. Require KB Protocol 1 and use
+only declared capabilities. A successful substantive read establishes the
+connection; do not repeat connection checks after success.
 
-Fall back to the target KB's retrieval corpus only when the wiki is insufficient or the request asks for source evidence. Use chunk search for what source material says; document metadata search for records, senders, dates, URLs or folders; table search/fetch/value tools for spreadsheet and table questions; and specialised capabilities such as `x` only when declared and relevant. Filter before ranking, preserve provenance, keep separate intents in separate calls, and treat ranking as evidence guidance rather than proof. Avoid unnecessary RAG calls.
+For ordinary personal or organisation knowledge, start at `wiki://index.md`
+unless a relevant canonical page is already reliably known. Read whole relevant
+pages and follow their links. Use the retrieval corpus when the wiki leaves a
+gap, or start with sources when the user explicitly asks for source evidence.
 
-Stop once evidence is sufficient. Do not silently substitute another KB after a requested KB read fails. Give diagnostic traversal pages, query plans, scores or traces only when explicitly requested.
+Choose chunk search for what source material says; document metadata search for
+records, senders, dates, URLs or folders; table tools for spreadsheet/table
+questions; and specialised tools such as `x` only when declared and relevant.
+Filter before ranking, keep separate intents in separate calls and preserve
+provenance. Ranked candidates are not a quota of facts to include.
+
+Stop when the evidence is sufficient. Accept an empty result unless the query
+was poorly phrased; do not keep varying it to force a match. Do not silently
+switch KBs or credentials after an access refusal, or use cached protected pages
+to bypass one. Provide query plans, scores and traces only when requested.

@@ -64,3 +64,14 @@ Open WebUI filters. Runtime logs and exact source hashes verify capture 0.4.0 an
 retrieval 0.3.0; active/global flags and stored valves match the pre-update backup.
 The earlier failed JSON import is superseded by this completed installation. Source validation and
 these live checks remain separate evidence.
+
+
+## Setup clarity patch — 26 October 2026
+
+Source KBs package 1.4.0 → 1.4.1 is a compatible instruction/presentation patch,
+prepared but not published or installed. Setup and bootstrap skill metadata
+1.3.5 → 1.3.6 and the retrieval helper 1.0.0 → 1.0.1 describe their changed text.
+The helper remains available under its existing name; invocation policies are
+preserved. Runtime helper APIs, the 1.1.0 collector, authentication and backend
+protocols are unchanged. Both package manifests and generated resources use the
+canonical setup inventory. See [the decision and validation](setup-clarity-20261026.md).

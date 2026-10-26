@@ -116,8 +116,9 @@ Optional `system_wiki` accepts the authenticated descriptor from the approved
 system-wiki contract. A compatible complete descriptor enables a static load
 instruction; otherwise the packaged fallback remains. Neither result proves
 startup injection. The separate system-wiki client core implements startup/cache logic but still
-needs host integration. Personal-rag has its reader/content; its approved metadata
-extension and deployment remain dependencies. See the system-wiki client guide.
+needs host integration. The system-wiki reader/metadata contract has been deployed
+in personal-rag; verify the target connection live rather than assuming every
+installation has it. See the system-wiki client guide.
 
 ## Outputs and limitations
 

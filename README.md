@@ -17,7 +17,8 @@ rather than this repository.
 MCP Service owns the registry and Capture Protocol v1. `setup-kbs` reconciles
 services and handles capture separately for supported local Code sessions;
 chat and cloud Code setup includes retrieval/guidance without assumed capture.
-`use-kbs` is the transition system-instruction bootstrap. Open WebUI is the
+`use-kbs` loads the current system operating instructions; `use-standard-kb` is
+an optional retrieval helper for selected KBs, not a second startup step. Open WebUI is the
 primary surface for capturable ordinary chat and needs no KB plugin.
 Open WebUI server capture, local session capture and manual paste feed the same
 Capture Store and human review queue. See [local capture](local-capture/README.md).
@@ -48,10 +49,18 @@ and [bootstrap contract](docs/system-wiki-bootstrap-contract.md). The current
 [implementation and acceptance status](docs/setup-implementation.md) supersedes
 the earlier audit's implementation observations.
 
-Source **1.4.0 is published** (main 3fa8198); local Codex and Claude marketplace installations report 1.4.0. Both distributions include setup adapters, the
+Source **1.4.0 is published** (main 3fa8198); local Codex and Claude marketplace installations report 1.4.0. Both installed distributions include setup adapters, the
 index-plus-surface startup core, the small use-kbs instruction bootstrap, a short
-shared fallback, and explicit build/development workflows. use-standard-kb remains
-packaged until replacement acceptance. Other machines and cloud installations remain unverified.
+shared fallback, and explicit build/development workflows. Other machines and
+cloud installations remain unverified.
+
+Source **1.4.1 is prepared and unreleased**. The setup skill now explains the
+connection/instruction workflow and reports inventory, retrieval, instruction
+persistence, guidance delivery and capture separately. `use-standard-kb` remains
+as an optional retrieval helper; it is not required after every guide load or by
+the fallback. Plugin presentation now distinguishes these jobs. This source
+revision does not update installed plugins, personal instructions or services.
+See [the clarification decision](docs/setup-clarity-20261026.md).
 
 Personal-rag has implemented and deployed the system-wiki contract as c9ad645.
 Authenticated native resource listing and complete index/local-Codex reads passed
@@ -69,7 +78,7 @@ version-bump rule, diagnostics and release boundaries.
 
 ## Source development
 
-Canonical setup helpers, bootstrap, fallback and release inventory live in `setup/`.
+Canonical setup helpers, bootstrap, retrieval helper, fallback and release inventory live in `setup/`.
 Run `python3 scripts/sync-packages.py --write` to regenerate packaged copies;
 omit `--write` to check. `scripts/check-packages.py` checks both source versions,
 inventory and generated resource parity. These commands do not publish/install.

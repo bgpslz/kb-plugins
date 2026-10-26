@@ -1,6 +1,6 @@
 interface:
   display_name: "Set up knowledge bases"
-  short_description: "Check KB connections and surface-specific setup"
-  default_prompt: "Use $setup-kbs to identify my client and execution environment, reconcile KB connections and instructions, and report retrieval and capture readiness separately."
+  short_description: "Configure connections and saved KB instructions"
+  default_prompt: "Use $setup-kbs to set up or check my KB connections and saved instructions, reporting retrieval, guidance delivery and capture separately."
 policy:
   allow_implicit_invocation: false

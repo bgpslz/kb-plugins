@@ -1,5 +1,10 @@
 # Plugin alignment implementation status
 
+The [26 October clarification](setup-clarity-20261026.md) supersedes the earlier
+transition-only explanation of the retrieval helper and ambiguous completion
+wording. The dated implementation and acceptance snapshot below remains historical;
+it does not describe the installed state of every current client.
+
 Updated 23 October 2026 against personal-rag's
 `docs/kb_plugins_completion_brief.md` and current source `9d39527`.
 Bruno's phase approvals remain in force. This is source work, not live migration

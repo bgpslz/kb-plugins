@@ -2,7 +2,7 @@
 name: use-kbs
 description: Load KB system operating instructions before substantive work in each new or restored model context. Use the configured inventory; setup owns reconciliation.
 metadata:
-  version: "1.3.5"
+  version: "1.3.6"
 ---
 
 # Load KB system instructions
@@ -11,6 +11,12 @@ Use once before substantive work in each conversation or separate agent context.
 After compaction/resume, restore the instructions if they are no longer present.
 Keep loaded pages in context; do not append copies or reload on every turn.
 This is instruction-based loading, not deterministic host injection.
+
+This skill loads the operating instructions; it does not search KB content or
+reconcile connections as part of that loading. After loading, follow the guide
+for the user's request. `use-standard-kb` is an optional retrieval helper for a
+selected KB, not another startup step or an alternative system guide. Do not
+load it alongside the guide unless its retrieval detail is needed.
 
 Use the existing authenticated MCP Service connection. Determine actual execution
 location: local Codex uses `system-wiki://local-codex.md`; local Claude Code
@@ -43,7 +49,6 @@ live-only reads and no persistent cache reuse.
 Preserve this surface's configured authentication and KB inventory. Never query
 the registry as a loading side effect, capture conversations through model calls,
 or install local capture based on desktop branding. Setup, explicit build and
-authorised project documentation remain separate workflows. Still-active user
-instructions remain in force during staged migration; legacy runtime manuals
-are retained in the package until replacement acceptance, not preloaded beside
-a successful system-wiki bundle.
+authorised project documentation remain separate workflows. Preserve still-active
+user instructions when reconciling a client's setup; source changes alone do not
+replace installed instructions or establish automatic startup loading.

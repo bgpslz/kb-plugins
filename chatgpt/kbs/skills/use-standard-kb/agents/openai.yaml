@@ -1,6 +1,6 @@
 interface:
   display_name: "Use a standard KB"
-  short_description: "Retrieve from a relevant standard KB service"
-  default_prompt: "Use $use-standard-kb with the relevant configured KB for this request."
+  short_description: "Retrieve wiki knowledge and source evidence"
+  default_prompt: "Use $use-standard-kb to retrieve relevant wiki knowledge or source evidence from a selected configured knowledge base."
 policy:
   allow_implicit_invocation: true

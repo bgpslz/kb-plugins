@@ -1,8 +1,9 @@
 # Clear setup and retrieval skill responsibilities
 
 The KBs source package 1.4.1 clarifies what setup does, which instructions guide
-ordinary chats and how to report readiness. This is a source revision, not a
-plugin publication, client installation or service deployment.
+ordinary chats and how to report readiness. This source revision has been published to GitHub and is available through the
+configured local marketplaces. Installed plugin updates and service deployment
+remain separate.
 
 ## User decision and scope
 
@@ -59,3 +60,26 @@ remaining Claude frontmatter validated in a temporary normalised copy. The sourc
 field was preserved. These are source checks, not installed-version or automatic
 instruction-delivery acceptance. The task's final report records commit and
 Bruno PKB project update status.
+
+
+## Publication and marketplace follow-up — 26 October 2026
+
+Bruno requested updating GitHub and the marketplace. Implementation commit
+`5bdd702` was pushed to `bgpslz/kb-plugins/main` and verified with GitHub's ref.
+The release inventory now marks 1.4.1 published. This receipt and generated
+release metadata follow in a documentation/metadata commit on the same branch.
+
+Codex and Claude both configure `kb-plugins` as a local directory marketplace
+pointing to `/Users/brunoprior/repos/kb-plugins`; their catalogue source therefore
+already contains 1.4.1. Claude's supported `plugin marketplace update kb-plugins`
+validated the local source successfully. Codex's `marketplace upgrade` is only
+for Git-backed sources and refused this local source; no clone refresh or
+configuration change is needed. Both package manifests and generated copies
+report 1.4.1.
+
+Installed metadata was checked separately: both native clients still report
+kbs@kb-plugins 1.4.0; Claude also reports folderVersion 1.4.1 from the source
+checkout. Neither installed cache was manually edited and no plugin reinstall
+was run. A client update/reload followed by a fresh-session check is still needed
+to claim active 1.4.1 instructions. Other machines and separately imported
+workspace-managed ChatGPT listings have not been updated by these local commands.

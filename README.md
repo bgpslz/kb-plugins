@@ -54,13 +54,17 @@ index-plus-surface startup core, the small use-kbs instruction bootstrap, a shor
 shared fallback, and explicit build/development workflows. Other machines and
 cloud installations remain unverified.
 
-Source **1.4.1 is prepared and unreleased**. The setup skill now explains the
+Source **1.4.1 is published on GitHub** (implementation commit `5bdd702`). The setup skill now explains the
 connection/instruction workflow and reports inventory, retrieval, instruction
 persistence, guidance delivery and capture separately. `use-standard-kb` remains
 as an optional retrieval helper; it is not required after every guide load or by
 the fallback. Plugin presentation now distinguishes these jobs. This source
 revision does not update installed plugins, personal instructions or services.
-See [the clarification decision](docs/setup-clarity-20261026.md).
+Both configured local marketplaces point to this checkout and read the 1.4.1
+package. Claude's marketplace update succeeded; Codex's Git-only upgrade does
+not apply to this local source. Installed plugin metadata still reports 1.4.0;
+client updates and fresh-session acceptance remain separate. See
+[the clarification and publication record](docs/setup-clarity-20261026.md).
 
 Personal-rag has implemented and deployed the system-wiki contract as c9ad645.
 Authenticated native resource listing and complete index/local-Codex reads passed

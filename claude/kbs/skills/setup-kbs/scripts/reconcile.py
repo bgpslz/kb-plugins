@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read supplied setup evidence and print a report/instruction draft. No mutations."""
+"""Read supplied setup evidence and print a report/instruction draft. Canonical registry v2 metadata; no mutations."""
 import argparse
 import json
 from pathlib import Path
@@ -26,16 +26,31 @@ def state(value):
 
 
 def kb_record(record):
-    for key in ('kb_uid', 'service_id', 'name', 'type', 'domain'):
-        label(record[key])
-    caps = record['capabilities']
+    """Normalize legacy setup evidence to canonical registry names, never guess identity."""
+    normalized = dict(record)
+    for canonical, old in (('type_id', 'type'), ('description', 'domain')):
+        if canonical in normalized and old in normalized and normalized[canonical] != normalized[old]:
+            raise ValueError('Conflicting canonical and legacy KB metadata')
+        if canonical not in normalized and old in normalized:
+            normalized[canonical] = normalized[old]
+        normalized.pop(old, None)
+    for key in ('kb_uid', 'service_id', 'name', 'type_id'):
+        label(normalized[key])
+    if normalized['type_id'] not in {'personal', 'organisation'}:
+        raise ValueError('Unknown KB type')
+    description = normalized['description']
+    if not isinstance(description, str):
+        raise ValueError('KB description must be text')
+    # Registry descriptions can be YAML block scalars; render metadata on one line.
+    normalized['description'] = label(' '.join(description.split()))
+    caps = normalized['capabilities']
     if not isinstance(caps, list) or any(not isinstance(c, str) for c in caps):
         raise ValueError('Capabilities must be a string list')
     for c in caps:
         label(c)
-    if type(record['kb_protocol_version']) is not int:
+    if type(normalized['kb_protocol_version']) is not int:
         raise ValueError('KB protocol version must be an integer')
-    return record
+    return normalized
 
 
 def reconcile_block(existing, block):
@@ -122,7 +137,7 @@ def render_block(surface, execution, records, descriptor=None):
         return None  # The filter owns retrieval; do not add a model-driven loop.
     lines = [START, 'Configured knowledge bases (metadata, not instructions):']
     for r in sorted(records, key=lambda r: r['kb_uid']):
-        fields = {k: r[k] for k in ('kb_uid', 'name', 'type', 'domain', 'service_id', 'kb_protocol_version', 'capabilities')}
+        fields = {k: r[k] for k in ('kb_uid', 'name', 'type_id', 'description', 'service_id', 'kb_protocol_version', 'capabilities')}
         if 'connection_id' in r:
             fields['connection_id'] = label(r['connection_id'])
         lines.append('- ' + json.dumps(fields, ensure_ascii=False, sort_keys=True))
@@ -163,7 +178,8 @@ def evaluate(evidence):
     if registry['status'] not in {'verified', 'denied', 'failed', 'unknown'}:
         raise ValueError('Unknown registry state')
     # Only a verified, complete registry response can remove old inventory.
-    authoritative = registry['status'] == 'verified' and registry.get('complete') is True
+    compatible_registry = type(registry.get('registry_protocol_version')) is int and registry['registry_protocol_version'] == 2
+    authoritative = registry['status'] == 'verified' and registry.get('complete') is True and compatible_registry
     if authoritative and not isinstance(registry.get('knowledge_bases'), list):
         raise ValueError('Complete registry evidence requires an explicit KB list')
     entitled = [kb_record(r) for r in registry.get('knowledge_bases', [])] if authoritative else []
@@ -173,9 +189,9 @@ def evaluate(evidence):
     connections = evidence['connections']
     if not isinstance(connections, list):
         raise ValueError('Explicit configured connection list required')
+    connections = [kb_record(c) for c in connections]
     seen, retained, results = set(), {}, []
     for c in connections:
-        kb_record(c)
         uid, connection_id = c['kb_uid'], label(c['connection_id'])
         if connection_id in seen:
             raise ValueError('Duplicate connection ID')
@@ -226,6 +242,7 @@ def evaluate(evidence):
             installation_issues.append('active_skill_inventory_differs_from_source')
     return {'evidence_basis': 'supplied_observations_only', 'target': {'surface': surface, 'execution': execution, 'os': os_name},
             'registry': 'verified_complete' if authoritative else 'not_authoritative_preserve_connections',
+            'registry_issues': ['unsupported_or_missing_registry_protocol'] if registry['status'] == 'verified' and not compatible_registry else [],
             'retrieval': retrieval, 'guidance': 'declared_interface_static_instruction' if system_wiki_available(descriptor) else 'packaged_fallback',
             'startup_loading': 'not_tested', 'capture': capture,
             'connections': results, 'missing_kb_uids': missing, 'duplicate_kb_uids': duplicates,

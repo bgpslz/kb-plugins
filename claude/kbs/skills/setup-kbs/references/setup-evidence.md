@@ -37,8 +37,8 @@ codes or complete configuration files. The following uses synthetic identities:
     "service_id": "example-service",
     "connection_id": "example_connection",
     "name": "Example KB",
-    "type": "personal",
-    "domain": "Example project context",
+    "type_id": "personal",
+    "description": "Example project context",
     "kb_protocol_version": 1,
     "capabilities": ["wiki", "rag"],
     "access": "verified",
@@ -52,11 +52,19 @@ codes or complete configuration files. The following uses synthetic identities:
 `execution`: `local`, `cloud`, or `unknown`, describing where code runs, not where
 its UI runs. `os`: `macos`, `windows`, `linux`, `wsl`, or `unknown`.
 
-Every connection and registry KB needs `kb_uid`, `service_id`, `name`, `type`,
-`domain`, integer `kb_protocol_version` and a string-list `capabilities`. Resolve
+Every connection and registry KB needs `kb_uid`, `service_id`, `name`, `type_id`,
+`description`, integer `kb_protocol_version` and a string-list `capabilities`. Resolve
 legacy missing identities against actual service/registry evidence; do not
 manufacture KB UIDs from names or a private-PKB example. A connection additionally
 needs its actual `connection_id`. A native OAuth client ID is a different identity.
+
+A verified complete registry observation must carry `registry_protocol_version: 2`
+from the list/get response. Missing, old, malformed or future protocols cannot
+make inventory authoritative. Existing verified connections are preserved.
+Legacy supplied evidence `type`/`domain` normalizes to `type_id`/`description`;
+conflicting aliases are rejected and generated blocks use canonical names.
+Use explicit registry `mcp_url` for service setup; `account_url` is optional and
+separate. Never infer an MCP path from an account URL.
 
 Registry `status` and connection `access`/`wiki_read` values are `verified`,
 `denied`, `failed` or `unknown`. `access=verified` means an authenticated capability

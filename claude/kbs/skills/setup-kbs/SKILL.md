@@ -46,8 +46,12 @@ capture, so do not attach this plugin's retrieval loop to its ordinary chats.
 ## 2. Discover permitted KBs and verify access
 
 Through the client's existing authenticated MCP Service connection, verify
-Registry Protocol 1 and obtain the entitled KB list. Discovery belongs to this
+Registry Protocol 2 and obtain the entitled KB list. Discovery belongs to this
 explicit setup step; `use-kbs` must not rediscover it on every chat or turn.
+
+Use the record’s explicit `mcp_url` for the connection and optional `account_url`
+for its separate token page. Never derive one URL from the other. Confirm
+`registry_protocol_version=2` in the list response before treating it as authoritative.
 
 Match each immutable KB UID and service ID to the client's actual connection ID.
 For each required KB, verify KB Protocol 1, the required capabilities and a

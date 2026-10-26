@@ -31,3 +31,13 @@ discovery capabilities. Both system-guide changes and central migration are
 verified. Bruno PKB documentation changes 97/98 are applied, including the deferred
 opt-out. Installed plugin metadata, saved instructions and fresh-client acceptance
 remain separate from source publication; collector runtime was not changed.
+
+## Final registry cleanup approved before use
+
+Bruno approved completing MCP Service 2.0.0/registry protocol 2 without another
+version increment: he has not started using it and there are no other users.
+Plugin 1.4.3 validates the registry response version, preserves working connections
+when discovery is incompatible, normalizes canonical type/description names from
+legacy evidence, and uses explicit MCP/account URLs. Backend removal of the unused
+retrieval profile and the per-KB capture tool is separate from this source package.
+The deferred deterministic chat opt-out remains unimplemented.

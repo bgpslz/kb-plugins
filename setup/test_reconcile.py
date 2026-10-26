@@ -63,7 +63,7 @@ class ReconcileTests(unittest.TestCase):
     def test_service_denial_cannot_be_overridden_by_inventory(self):
         for denied in ('access', 'wiki_read'):
             e = evidence()
-            e['registry'] = {'status': 'verified', 'complete': True, 'knowledge_bases': copy.deepcopy(e['connections'])}
+            e['registry'] = {'status': 'verified', 'registry_protocol_version': 2, 'complete': True, 'knowledge_bases': copy.deepcopy(e['connections'])}
             e['connections'][0][denied] = 'denied'
             out = r.evaluate(e)
             self.assertEqual(out['retrieval'], 'not_verified')
@@ -80,7 +80,7 @@ class ReconcileTests(unittest.TestCase):
 
     def test_complete_revocation_only_removes_managed_inventory(self):
         e = evidence()
-        e['registry'] = {'status': 'verified', 'complete': True, 'knowledge_bases': []}
+        e['registry'] = {'status': 'verified', 'registry_protocol_version': 2, 'complete': True, 'knowledge_bases': []}
         out = r.evaluate(e)
         self.assertNotIn('"kb_uid": "kb-1"', out['managed_block'])
         self.assertEqual(out['connector_removals'], [])
@@ -88,14 +88,14 @@ class ReconcileTests(unittest.TestCase):
 
     def test_missing_complete_registry_payload_cannot_erase_inventory(self):
         e = evidence()
-        e['registry'] = {'status': 'verified', 'complete': True}
+        e['registry'] = {'status': 'verified', 'registry_protocol_version': 2, 'complete': True}
         with self.assertRaises(ValueError):
             r.evaluate(e)
 
     def test_new_entitlement_is_reported_missing_not_configured(self):
         e = evidence()
         kb = dict(e['connections'][0], kb_uid='kb-2', service_id='service-2')
-        e['registry'] = {'status': 'verified', 'complete': True, 'knowledge_bases': [e['connections'][0], kb]}
+        e['registry'] = {'status': 'verified', 'registry_protocol_version': 2, 'complete': True, 'knowledge_bases': [e['connections'][0], kb]}
         out = r.evaluate(e)
         self.assertEqual(out['missing_kb_uids'], ['kb-2'])
         self.assertEqual(out['retrieval'], 'not_verified')
@@ -109,7 +109,7 @@ class ReconcileTests(unittest.TestCase):
 
     def test_uid_service_mismatch_is_not_accepted(self):
         e = evidence()
-        e['registry'] = {'status': 'verified', 'complete': True, 'knowledge_bases': [dict(e['connections'][0], service_id='other')]}
+        e['registry'] = {'status': 'verified', 'registry_protocol_version': 2, 'complete': True, 'knowledge_bases': [dict(e['connections'][0], service_id='other')]}
         self.assertEqual(r.evaluate(e)['retrieval'], 'not_verified')
 
     def test_duplicates_keep_a_ready_connection_without_removing_either(self):
@@ -158,6 +158,32 @@ class ReconcileTests(unittest.TestCase):
         for patch in [{'system_wiki_protocol_version': 2}, {'account_id': None}, {'account_id': {'bad': True}}, {'index_uri': 'wiki://index.md'}, {'capabilities': None}]:
             e['system_wiki'] = dict(descriptor, **patch)
             self.assertEqual(r.evaluate(e)['guidance'], 'packaged_fallback')
+
+    def test_canonical_registry_fields_and_legacy_evidence_normalize(self):
+        e = evidence()
+        legacy = e['connections'][0]
+        canonical = {k: v for k, v in legacy.items() if k not in {'type', 'domain'}}
+        canonical.update(type_id='personal', description='Test context\n')
+        e['registry'] = {'status': 'verified', 'complete': True,
+                         'registry_protocol_version': 2, 'knowledge_bases': [canonical]}
+        out = r.evaluate(e)
+        self.assertEqual(out['registry'], 'verified_complete')
+        self.assertIn('"type_id": "personal"', out['managed_block'])
+        self.assertIn('"description": "Test context"', out['managed_block'])
+        self.assertNotIn('"domain":', out['managed_block'])
+        self.assertNotIn('type_id', legacy)  # No mutation of supplied evidence.
+        with self.assertRaises(ValueError):
+            r.kb_record(dict(legacy, type_id='organisation'))
+
+    def test_unknown_registry_protocol_cannot_remove_working_inventory(self):
+        for version in (None, 1, 3, True, '2'):
+            e = evidence()
+            e['registry'] = {'status': 'verified', 'complete': True,
+                             'registry_protocol_version': version, 'knowledge_bases': []}
+            out = r.evaluate(e)
+            self.assertIn('unsupported_or_missing_registry_protocol', out['registry_issues'])
+            self.assertIn('"kb_uid": "kb-1"', out['managed_block'])
+            self.assertEqual(out['registry'], 'not_authoritative_preserve_connections')
 
     def test_instruction_preservation_and_idempotence(self):
         block = r.evaluate(evidence())['managed_block']

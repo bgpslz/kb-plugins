@@ -107,3 +107,9 @@ cloud/ordinary chat setup must not install a laptop collector. See
 Source **1.4.2** removes obsolete capture-policy metadata from setup inventories
 and fallback wording. Humans choose destinations in Capture Review. Collection
 and installed-client state are unchanged; see [the retirement record](docs/capture-policy-retirement-20261026.md).
+
+Source **1.4.3** consumes finalized registry protocol 2. Discovery evidence must
+include that protocol before changing inventory. Canonical metadata names are
+`type_id` and `description`; old evidence aliases normalize deterministically.
+Connections use explicit `mcp_url`; nullable `account_url` is a separate account
+page. This changes source packages, not installed caches or credentials.

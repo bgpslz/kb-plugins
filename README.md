@@ -103,3 +103,7 @@ python3 scripts/check-packages.py
 Capture installation/readiness stays separate. Local capture supports macOS;
 cloud/ordinary chat setup must not install a laptop collector. See
 [local capture](local-capture/README.md).
+
+Source **1.4.2** removes obsolete capture-policy metadata from setup inventories
+and fallback wording. Humans choose destinations in Capture Review. Collection
+and installed-client state are unchanged; see [the retirement record](docs/capture-policy-retirement-20261026.md).

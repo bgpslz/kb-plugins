@@ -12,7 +12,7 @@ Claude Code/Codex session capture, and manual paste for other surfaces. See
 [local capture installation](../../local-capture/README.md). Local Code capture is
 verified separately per surface and machine. Cloud Code and Claude Chat receive
 retrieval setup only; capture is not a prerequisite for retrieval or its guidance.
-`capture_policy` remains review metadata; in-chat exclude/include is retired.
+Humans choose destinations in Capture Review; in-chat exclude/include is retired.
 
 Claude web, Desktop, and mobile use remote OAuth connectors for MCP Service and
 each KB Service. Claude Code loads the plugin's bundled `mcp-service` for

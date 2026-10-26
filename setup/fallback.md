@@ -15,5 +15,5 @@ chat; supported local Code capture needs separate machine/surface verification.
 Cloud Code and ordinary ChatGPT/Claude chat have no assumed automatic capture.
 Humans choose destinations in Capture Review; optional manual paste is separate.
 Do not call routine capture tools, generate conversation references or KB_ref
-tags, interpret capture_policy as intake permission, or implement in-chat capture
+tags, or implement in-chat capture
 include/exclude commands. Guidance loading does not grant access or publication.

@@ -76,3 +76,11 @@ The helper remains available under its existing name; invocation policies are
 preserved. Runtime helper APIs, the 1.1.0 collector, authentication and backend
 protocols are unchanged. Both package manifests and generated resources use the
 canonical setup inventory. See [the decision and validation](setup-clarity-20261026.md).
+
+## Registry metadata retirement — 26 October 2026
+
+Plugin source 1.4.1 → 1.4.2 removes the obsolete capture-policy inventory field.
+This compatible plugin patch accepts records without that metadata; the backend
+separately advances its breaking registry discovery contract to protocol 2 and
+MCP Service 2.0.0. KB/Capture/system-wiki protocol versions stay 1. Collector
+runtime 1.1.0 is unchanged. Source publication does not upgrade installed clients.

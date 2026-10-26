@@ -77,7 +77,7 @@ outside chat and cloud Code configuration, not evidence of automatic capture.
   retain central capture tools for the external capture clients that need them.
 - Never restore model-generated conversation references, KB_ref tags, routine
   capture-tool calls, per-KB capture fan-out, in-chat include/exclude commands or
-  model evaluation of `capture_policy`. That field is human-review metadata.
+  model selection of capture destinations. Humans choose destinations in Capture Review.
 - The local capture client's credential is separate from retrieval OAuth.
 
 The current 1.3.4 package already reflects much of this change. Its capture

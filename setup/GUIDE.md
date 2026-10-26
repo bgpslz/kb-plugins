@@ -76,8 +76,8 @@ connections when drafting inventory; an empty array means you have observed none
 not that discovery failed. The helper cannot recover an omitted connection from
 arbitrary legacy instruction text.
 
-Optional connection `capture_policy` is copied as human-review metadata only.
-It never influences routing/readiness. The helper ignores any requested capture
+Capture collection is external; the inventory contains no destination capture policy.
+Capture settings never influence retrieval routing/readiness. The helper ignores any requested capture
 verification for chat, cloud or unknown execution. For a local macOS Code target,
 `capture_verified=true` may be supplied only after independently verifying the
 current surface/machine's receipt and real hook delivery. A missing receipt does

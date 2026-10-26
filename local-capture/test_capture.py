@@ -146,8 +146,8 @@ class CaptureTests(unittest.TestCase):
             (home/'.claude/settings.json').write_text('{"permissions":{"allow":["Read"]}}')
             policy = install.install(home, 'test@example.com')
             initial = config.read_text()
-            capture_policy = json.loads(policy.read_text()) | {'excluded_projects': ['/private/*']}
-            policy.write_text(json.dumps(capture_policy))
+            collector_policy = json.loads(policy.read_text()) | {'excluded_projects': ['/private/*']}
+            policy.write_text(json.dumps(collector_policy))
             install.install(home, 'test@example.com')
             self.assertEqual(config.read_text(), initial)
             self.assertIn('computer-use', initial)

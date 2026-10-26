@@ -125,8 +125,6 @@ def render_block(surface, execution, records, descriptor=None):
         fields = {k: r[k] for k in ('kb_uid', 'name', 'type', 'domain', 'service_id', 'kb_protocol_version', 'capabilities')}
         if 'connection_id' in r:
             fields['connection_id'] = label(r['connection_id'])
-        if 'capture_policy' in r:
-            fields['capture_policy'] = label(r['capture_policy'])
         lines.append('- ' + json.dumps(fields, ensure_ascii=False, sort_keys=True))
     if not records:
         lines.append('None confirmed on this surface. Run explicit setup to add connections.')
@@ -152,7 +150,7 @@ def render_block(surface, execution, records, descriptor=None):
     else:
         lines.append('This environment receives retrieval setup only; do not configure capture clients, hooks, capture-only credentials or capture tests here.')
     lines += ['Human paste into Capture Review is optional and outside setup. Capture destinations are chosen there by a human.',
-              'Do not generate conversation references or KB_ref tags, call routine capture tools, evaluate capture_policy, or implement in-chat capture include/exclude commands.', END]
+              'Do not generate conversation references or KB_ref tags, call routine capture tools, or implement in-chat capture include/exclude commands.', END]
     return '\n'.join(lines)
 
 

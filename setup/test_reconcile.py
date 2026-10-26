@@ -122,13 +122,14 @@ class ReconcileTests(unittest.TestCase):
         self.assertNotIn('bad-duplicate', out['managed_block'])
         self.assertEqual(out['connector_removals'], [])
 
-    def test_capture_policy_and_optional_build_do_not_gate_retrieval(self):
+    def test_optional_build_does_not_gate_retrieval(self):
         e = evidence()
         e['connections'][0].update(capabilities=['wiki', 'build'], capture_policy='all_conversations')
         out = r.evaluate(e)
         self.assertEqual(out['retrieval'], 'verified')
         self.assertIn('build_guide_not_verified', out['connections'][0]['issues'])
         self.assertEqual(out['capture'], 'not_verified')
+        self.assertNotIn('capture_policy', out['managed_block'])
 
     def test_protocol_and_wiki_capability_are_required(self):
         for patch in [{'kb_protocol_version': 2}, {'capabilities': ['rag']}]:

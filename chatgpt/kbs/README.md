@@ -12,7 +12,7 @@ Claude Code/Codex session capture, and manual paste for other surfaces. See
 [local capture installation](../../local-capture/README.md). Local Code capture is
 verified separately per surface and machine. Cloud Code and ChatGPT chat receive
 retrieval setup only; capture is not a prerequisite for retrieval or its guidance.
-`capture_policy` remains review metadata; in-chat exclude/include is retired.
+Humans choose destinations in Capture Review; in-chat exclude/include is retired.
 
 The plugin's `.app.json` registers the ChatGPT bearer-token apps for MCP Service
 and PKB Service. Their separate service-local tokens are created on the

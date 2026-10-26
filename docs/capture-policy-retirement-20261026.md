@@ -41,3 +41,12 @@ when discovery is incompatible, normalizes canonical type/description names from
 legacy evidence, and uses explicit MCP/account URLs. Backend removal of the unused
 retrieval profile and the per-KB capture tool is separate from this source package.
 The deferred deterministic chat opt-out remains unimplemented.
+
+Finalization is deployed in personal-rag at implementation 083c0d5. Normal
+OAuth discovery confirms protocol 2, explicit MCP/account URLs, and no profile,
+setup or capture metadata. Both KB Services report 2.0.0 without capture; all
+twelve backend health checks pass. Plugin 1.4.3 source faa971f is published to
+GitHub; installed caches and saved instruction blocks remain independently
+reconciled. Bruno PKB decision change 99 records the approved same-version
+exception and applied cleanup. Open WebUI retrieval 0.3.1 is installed separately
+through its existing admin editor; central capture remains unchanged.

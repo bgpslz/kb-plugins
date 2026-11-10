@@ -58,6 +58,29 @@ legacy missing identities against actual service/registry evidence; do not
 manufacture KB UIDs from names or a private-PKB example. A connection additionally
 needs its actual `connection_id`. A native OAuth client ID is a different identity.
 
+Record the verified registry connection separately from KB records, using the
+optional top-level field below. MCP Service has no KB UID and must not be added
+as a fictitious KB. `access=verified` requires an authenticated service check;
+the system-wiki descriptor alone does not identify the client connection used.
+
+```json
+{
+  "mcp_service": {
+    "service_id": "mcp-service",
+    "connection_id": "this_machines_registry_connection",
+    "access": "verified"
+  }
+}
+```
+
+The helper emits this local binding only when its access is verified, and rejects
+another service identity. Supply it, along with all existing KB mappings, when
+regenerating local instructions. Omission means no binding was supplied; the
+helper cannot recover an omitted mapping from arbitrary old instruction text.
+Shared skills do not assume these connection names exist on another machine.
+Retain separate read/refresh/fresh-connection evidence: the helper's retrieval
+result does not itself test refresh or prove instruction delivery.
+
 A verified complete registry observation must carry `registry_protocol_version: 2`
 from the list/get response. Missing, old, malformed or future protocols cannot
 make inventory authoritative. Existing verified connections are preserved.

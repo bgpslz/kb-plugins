@@ -2,7 +2,7 @@
 name: use-kbs
 description: Load KB system operating instructions before substantive work in each new or restored model context. Use the configured inventory; setup owns reconciliation.
 metadata:
-  version: "1.3.7"
+  version: "1.3.8"
 ---
 
 # Load KB system instructions
@@ -18,7 +18,11 @@ for the user's request. `use-standard-kb` is an optional retrieval helper for a
 selected KB, not another startup step or an alternative system guide. Do not
 load it alongside the guide unless its retrieval detail is needed.
 
-Use the existing authenticated MCP Service connection. Determine actual execution
+Use the MCP Service connection mapped in this client's saved setup. If no mapping
+is saved, inspect existing local connection metadata to identify the intended
+service; do not invent a connection name or silently substitute credentials.
+Missing configuration needs explicit setup, not connection creation during startup.
+Determine actual execution
 location: local Codex uses `system-wiki://local-codex.md`; local Claude Code
 (including its desktop Code tab) uses `system-wiki://local-claude-code.md`.
 Cloud Code, ChatGPT chat, Claude Chat and unknown locality use
@@ -46,11 +50,13 @@ setup-kbs can enforce these rules where a host supplies an authenticated bridge;
 settings discovery alone is not a bridge. Without a trusted auth binding, use
 live-only reads and no persistent cache reuse.
 
-Preserve this surface's configured authentication and KB inventory. Local Codex
-Desktop/CLI prefers the existing PKB Service (OAuth) OAuth app or a working native
-OAuth connection; cloud ChatGPT uses PKB Service (token). App-backed OAuth need
-not appear in the native MCP list. Missing tools alone do not prove uninstall
-or expired authentication; use explicit setup to diagnose before adding entries. Never query
+Preserve this client's verified connection mappings, authentication and KB inventory.
+Local Codex setup supplies native OAuth connections using its configuration/login
+recipe; cloud ChatGPT uses separate service-local bearer-token apps. Shared
+guidance does not assume example server names or registered app IDs. Registered
+app and native routes require separate verification; their UI presence is not
+authenticated access. Missing tools alone do not prove uninstall or expired
+authentication; use explicit setup to diagnose before adding entries. Never query
 the registry as a loading side effect, capture conversations through model calls,
 or install local capture based on desktop branding. Setup, explicit build and
 authorised project documentation remain separate workflows. Preserve still-active

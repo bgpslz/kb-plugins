@@ -1,96 +1,186 @@
-# OpenAI connection and instruction targets
+# Set up your knowledge bases in Codex
 
-## Choose the route for the actual client
+If you are reading this guide through KBs in **ChatGPT or Codex**, the **KBs**
+plugin is already installed and enabled in **Plugins**. That is the first
+requirement for this system.
 
-| Execution surface | Preferred PKB connection | Authentication |
-| --- | --- | --- |
-| Local Codex Desktop or CLI | **PKB Service (OAuth)** | Existing registered OAuth app; sign in through Casdoor. Reuse a working native OAuth connection as well. |
-| Cloud ChatGPT | **PKB Service (token)** | Service-local token entered in the connector's credential field. OAuth has not worked here; investigation remains open. |
-| Cloud Codex or unknown execution | Verify that environment's supported connection mechanism | Do not infer local OAuth or cloud ChatGPT token support from a desktop window. |
+To install KBs on another computer, or help someone get started, use the
+[installation instructions](https://github.com/bgpslz/kb-plugins/blob/main/INSTALL.md).
 
-Use the connection's display name in user instructions. Users should not need to
-choose server identifiers, edit CLI configuration or understand app IDs. Resolve
-technical identity as the assistant and retain the actual connection ID in setup
-evidence. These known Bruno PKB mappings are not a universal tenant inventory:
+The steps below configure **native connections for local Codex**, on the computer
+you want to use. Use the **Codex desktop app** for the settings, then the browser
+window it opens for sign-in. This is the verified local Codex connection route.
 
-| Registered app | App ID | MCP endpoint |
-| --- | --- | --- |
-| PKB Service (OAuth) | `asdk_app_6ab29f2769908191afa0c980c197354e` | `https://bruno-rag.summerleaze.com/mcp` |
-| PKB Service (token) | `asdk_app_6ab2b686b2d08191a794afb44cd95e37` | `https://bruno-rag.summerleaze.com/mcp` |
+Creating a registered connection for ChatGPT's cloud service is a different
+procedure, performed at **chatgpt.com in a browser**. That registered OAuth route
+hit the Casdoor incompatibility described below. It is not the route used by
+these Codex instructions.
 
-**PKB Service (OAuth)** is the preferred display name for the connection formerly
-called **PKB Service v2**. Recognise either name during the transition and match
-the same app ID and endpoint. Plugin guidance cannot itself rename the registered
-app in the provider's directory: if the client still shows the former name,
-identify it by that ID rather than creating a second app. When setting up a
-connection with an editable display name, use **PKB Service (OAuth)**. Preserve
-existing grants and identities when repairing an existing installation.
+## 1. Start setup
 
-First inspect tools and the client's plugin/connection state. Reuse **PKB Service (OAuth)**
-locally; when missing, find and recommend that existing app through the
-supported plugin manager. Directory search may omit private/workspace apps;
-use the client's workspace/personal listing and known app identity before
-concluding that it does not exist. Preserve its registration, grant, endpoint,
-callbacks and scopes. Do not create a replacement custom app or another native
-MCP entry merely because it is absent from `codex mcp list` or file inspection.
-App-backed connections and native MCP servers are separate inventories. Existing
-native names such as `pkb_service` or `casdoor_pkb_service` are local labels.
+Start a Codex chat and say:
 
-The shared KBs package declares only MCP Service in `.app.json`. It recommends
-the surface-appropriate PKB app during setup instead of making both PKB apps
-mandatory dependencies. No verified alternative-dependency or per-client app
-selector is available in the packaging contract. Do not invent selector fields
-or require cloud users to authenticate the local OAuth app. Removing a package
-mapping is not an instruction to uninstall the user's existing connection.
+> Set up my knowledge bases on this computer. Check any connections already
+> configured, tell me which ones need adding, and give me the exact server names
+> and addresses to enter. Guide me through the settings and sign-in steps, then
+> check that access works and stays connected.
 
-## Diagnose before changing anything
+Keep that chat open while you complete the following steps. If a server is
+already configured, Codex should check it rather than ask you to add it again.
+If Codex does not have the MCP Service address, ask the person who provides your
+KB access for it before continuing.
 
-| Observed state | Recovery action |
+## 2. Connect MCP Service
+
+MCP Service tells Codex which knowledge bases your account can access.
+Add it to the desktop app's native **MCPs** list as follows.
+
+1. Open **Settings → Plugins → MCPs**.
+2. Choose **Add**, then the option to add a custom MCP server. This opens
+   **Connect to a custom MCP**.
+3. Enter the following values for **MCP Service**:
+
+   | Field | Value |
+   | --- | --- |
+   | **Name** | `casdoor_mcp_service` |
+   | **Type** | **Streamable HTTP** |
+   | **URL** | Copy the **MCP Service address supplied by Codex** |
+   | **Bearer token env var** | Leave blank |
+   | **Headers** | Leave blank |
+   | **Headers from environment variables** | Leave blank |
+
+4. Click **Save** and return to the MCP server list. The switch beside the new
+   server should be on.
+5. Click **Authenticate** beside `casdoor_mcp_service`. The connection form has
+   no OAuth selector: this Authenticate button starts OAuth sign-in after saving.
+6. On your KB system's sign-in page, choose **Google**, select the account that
+   has KB access, and complete the sign-in and any consent requested.
+7. Return to the Codex chat and say:
+
+   > MCP Service sign-in is complete. Check that connection and list the
+   > knowledge bases available to me.
+
+## 3. Connect your knowledge bases
+
+Tell Codex which of the available knowledge bases you want to use. It should
+provide the exact **Name** and **URL** to enter for each one.
+
+Codex should list each selected knowledge base, such as **My PKB** or
+**Organisation KB**, with its connection name and server address. Copy those
+values: each knowledge base has its own address. Use only the knowledge bases
+confirmed as available to your account.
+
+For **each** selected knowledge base:
+
+1. Return to **Settings → Plugins → MCPs → Add** and open the custom MCP form.
+2. Copy its **Name** and **URL** from the values supplied by Codex.
+3. Select **Streamable HTTP**. Leave **Bearer token env var**, **Headers** and
+   **Headers from environment variables** blank, as for MCP Service.
+4. Click **Save**, return to the list and check that the server is switched on.
+5. Click **Authenticate** beside that server and complete Google sign-in and
+   consent. Finish this connection before starting the next one.
+6. Return to the chat and tell Codex which knowledge base you have signed into.
+
+## 4. Check and finish
+
+Once you have signed into the selected knowledge bases, tell Codex:
+
+> Check MCP Service and each selected knowledge base using the native MCP
+> connections we just configured. Read their overview pages, check that access
+> still works after seven minutes without another sign-in, and save this
+> computer's setup for future chats. Tell me which connections passed.
+
+Codex should carry out the checks and save the local setup. The seven-minute
+wait checks that you will not have to sign in again whenever a short-lived access
+token expires. You can then use the confirmed knowledge bases in future Codex
+chats on this computer. Repeat setup on each additional computer.
+
+If Codex asks you to restart or open a fresh chat to load the new connections,
+do so and ask it to finish the same checks.
+
+## If a step fails
+
+Show the error to Codex and tell it which server you were connecting. Keep the
+existing entries while it checks the problem; do not create another copy or keep
+repeating sign-in. The technical notes below identify the material issues found
+with this deployment.
+
+## Technical notes for the assistant or technician
+
+### Scopes and OAuth are discovered by Codex
+
+The graphical form needs the server name, Streamable HTTP and the full MCP URL.
+It does not need a bearer token, custom headers or an OAuth dropdown. Codex starts
+OAuth from **Authenticate** and obtains the service's scope from discovery.
+
+The deployment checked on 10 November 2026 advertises the following scopes.
+Verify the actual metadata for the deployment being configured:
+
+| Service | Required API scope |
 | --- | --- |
-| Not installed, confirmed in the client's plugin listing | Recommend/install the named app for this surface through the supported manager, then connect it. |
-| Installed but disconnected, confirmed by client status | Enable/connect the existing app and complete its sign-in flow. Preserve its identity. |
-| Authentication expired or rejected (for example 401/invalid grant) | Reconnect the same app. Local OAuth should open Summerleaze/Casdoor sign-in; an old Auth0 grant may need renewed consent. Do not assert that migration caused the failure without testing. |
-| Tools unavailable in this chat, installation/authentication unconfirmed | Check enablement, workspace/account, policy and tool exposure; refresh/restart in a fresh chat. Inspect app-detail/DNS/timeout failures separately. Missing tools alone proves neither uninstall nor grant expiry. |
-| 403/access denied | Follow the actual denial and check membership/administrator permissions. Do not bypass it with another credential or protected cache. |
+| MCP Service | `kb_registry:read` |
+| Personal and organisation KBs in the example deployment | `personal_rag:read` |
 
-The assistant can guide browser consent but the user completes sign-in in the
-native flow. Never request passwords, service tokens or OAuth secrets in chat.
-For cloud ChatGPT, use the registry record's explicit `account_url` and the
-service's token UI, then enter the token in **PKB Service (token)**. Do not derive
-account URLs or ask MCP Service to issue/relay a KB token. Do not silently switch
-authentication routes after a denial. Keep investigating cloud OAuth separately
-so the supported route can eventually be standardised.
+[Codex's documented behavior](https://learn.chatgpt.com/docs/extend/mcp?surface=cli)
+is to use the scope in the authentication challenge, or the protected-resource
+metadata if the challenge omits it. Its OAuth library can also request
+`offline_access` for refresh. Therefore users should not be sent looking for a
+scope field absent from the graphical form. Check the actual requested/granted
+scopes if sign-in or refresh fails. The previously verified explicit scope lists
+and technician-assisted configuration are in the [connection reference](connection-reference.md).
 
-Public OAuth discovery is diagnostic evidence only. Check the protected-resource
-metadata and its declared authorization server when investigating registration,
-callback/resource/scope issues. Casdoor discovery does not test a saved grant.
-Cached tool definitions do not prove current installation or authenticated access.
+Codex selects CIMD automatically when discovery advertises CIMD and the compatible
+public-client method. The CLI recipe in the reference explicitly selects CIMD
+if a technician needs to diagnose registration. Do not send non-technical users
+to the command line as the normal setup procedure.
 
-After connection or re-authentication, verify KB Protocol 1, required capabilities
-and a substantive `wiki://index.md` read through that exact connection. Record
-client, actual connection identity and outcome. Token and native OAuth reads do not establish
-access through the app-backed OAuth connection.
-Test fresh and existing-user setup on Desktop and CLI independently, and cloud
-token setup separately. Do not report these passed from source/package tests.
+### Native Codex and registered apps use different OAuth routes
 
-## Instruction targets and native adapters
+This procedure uses **MCPs → Servers** in Codex. It does not create a registered
+app through the ChatGPT website. The native Codex client verified in this
+installation is `https://chatgpt.com/oauth/codex/client.json`; the registered-app
+client is `https://chatgpt.com/oauth/client.json`.
 
-Cloud ChatGPT Custom Instructions and local Codex instructions are independent.
-The audited local Codex store is `~/.codex/AGENTS.md`; verify the current client's
-supported mechanism before applying. Reconcile local stores per machine and
-cloud Code stores in their actual execution environment. Cloud ChatGPT account
-preferences do not configure Codex. Verify placement/persistence where manual UI
-work is necessary.
+The old registered PKB OAuth app retained Auth0 metadata. A new registered app
+reached Casdoor but failed because its client metadata selected `private_key_jwt`
+while the deployed Casdoor accepted only `none` with PKCE. These findings do not
+show a failure of native Codex OAuth. Do not substitute registered `codex_apps`
+reads or the ChatGPT token route to declare native setup successful.
 
-The [native adapter](native-setup.md) inspects supported file stores, not app-backed
-connections or their grants. A new Codex native entry requires a separate client
-check confirming no matching app connection exists, recorded with
-`--codex-apps-checked`. This is an operator assertion, not automated discovery.
-Prefer repairing/recommending the existing OAuth app; a native addition is only for
-an explicitly intended native route after checking both inventories. Native
-configuration presence is not authenticated wiki-read acceptance.
+### Use the correct issuer and resource
 
-Tool-approval preferences are a separate user choice, not an authentication
-requirement or an automatic “Allow all tools” default. Do not expand permissions
-merely to avoid prompts. Identify the actual OAuth client used by login before
-requesting administrator grants, rather than granting similarly named apps.
+Obtain the issuer from the live service metadata. For example, an MCP Service
+at `https://mcp-service.example.org/mcp` might use issuer
+`https://mcp-service.example.org/auth`. These are example addresses, not live
+connection values. Each resource must be the exact service URL, including `/mcp`.
+If saved settings contain a retired issuer or an origin-only resource, inspect
+discovery and the selected connection rather than repeating consent. A rejected refresh token needs repair of
+that existing grant; it is a different problem from stale app metadata.
+Respect service access denials and check entitlement rather than trying another
+credential to bypass them.
+
+### Save and verify this machine's mappings
+
+Reuse suitable existing names and preserve unrelated configuration. During setup,
+record the actual MCP Service connection and each KB's UID, service ID and local
+connection name in this computer's managed KB instructions. Example `casdoor_*`
+names are not assumed to exist on another machine. Discovery of a KB alone does
+not establish its connection or grant access.
+
+Validate system-wiki protocol 1 and complete matching-revision index/local-Codex
+pages, Registry Protocol 2, and KB Protocol 1 plus substantive KB wiki reads.
+After new login or grant repair, verify post-expiry reads and access from a fresh
+Codex connection. Report any unverified result explicitly. Save instructions
+without changing unrelated instructions; capture setup remains separate.
+
+The native connections in the verified local installation passed login/read
+checks and post-expiry reads;
+PKB refresh rotation was also confirmed against broker metadata. That recovery
+used native Codex login commands. The graphical procedure above follows the
+observed form and documented discovery behavior; its complete new-user flow
+still needs acceptance on a second computer. Do not report that test as already passed.
+
+For configuration files, explicit scope lists, recovery commands and package
+boundaries, use the [assistant/technician connection reference](connection-reference.md).
+ChatGPT's separate bearer-token procedure is also in that reference; it does not
+configure Codex on a user's computer.

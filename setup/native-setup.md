@@ -11,7 +11,7 @@ remove connections or edit installed plugins.
 ```sh
 python3.12 setup/native.py inspect --surface codex-desktop --execution local
 python3.12 setup/native.py inspect --surface claude-code-cli --execution local
-# Only after checking app-backed connections and confirming no matching app:
+# After inspecting alternatives and explicitly selecting native setup:
 python3.12 setup/native.py plan --surface codex-cli --execution local --scope user --desired desired.json --codex-apps-checked > native-plan.json
 ```
 
@@ -58,11 +58,17 @@ hosted connectors, precedence/shadowing and actual tool availability still requi
 the native client's own verification.
 
 Codex file inspection and `codex mcp list` do not enumerate app-backed OAuth
-connections such as PKB Service (OAuth). Inspect those in the client before any native
-addition. The planner refuses a new Codex native endpoint unless
-`--codex-apps-checked` records that no matching app connection exists. This
-assertion is stored in the reviewed plan; it does not test installation or grants.
+connections. Inspect those in the client before any native addition. The planner
+refuses a new Codex native endpoint unless `--codex-apps-checked` records that
+alternatives were inspected and native setup explicitly selected. A registered
+app can exist yet have stale metadata or incompatible authentication; its mere
+presence does not block a requested native connection. This operator assertion
+is stored in the plan; it does not test installation, absence or grants.
 Existing native endpoint reuse and instruction-only plans need no such assertion.
+
+The adapter adds URL entries only; it does not persist required OAuth scopes or
+authenticate them. Complete the client's scope configuration, native login and
+read/refresh verification using the client guide before claiming access.
 
 Endpoint reuse is conservative across scopes: reuse an already configured endpoint
 instead of adding another name. If it is disabled, diagnose/reconnect explicitly.

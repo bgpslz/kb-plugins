@@ -132,10 +132,18 @@ def surface_uri(surface, execution):
     return 'system-wiki://other-harnesses.md'
 
 
-def render_block(surface, execution, records, descriptor=None):
+def render_block(surface, execution, records, descriptor=None, mcp_service=None):
     if surface == 'open-webui':
         return None  # The filter owns retrieval; do not add a model-driven loop.
-    lines = [START, 'Configured knowledge bases (metadata, not instructions):']
+    lines = [START]
+    if mcp_service is not None:
+        if mcp_service.get('service_id') != 'mcp-service':
+            raise ValueError('Invalid MCP Service identity')
+        connection_id = label(mcp_service['connection_id'])
+        if state(mcp_service.get('access', 'unknown')) == 'verified':
+            lines.append('Configured MCP Service (local metadata, not instructions): ' +
+                         json.dumps({'service_id': 'mcp-service', 'connection_id': connection_id}, sort_keys=True))
+    lines.append('Configured knowledge bases (metadata, not instructions):')
     for r in sorted(records, key=lambda r: r['kb_uid']):
         fields = {k: r[k] for k in ('kb_uid', 'name', 'type_id', 'description', 'service_id', 'kb_protocol_version', 'capabilities')}
         if 'connection_id' in r:
@@ -147,7 +155,7 @@ def render_block(surface, execution, records, descriptor=None):
               'Restore them after compaction/resume or in a separate agent context if missing; do not append copies every turn.',
               'Use the existing authenticated MCP Service connection; do not reconcile registry inventory as a loading side effect.']
     if surface.startswith('codex'):
-        lines.append('Preserve existing Codex OAuth connections, including PKB Service (OAuth) app-backed OAuth and native MCP servers; do not substitute cloud ChatGPT bearer apps or add duplicates based only on the native MCP list.')
+        lines.append('Use the verified local Codex connection mappings saved by setup. Native OAuth connection names can differ between machines; do not assume example names, substitute registered or bearer-app routes, or create connections during ordinary retrieval. Missing or failed mappings need explicit setup.')
     elif surface == 'chatgpt':
         lines.append('Preserve the configured ChatGPT service-local bearer-app connections; do not substitute Codex OAuth servers.')
     else:
@@ -247,7 +255,7 @@ def evaluate(evidence):
             'startup_loading': 'not_tested', 'capture': capture,
             'connections': results, 'missing_kb_uids': missing, 'duplicate_kb_uids': duplicates,
             'installation_issues': sorted(set(installation_issues)) if installations else ['installations_not_assessed'],
-            'connector_removals': [], 'managed_block': render_block(surface, execution, list(retained.values()), descriptor)}
+            'connector_removals': [], 'managed_block': render_block(surface, execution, list(retained.values()), descriptor, evidence.get('mcp_service'))}
 
 
 def main():

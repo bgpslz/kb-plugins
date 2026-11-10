@@ -2,11 +2,16 @@
 
 Versioned marketplace packages for the generic multi-knowledge-base workflow.
 
+New users: start with [Install KBs](INSTALL.md). Once installed, ask the plugin
+to set up your knowledge bases; it supplies the connection and sign-in guide.
+
 - `chatgpt/kbs` serves ChatGPT and Codex. It contains OpenAI
   invocation metadata and expects ChatGPT bearer-token connections or Codex
-  OAuth connections to be configured per service. Local Codex Desktop/CLI prefers
-  **PKB Service (OAuth)**; cloud ChatGPT uses **PKB Service (token)**. Setup reuses
-  connections and recommends the appropriate app without requiring both routes.
+  OAuth connections to be configured per service. Local Codex Desktop/CLI setup
+  configures native MCP OAuth, verifies reads and refresh, and saves each machine's
+  actual connection mappings. Cloud ChatGPT uses service-local bearer-token apps.
+  Installing the skills does not establish these connections; see the complete
+  [setup guide](setup/openai-client-setup.md) and its linked technical reference.
 - `claude/kbs` serves Claude Chat, Desktop, mobile, and Claude Code.
   It preserves OAuth connections and uses Claude's explicit-invocation
   metadata for setup and build workflows.
@@ -121,3 +126,11 @@ cloud token route, supports natural-language setup and plugin onboarding, and
 requires a client app-connection check before a new Codex native entry. The
 shared package no longer requires the token PKB app on every surface. See the
 [packaging decision, live-guidance handover and acceptance matrix](docs/pkb-connection-routing-20261110.md).
+
+Source **1.4.5 is an unpublished draft** correcting that registered-app preference
+after native Codex recovery and a registered-app CIMD failure on 10 November.
+The complete manual/assistant-guided recipe covers native configuration, scopes,
+browser consent, exact-route reads, refresh and local mappings. Registered-app
+presence no longer forbids selecting native setup. See the
+[recovery evidence and release boundaries](docs/codex-native-setup-20261110.md).
+No installed cache, personal instruction, broker or backend is updated by this draft.

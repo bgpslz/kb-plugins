@@ -1,5 +1,11 @@
 # PKB connection routing correction — 10 November 2026
 
+Current follow-up: the later [native Codex recovery and complete setup draft](codex-native-setup-20261110.md)
+supersedes this release's registered-PKB-OAuth preference. The record below
+preserves what 1.4.4 shipped. Its prepared backend patch still recommends the
+old app route and needs revision before application; it is not the new native
+setup procedure.
+
 KBs source 1.4.4 is a published compatible patch over 1.4.3. Local
 Codex Desktop/CLI setup prefers **PKB Service (OAuth)** (formerly **PKB Service v2**); cloud
 ChatGPT setup uses **PKB Service (token)**. Preserve working native OAuth as well.

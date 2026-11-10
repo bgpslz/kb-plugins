@@ -22,6 +22,26 @@ def evidence(surface='codex-desktop', execution='local', os_name='macos'):
 
 
 class ReconcileTests(unittest.TestCase):
+    def test_local_bindings_follow_each_machines_actual_names(self):
+        for registry_name, kb_name in [('mini_registry', 'mini_pkb'), ('laptop_registry', 'laptop_pkb')]:
+            e = evidence()
+            e['connections'][0]['connection_id'] = kb_name
+            e['mcp_service'] = {'service_id': 'mcp-service', 'connection_id': registry_name, 'access': 'verified'}
+            block = r.evaluate(e)['managed_block']
+            self.assertIn('"connection_id": "' + registry_name + '"', block)
+            self.assertIn('"connection_id": "' + kb_name + '"', block)
+            self.assertNotIn('casdoor_pkb_service', block)
+            self.assertNotIn('PKB Service (OAuth)', block)
+
+    def test_registry_binding_requires_verified_access_and_correct_service(self):
+        e = evidence()
+        e['mcp_service'] = {'service_id': 'mcp-service', 'connection_id': 'registry_unverified', 'access': 'unknown'}
+        self.assertNotIn('registry_unverified', r.evaluate(e)['managed_block'])
+        e['mcp_service']['service_id'] = 'some-kb-service'
+        e['mcp_service']['access'] = 'verified'
+        with self.assertRaises(ValueError):
+            r.evaluate(e)
+
     def test_local_supported_capture_is_independent(self):
         e = evidence()
         self.assertEqual(r.evaluate(e)['retrieval'], 'verified')

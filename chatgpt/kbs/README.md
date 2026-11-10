@@ -1,6 +1,6 @@
 # KBs plugin for ChatGPT and Codex
 
-Source 1.4.4 is published. `use-kbs` is now a small instruction-based bootstrap
+Source 1.4.5 is an unpublished draft over published 1.4.4. `use-kbs` is a small instruction-based bootstrap
 for the system-wiki index plus applicable surface page; `setup-kbs` supplies
 setup adapters and the startup/cache core. Explicit `build-kb` and
 `maintain-project-docs` remain. `use-standard-kb` stays packaged until replacement
@@ -14,14 +14,16 @@ verified separately per surface and machine. Cloud Code and ChatGPT chat receive
 retrieval setup only; capture is not a prerequisite for retrieval or its guidance.
 Humans choose destinations in Capture Review; in-chat exclude/include is retired.
 
-The shared plugin's `.app.json` declares MCP Service only. Setup recommends
-**PKB Service (OAuth)** (OAuth) for local Codex Desktop/CLI and **PKB Service (token)**
-for cloud ChatGPT, reusing existing connections and guiding reconnection when
-needed. Both PKB apps remain separate choices so cloud users are not required to
-authenticate an unusable OAuth dependency. See the
-[connection and recovery guide](skills/setup-kbs/references/client-setup.md).
-App-backed OAuth need not appear in the native MCP list; inspect both before
-adding entries. Tokens are entered only through the connector credential UI.
+The shared plugin's `.app.json` declares MCP Service only. Local Codex setup
+configures native OAuth connections to MCP Service and each requested KB, guides
+browser consent, verifies reads/refresh, and saves this machine's actual names.
+Installing the plugin does not perform that setup. Cloud ChatGPT uses separate
+service-local bearer-token apps, including PKB Service (token). Follow the full
+[short setup instructions](skills/setup-kbs/references/client-setup.md). The linked
+[technical reference](skills/setup-kbs/references/connection-reference.md) supplies
+the configuration and checks for the assistant or technician.
+Inspect registered alternatives before adding native entries, but do not treat
+app presence as working access. Tokens are entered only in the credential UI.
 
 Run plugin setup or ask “set up my knowledge bases”. The manifest's onboarding
 skill and setup's natural-language invocation policy route that request to

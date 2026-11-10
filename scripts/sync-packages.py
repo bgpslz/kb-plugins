@@ -15,6 +15,7 @@ def resources(root):
         text = (root / 'setup/SKILL.md').read_bytes()
         if platform == 'chatgpt':
             yield skill / 'references/client-setup.md', (root / 'setup/openai-client-setup.md').read_bytes()
+            yield skill / 'references/connection-reference.md', (root / 'setup/connection-reference.md').read_bytes().replace(b'(openai-client-setup.md)', b'(client-setup.md)')
         if platform == 'claude':
             text = text.replace(b'\nmetadata:\n', b'\ndisable-model-invocation: true\nmetadata:\n', 1)
         yield skill / 'SKILL.md', text

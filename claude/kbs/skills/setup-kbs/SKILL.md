@@ -3,7 +3,7 @@ name: setup-kbs
 description: Set up or repair KB connections and saved operating instructions for the current client. Use for an explicit setup request; verify local capture separately.
 disable-model-invocation: true
 metadata:
-  version: "1.3.7"
+  version: "1.3.8"
 ---
 
 # Set up knowledge bases
@@ -30,16 +30,29 @@ on that helper being invoked.
 
 ## 1. Identify the client and preserve its existing setup
 
+For local Codex, follow the client guide's step-by-step graphical setup flow.
+Read its technical notes and linked reference before doing the work. When user
+input is needed, provide the exact Settings path, server Name, Streamable HTTP
+selection, URL, fields to leave blank, Save/Authenticate actions and browser steps.
+Do not replace required configuration instructions with “ask the assistant”.
+Carry out steps yourself when tools permit, without making the user repeat them.
+Keep file paths, commands and protocol detail in the technical reference; include
+every field value and action the user actually needs in the normal setup flow.
+
 Identify the client, machine and actual execution location. A cloud task remains
 cloud when viewed in a desktop app. Read the relevant
 [client connection guide](references/client-setup.md) for its authentication and
 instruction settings. Existing connection names are local labels, not universal
-service identifiers. Local Codex Desktop/CLI should reuse **PKB Service (OAuth)**
-OAuth; cloud ChatGPT should use **PKB Service (token)**. The client guide names
-both registered apps and their recovery actions. Inspect app-backed connections
-as well as native MCP servers before adding anything. Missing native-list output
-is not evidence that an app-backed connection is absent. Do not require both
-authentication routes or replace a working connection merely to match an example.
+service identifiers. For local Codex Desktop/CLI, follow the client guide's
+linked native OAuth configuration recipe: inspect/back up local settings,
+configure MCP Service, authenticate with the supported native CIMD flow, discover
+entitled KBs, configure and authenticate each requested KB, then verify reads and
+refresh. Perform local configuration work for the user when available; the user
+completes browser sign-in. Installing this plugin does not perform these steps.
+Cloud ChatGPT uses its separate service-local bearer-token connection procedure.
+Inspect registered apps as well as native servers, but an app's presence does
+not prove access or block an explicitly selected native route. Preserve working
+connections and their names; do not replace them merely to match an example.
 
 Preserve working endpoints, native credentials, callbacks and unrelated settings.
 Reuse configured or bundled servers before adding one. Diagnose an unknown client
@@ -50,7 +63,9 @@ capture, so do not attach this plugin's retrieval loop to its ordinary chats.
 
 ## 2. Discover permitted KBs and verify access
 
-Through the client's existing authenticated MCP Service connection, verify
+First establish MCP Service access using the deployment's supplied bootstrap
+endpoint and the client guide; do not assume a new client already has it. Through
+the selected authenticated MCP Service connection, verify
 Registry Protocol 2 and obtain the entitled KB list. Discovery belongs to this
 explicit setup step; `use-kbs` must not rediscover it on every chat or turn.
 
@@ -64,6 +79,13 @@ substantive authenticated wiki read. A successful login or registry listing alon
 does not prove access. If build support is being checked, also read its Build
 Guide; report a build-only failure separately from retrieval.
 
+After new OAuth login or grant repair, repeat reads beyond access-token expiry
+without another sign-in and check a fresh connection. Test multiple services over
+one waiting period where practical. Record the exact native server or registered
+app route for each result; do not substitute another route to declare success.
+Report refresh as unverified if it could not be checked. Diagnose issuer/resource
+and client-registration errors separately from rejected refresh credentials.
+
 An unavailable or incomplete registry response must not erase configured KBs.
 A complete authoritative response may remove revoked entries from the managed
 inventory. Live 401/403 responses govern access; do not bypass them with another
@@ -73,7 +95,9 @@ revoke its server-side credential.
 ## 3. Save and test the instruction-loading arrangement
 
 Generate the managed `kbs-instructions v2` block from the packaged canonical
-sources. It saves the KB inventory and tells `use-kbs` to read the complete
+sources. Save the actual MCP Service binding and each KB's local connection ID
+with its immutable KB UID/service ID; example `casdoor_*` names are not assumed
+on other machines. It saves the KB inventory and tells `use-kbs` to read the complete
 system-wiki index plus the applicable surface page at one validated revision.
 Check the live descriptor and read both pages; declaration of the interface
 alone is not evidence that the instructions reached the assistant. If loading

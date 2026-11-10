@@ -200,7 +200,7 @@ def plan(report, scope='user', desired=None, block=None, codex_apps_checked=Fals
             if any(c['connection_id'] == item['connection_id'] for c in changes):
                 raise SetupError('Duplicate desired connection name')
             if report['surface'].startswith('codex') and codex_apps_checked is not True:
-                raise SetupError('Check app-backed OAuth connections in the client before adding a native server; the native MCP list is incomplete. Record that check with --codex-apps-checked only when no matching app connection exists.')
+                raise SetupError('Check app-backed OAuth alternatives before adding a native server; record that inspection and explicit selection of native setup with --codex-apps-checked. App presence alone does not establish access or block native setup.')
             if url not in {c['url'] for c in changes}:
                 changes.append({'connection_id': item['connection_id'], 'url': url})
     return {'schema_version': 1, 'inspection': report, 'action': action, 'scope': scope,
@@ -322,7 +322,7 @@ def main():
     parser.add_argument('--codex-home', type=Path)
     parser.add_argument('--scope', choices=('user', 'local', 'project'), default='user')
     parser.add_argument('--codex-apps-checked', action='store_true',
-                        help='record a client check confirming no matching app-backed connection exists; not an automatic discovery or authentication check')
+                        help='record inspection of app-backed alternatives and explicit selection of native setup; not an absence, discovery or authentication check')
     parser.add_argument('--desired', type=Path, help='JSON list of connection_id/url pairs from authorised setup')
     parser.add_argument('--block', type=Path, help='complete managed instruction block to save')
     parser.add_argument('--plan', type=Path, help='reviewed saved plan for explicit apply')

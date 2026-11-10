@@ -116,7 +116,7 @@ include that protocol before changing inventory. Canonical metadata names are
 Connections use explicit `mcp_url`; nullable `account_url` is a separate account
 page. This changes source packages, not installed caches or credentials.
 
-Source **1.4.4 is unreleased**. Setup now names the existing local OAuth app and
+Source **1.4.4 is published on GitHub** (implementation `dabeab9`). Setup now names the existing local OAuth app and
 cloud token route, supports natural-language setup and plugin onboarding, and
 requires a client app-connection check before a new Codex native entry. The
 shared package no longer requires the token PKB app on every surface. See the

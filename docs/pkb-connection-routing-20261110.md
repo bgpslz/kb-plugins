@@ -1,6 +1,6 @@
 # PKB connection routing correction — 10 November 2026
 
-KBs source 1.4.4 is an unreleased compatible patch over published 1.4.3. Local
+KBs source 1.4.4 is a published compatible patch over 1.4.3. Local
 Codex Desktop/CLI setup prefers **PKB Service (OAuth)** (formerly **PKB Service v2**); cloud
 ChatGPT setup uses **PKB Service (token)**. Preserve working native OAuth as well.
 Cloud OAuth investigation remains open. No credential, connection, installed
@@ -42,7 +42,7 @@ the earlier successful discovery remains user-supplied evidence only.
 ## Source changes and versions
 
 - KBs OpenAI and Claude package inventories/manifests: **1.4.3 → 1.4.4**, patch
-  for compatible setup repair; status **unreleased**. Shared copies stay aligned.
+  for compatible setup repair; status **published**. Shared copies stay aligned.
 - Setup and bootstrap skill text: **1.3.6 → 1.3.7**. Other skill versions stay put.
 - Collector **1.1.0**, backend services and KB/registry/system-wiki protocols are
   unchanged. No backend version is proposed merely for this handover artifact.
@@ -118,3 +118,16 @@ unchanged; this source edit does not itself rename the provider's registered
 app. An editable new connection should use the OAuth display name. The user will
 perform the MacBook update in MacBook Codex after source publication; this chat
 executes on the Mac mini. Reconnection acceptance follows that client update.
+
+## Publication receipt
+
+Implementation commit `dabeab9` was pushed successfully to `bgpslz/kb-plugins`
+GitHub main on 10 November 2026. The release inventory now marks **1.4.4 published**.
+Source validation remained 93 setup tests, 8 collector regressions and passing
+canonical/package/whitespace checks. The previous unreleased-source statements
+record the state before this authorised publication.
+
+The user will update KBs on the MacBook through its supported plugin manager,
+verify installed 1.4.4 and use a fresh chat for the setup trial. No MacBook update
+or OAuth reconnection is claimed here. The provider-side registered app display
+name and live system-wiki deployment are separate pending operations.

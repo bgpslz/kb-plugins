@@ -84,3 +84,12 @@ This compatible plugin patch accepts records without that metadata; the backend
 separately advances its breaking registry discovery contract to protocol 2 and
 MCP Service 2.0.0. KB/Capture/system-wiki protocol versions stay 1. Collector
 runtime 1.1.0 is unchanged. Source publication does not upgrade installed clients.
+
+## PKB route correction — 10 November 2026
+
+Proposed/prepared source KBs **1.4.3 → 1.4.4** is a compatible setup repair;
+setup/bootstrap text **1.3.6 → 1.3.7**. Both package manifests and generated
+copies agree. Natural-language setup/onboarding selects the named local OAuth
+or cloud token app without requiring both, and new Codex native entries require
+a separate app-inventory check. Collector/backend versions are unchanged.
+The source is unreleased; see [validation and pending live acceptance](pkb-connection-routing-20261110.md).

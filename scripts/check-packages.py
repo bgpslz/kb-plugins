@@ -48,6 +48,17 @@ def check(root):
             read(package / 'skills' / skill / 'SKILL.md')
         print(f'{package.relative_to(root)}: version {version}; {len(skills)} skills: {", ".join(sorted(skills))}')
 
+    # The shared OpenAI package must not require both surface-specific PKB routes.
+    openai = packages[0]
+    manifest = json.loads((openai / '.codex-plugin/plugin.json').read_text())
+    apps = json.loads((openai / '.app.json').read_text()).get('apps', {})
+    if apps != {'mcp-service': {'id': 'asdk_app_6aba17d991648191a5253ff8caca96f8'}}:
+        errors.append('OpenAI shared app mappings must contain only MCP Service; PKB routes are selected during setup')
+    if manifest.get('apps') != './.app.json':
+        errors.append('OpenAI manifest must reference the shared app mappings')
+    if manifest.get('onboardingSkill') != './skills/setup-kbs/SKILL.md':
+        errors.append('OpenAI onboarding must invoke setup-kbs')
+
     if versions[0] != versions[1]:
         errors.append('package versions differ')
     if inventories[0] != inventories[1]:

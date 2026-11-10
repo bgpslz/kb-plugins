@@ -1,6 +1,6 @@
 # KBs plugin for ChatGPT and Codex
 
-Source 1.4.0 is unreleased. `use-kbs` is now a small instruction-based bootstrap
+Source 1.4.4 is unreleased. `use-kbs` is now a small instruction-based bootstrap
 for the system-wiki index plus applicable surface page; `setup-kbs` supplies
 setup adapters and the startup/cache core. Explicit `build-kb` and
 `maintain-project-docs` remain. `use-standard-kb` stays packaged until replacement
@@ -14,15 +14,21 @@ verified separately per surface and machine. Cloud Code and ChatGPT chat receive
 retrieval setup only; capture is not a prerequisite for retrieval or its guidance.
 Humans choose destinations in Capture Review; in-chat exclude/include is retired.
 
-The plugin's `.app.json` registers the ChatGPT bearer-token apps for MCP Service
-and PKB Service. Their separate service-local tokens are created on the
-services' `/account` pages and are never returned by MCP tools.
+The shared plugin's `.app.json` declares MCP Service only. Setup recommends
+**PKB Service (OAuth)** (OAuth) for local Codex Desktop/CLI and **PKB Service (token)**
+for cloud ChatGPT, reusing existing connections and guiding reconnection when
+needed. Both PKB apps remain separate choices so cloud users are not required to
+authenticate an unusable OAuth dependency. See the
+[connection and recovery guide](skills/setup-kbs/references/client-setup.md).
+App-backed OAuth need not appear in the native MCP list; inspect both before
+adding entries. Tokens are entered only through the connector credential UI.
 
-Codex uses separately configured OAuth MCP servers (`mcp_service` for registry
-reconciliation, and `pkb_service` for PKB runtime
-operations). Those OAuth connections are deliberately not registered in
-`.app.json`; authentication
-transport stays outside the retrieval protocol.
+Run plugin setup or ask “set up my knowledge bases”. The manifest's onboarding
+skill and setup's natural-language invocation policy route that request to
+`setup-kbs`; `$setup-kbs` remains available explicitly. Setup runs only for an
+actual setup/repair request, not ordinary retrieval. Build remains explicit-only.
+The earlier explicit-only setup policy explained lack of implicit invocation;
+absence from one chat's advertised list did not establish a discovery bug.
 
 `build-kb` inspects service-declared lifecycle, write behaviour and proposal
 schema. Automatic application requires an authenticated personal owner and a

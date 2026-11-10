@@ -2,9 +2,6 @@
   "apps": {
     "mcp-service": {
       "id": "asdk_app_6aba17d991648191a5253ff8caca96f8"
-    },
-    "pkb-service": {
-      "id": "asdk_app_6ab2b686b2d08191a794afb44cd95e37"
     }
   }
 }

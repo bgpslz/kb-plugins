@@ -11,7 +11,8 @@ remove connections or edit installed plugins.
 ```sh
 python3.12 setup/native.py inspect --surface codex-desktop --execution local
 python3.12 setup/native.py inspect --surface claude-code-cli --execution local
-python3.12 setup/native.py plan --surface codex-cli --execution local --scope user --desired desired.json > native-plan.json
+# Only after checking app-backed connections and confirming no matching app:
+python3.12 setup/native.py plan --surface codex-cli --execution local --scope user --desired desired.json --codex-apps-checked > native-plan.json
 ```
 
 In an installed skill, replace `setup/native.py` with its `scripts/native.py`.
@@ -55,6 +56,13 @@ connection metadata, source-file hashes and limitations, not credentials. It
 observes configuration candidates; managed policies, trust, project approvals,
 hosted connectors, precedence/shadowing and actual tool availability still require
 the native client's own verification.
+
+Codex file inspection and `codex mcp list` do not enumerate app-backed OAuth
+connections such as PKB Service (OAuth). Inspect those in the client before any native
+addition. The planner refuses a new Codex native endpoint unless
+`--codex-apps-checked` records that no matching app connection exists. This
+assertion is stored in the reviewed plan; it does not test installation or grants.
+Existing native endpoint reuse and instruction-only plans need no such assertion.
 
 Endpoint reuse is conservative across scopes: reuse an already configured endpoint
 instead of adding another name. If it is disabled, diagnose/reconnect explicitly.

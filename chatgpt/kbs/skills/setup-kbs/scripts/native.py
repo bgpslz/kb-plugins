@@ -112,7 +112,7 @@ def inspect(surface, execution, home, project, codex_home=None):
                 continue
             data = parse(path, snapshots, 'toml')
             servers(data.get('mcp_servers', {}), 'project:' + str(directory), records)
-        issues.append('project_trust_and_managed_policy_require_native_verification')
+        issues.append('project_trust_managed_policy_and_app_connections_require_native_verification')
         instruction_path = config_dir / 'AGENTS.md'
     else:
         profile = parse(home / '.claude.json', snapshots)
@@ -165,7 +165,7 @@ def file_for(report, scope):
     return project / '.mcp.json' if scope == 'project' else home / '.claude.json'
 
 
-def plan(report, scope='user', desired=None, block=None):
+def plan(report, scope='user', desired=None, block=None, codex_apps_checked=False):
     if report['execution'] != 'local':
         raise SetupError('Cloud/unknown execution: inspect only; no host-local persistence plan')
     if block is not None and desired:
@@ -199,11 +199,14 @@ def plan(report, scope='user', desired=None, block=None):
                 raise SetupError('Resolve unknown HTTP endpoints before adding a connection')
             if any(c['connection_id'] == item['connection_id'] for c in changes):
                 raise SetupError('Duplicate desired connection name')
+            if report['surface'].startswith('codex') and codex_apps_checked is not True:
+                raise SetupError('Check app-backed OAuth connections in the client before adding a native server; the native MCP list is incomplete. Record that check with --codex-apps-checked only when no matching app connection exists.')
             if url not in {c['url'] for c in changes}:
                 changes.append({'connection_id': item['connection_id'], 'url': url})
     return {'schema_version': 1, 'inspection': report, 'action': action, 'scope': scope,
             'target': str(path), 'additions': changes, 'managed_block': block,
-            'authentication': 'separate_native_login_required', 'capture_actions': []}
+            'authentication': 'separate_native_login_required', 'capture_actions': [],
+            'codex_apps_checked': codex_apps_checked is True}
 
 
 def candidate(proposal):
@@ -243,7 +246,8 @@ def apply(proposal, personal_claude_approved=False):
     current = inspect(previous['surface'], previous['execution'], previous['home'], previous['project'], previous['codex_home'])
     if current != previous:
         raise SetupError('Configuration changed after inspection; create and review a new plan')
-    rebuilt = plan(current, proposal['scope'], proposal['additions'], proposal['managed_block'])
+    rebuilt = plan(current, proposal['scope'], proposal['additions'], proposal['managed_block'],
+                   proposal.get('codex_apps_checked', False))
     if rebuilt != proposal:
         raise SetupError('Plan is inconsistent; recreate it from current native configuration')
     if proposal['action'] == 'instructions' and previous['surface'].startswith('claude') and not personal_claude_approved:
@@ -317,6 +321,8 @@ def main():
     parser.add_argument('--project', type=Path, default=Path.cwd())
     parser.add_argument('--codex-home', type=Path)
     parser.add_argument('--scope', choices=('user', 'local', 'project'), default='user')
+    parser.add_argument('--codex-apps-checked', action='store_true',
+                        help='record a client check confirming no matching app-backed connection exists; not an automatic discovery or authentication check')
     parser.add_argument('--desired', type=Path, help='JSON list of connection_id/url pairs from authorised setup')
     parser.add_argument('--block', type=Path, help='complete managed instruction block to save')
     parser.add_argument('--plan', type=Path, help='reviewed saved plan for explicit apply')
@@ -338,7 +344,7 @@ def main():
                 if not args.desired and not args.block:
                     raise SetupError('Plan needs desired connections or a managed block')
                 result = plan(result, args.scope, json.loads(args.desired.read_text()) if args.desired else None,
-                              args.block.read_bytes().decode().strip() if args.block else None)
+                              args.block.read_bytes().decode().strip() if args.block else None, args.codex_apps_checked)
         print(json.dumps(result, indent=2))
         return 0
     except SetupError as exc:

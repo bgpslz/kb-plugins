@@ -1,0 +1,89 @@
+--- a/src/personal_rag/system_wiki/content/local-codex.md
++++ b/src/personal_rag/system_wiki/content/local-codex.md
+@@ -40,9 +40,14 @@
+ See [connecting and reconnecting](connections.md) for compatibility checks and
+ client updates; do not rediscover the registry during ordinary retrieval.
+ 
+-Use Codex's separately configured OAuth MCP connections. Preserve working
+-connections; do not substitute a ChatGPT app connection or the local capture
+-credential for retrieval authentication.
++Local Codex Desktop and CLI should prefer the existing **PKB Service (OAuth)**
++OAuth connection for Bruno's PKB. Reuse working app-backed or native OAuth
++connections and preserve their identities, grants and settings. App-backed
++OAuth need not appear in the native MCP list; inspect both client inventories
++before adding a server. When the OAuth app is missing, recommend that existing
++app through the supported plugin manager rather than creating a duplicate.
++Cloud ChatGPT's **PKB Service (token)** route and local capture credentials
++are separate from this local OAuth route.
+ 
+ For each selected KB, check its protocol and required capabilities, then read
+ a wiki page through the signed-in connection. A successful read establishes
+--- a/src/personal_rag/system_wiki/content/other-harnesses.md
++++ b/src/personal_rag/system_wiki/content/other-harnesses.md
+@@ -39,8 +39,11 @@
+ See [connecting and reconnecting](connections.md) for compatibility checks and
+ client updates; do not rediscover the registry during ordinary retrieval.
+ 
+-For ChatGPT, the current supported KB connection uses a personal token created
+-in that service's Google-authenticated account page. Claude uses the service's
++For cloud ChatGPT, use **PKB Service (token)** for Bruno's PKB, with a personal
++token created in that service's Google-authenticated account page. OAuth has not
++worked on that surface; investigation remains open so authentication can
++eventually be standardised. Do not require cloud users to authenticate the local
++Codex **PKB Service (OAuth)** OAuth app. Claude uses the service's
+ browser sign-in flow. Signing into your AI provider alone does not connect it
+ to your KB. See [connecting and reconnecting](connections.md) for the sign-in
+ options, token replacement and shared sign-out behaviour.
+--- a/src/personal_rag/system_wiki/content/connections.md
++++ b/src/personal_rag/system_wiki/content/connections.md
+@@ -34,10 +34,11 @@
+ 
+ | Context | What you need to do |
+ | --- | --- |
+-| Codex and Claude MCP connections | Add the service connection in that client's settings, then follow its browser sign-in prompt. Connect to MCP Service for your permitted KB list and to each KB Service you use. Set up each client and device separately. |
++| Local Codex Desktop/CLI | Reuse **PKB Service (OAuth)** OAuth for Bruno's PKB, or preserve a working native OAuth connection. When missing, recommend the existing OAuth app through the supported plugin manager, then complete its browser sign-in. Inspect app-backed and native inventories before adding anything. |
++| Claude MCP connections | Reuse the service connection in that client's settings, then follow its browser sign-in prompt. Connect to MCP Service for your permitted KB list and to each KB Service you use. Set up each client and device separately. |
+ | Open WebUI | Use Google through Summerleaze sign-in to enter WebUI. Its KB connections also need authorisation to MCP Service and each selected KB Service; being able to open a chat does not prove retrieval works. |
+ | KB browser and review applications | Open your KB's supplied web link and follow Summerleaze sign-in. The wiki browser and review pages check your access after sign-in; review and publication rights depend on the KB. |
+-| ChatGPT KB connections | The current supported route uses a personal service token. Sign into the named service's account page with Google, create a token and enter it in the connector's credential field. These account pages use their own Google sign-in, separately from shared browser sign-in. |
++| Cloud ChatGPT KB connections | Use **PKB Service (token)** for Bruno's PKB. The current supported route uses a personal service token. Sign into the named service's account page with Google, create a token and enter it in the connector's credential field. These account pages use their own Google sign-in, separately from shared browser sign-in. |
+ | Connecting source accounts | Follow the separate consent flow for the source, such as Gmail or Google Drive. Permission to read a KB does not grant permission to collect your email or files. |
+ | Local conversation capture | Use the separately installed capture setup for that machine and client. Its credential is separate from assistant retrieval sign-in; a working KB connection does not prove capture is installed or delivering history. |
+ 
+@@ -76,8 +77,10 @@
+ Keep working connections and unrelated client instructions.
+ 
+ Setup connects to MCP Service for your permitted KB list, then configures each
+-KB Service using the sign-in method supported by your client. Native OAuth
+-connections and ChatGPT app connections use different setup steps. Signing into
++KB Service using the sign-in method supported by your client. Both app-backed
++and native OAuth are possible locally; cloud ChatGPT's token app is a separate
++route. Inspect both local inventories before creating a native entry. Missing
++native-list output does not establish that the app-backed connection is absent. Signing into
+ a browser application is also separate from connecting an assistant through MCP.
+ Keep passwords and tokens out of conversations. A credential used to collect
+ local conversation history must not be used to read KB content.
+@@ -129,6 +132,23 @@
+ 
+ ## Repair a failed connection
+ 
++Use the named connection in user instructions; the assistant should resolve
++technical identifiers without requiring users to edit CLI configuration.
++
++| Observed state | Recovery |
++| --- | --- |
++| Confirmed not installed in the client | Recommend the existing app for this surface and connect it. |
++| Installed but disconnected | Enable/connect that existing app through its native sign-in action. |
++| Expired/rejected authentication | Reconnect the same connection. An old Auth0 grant may need renewed consent through Casdoor; test the actual grant before attributing cause. |
++| Tools unavailable, state unconfirmed | Check enablement, workspace/account, policy, app-detail fetch/network failures and fresh-chat tool exposure. Missing tools proves neither uninstall nor expiry. |
++
++Preserve connection identities, endpoints, callbacks and scopes. Do not request
++secrets in chat or switch credentials to bypass denial. Public OAuth discovery
++and cached tool definitions do not prove authenticated access. After reconnect,
++check protocol/capabilities and read the wiki through that exact connection. A
++token read does not establish app-backed OAuth readiness, and a native OAuth read does
++not establish app-backed readiness. Verify each client/surface separately.
++
+ A restarted or expired MCP session may need a new handshake. A 401 response
+ usually means the user needs to reconnect or sign in; a 403 may require an
+ administrator to change access. Follow the actual error. Repeating the same

@@ -2,7 +2,7 @@
 name: setup-kbs
 description: Set up or repair KB connections and saved operating instructions for the current client. Use for an explicit setup request; verify local capture separately.
 metadata:
-  version: "1.3.6"
+  version: "1.3.7"
 ---
 
 # Set up knowledge bases
@@ -33,7 +33,12 @@ Identify the client, machine and actual execution location. A cloud task remains
 cloud when viewed in a desktop app. Read the relevant
 [client connection guide](references/client-setup.md) for its authentication and
 instruction settings. Existing connection names are local labels, not universal
-service identifiers.
+service identifiers. Local Codex Desktop/CLI should reuse **PKB Service (OAuth)**
+OAuth; cloud ChatGPT should use **PKB Service (token)**. The client guide names
+both registered apps and their recovery actions. Inspect app-backed connections
+as well as native MCP servers before adding anything. Missing native-list output
+is not evidence that an app-backed connection is absent. Do not require both
+authentication routes or replace a working connection merely to match an example.
 
 Preserve working endpoints, native credentials, callbacks and unrelated settings.
 Reuse configured or bundled servers before adding one. Diagnose an unknown client

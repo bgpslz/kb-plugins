@@ -4,7 +4,9 @@ Versioned marketplace packages for the generic multi-knowledge-base workflow.
 
 - `chatgpt/kbs` serves ChatGPT and Codex. It contains OpenAI
   invocation metadata and expects ChatGPT bearer-token connections or Codex
-  OAuth connections to be configured per service.
+  OAuth connections to be configured per service. Local Codex Desktop/CLI prefers
+  **PKB Service (OAuth)**; cloud ChatGPT uses **PKB Service (token)**. Setup reuses
+  connections and recommends the appropriate app without requiring both routes.
 - `claude/kbs` serves Claude Chat, Desktop, mobile, and Claude Code.
   It preserves OAuth connections and uses Claude's explicit-invocation
   metadata for setup and build workflows.
@@ -113,3 +115,9 @@ include that protocol before changing inventory. Canonical metadata names are
 `type_id` and `description`; old evidence aliases normalize deterministically.
 Connections use explicit `mcp_url`; nullable `account_url` is a separate account
 page. This changes source packages, not installed caches or credentials.
+
+Source **1.4.4 is unreleased**. Setup now names the existing local OAuth app and
+cloud token route, supports natural-language setup and plugin onboarding, and
+requires a client app-connection check before a new Codex native entry. The
+shared package no longer requires the token PKB app on every surface. See the
+[packaging decision, live-guidance handover and acceptance matrix](docs/pkb-connection-routing-20261110.md).

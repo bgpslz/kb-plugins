@@ -37,6 +37,32 @@ class NativeTests(unittest.TestCase):
     def desired(self, name='new_kb', url='https://kb.example/mcp'):
         return [{'connection_id': name, 'url': url}]
 
+    def test_codex_app_inventory_must_be_checked_on_cli_and_desktop(self):
+        for surface in ('codex-cli', 'codex-desktop'):
+            with self.subTest(surface=surface):
+                observed = self.inspect(surface)
+                self.assertEqual(observed['connections'], [])
+                with self.assertRaisesRegex(n.SetupError, 'app-backed OAuth'):
+                    n.plan(observed, desired=self.desired())
+                self.assertEqual(list(self.home.iterdir()), [])
+
+    def test_missing_or_false_app_check_cannot_be_applied(self):
+        for state in ('missing', False):
+            proposal = n.plan(self.inspect(), desired=self.desired(), codex_apps_checked=True)
+            if state == 'missing':
+                del proposal['codex_apps_checked']
+            else:
+                proposal['codex_apps_checked'] = state
+            with self.assertRaises(n.SetupError):
+                n.apply(proposal)
+            self.assertFalse((self.home / '.codex/config.toml').exists())
+
+    def test_native_reuse_needs_no_app_check(self):
+        self.write(self.home / '.codex/config.toml', '[mcp_servers.existing]\nurl="https://kb.example/mcp"\n')
+        proposal = n.plan(self.inspect(), desired=self.desired())
+        self.assertEqual(proposal['additions'], [])
+        self.assertEqual(n.apply(proposal)['status'], 'unchanged')
+
     def test_codex_surgical_addition_preserves_headers_hooks_and_notify(self):
         p = self.home / '.codex/config.toml'
         original = '# Personal notes\nnotify = ["my-notifier"]\n[hooks]\nstate = { enabled = true }\n[mcp_servers.old]\nurl = "https://old.example/mcp"\nhttp_headers = { Authorization = "PRIVATE" }\n'
@@ -44,7 +70,7 @@ class NativeTests(unittest.TestCase):
         p.chmod(0o640)
         observed = self.inspect()
         self.assertNotIn('PRIVATE', json.dumps(observed))
-        proposal = n.plan(observed, desired=self.desired())
+        proposal = n.plan(observed, desired=self.desired(), codex_apps_checked=True)
         result = n.apply(proposal)
         self.assertEqual(result['status'], 'saved_and_reread')
         self.assertTrue(p.read_text().startswith(original))
@@ -54,7 +80,7 @@ class NativeTests(unittest.TestCase):
         self.assertEqual(stat.S_IMODE(p.stat().st_mode), 0o640)
 
     def test_repeat_setup_reuses_configured_endpoint_and_is_noop(self):
-        first = n.plan(self.inspect(), desired=self.desired())
+        first = n.plan(self.inspect(), desired=self.desired(), codex_apps_checked=True)
         n.apply(first)
         repeated = n.plan(self.inspect(), desired=self.desired('different_alias'))
         self.assertEqual(repeated['additions'], [])
@@ -65,11 +91,11 @@ class NativeTests(unittest.TestCase):
     def test_same_name_different_resource_refuses_replacement(self):
         self.write(self.home / '.codex/config.toml', '[mcp_servers.new_kb]\nurl="https://old.example/mcp"\n')
         with self.assertRaises(n.SetupError):
-            n.plan(self.inspect(), desired=self.desired())
+            n.plan(self.inspect(), desired=self.desired(), codex_apps_checked=True)
 
     def test_codex_project_layers_are_inspected_before_user_addition(self):
         self.write(self.project / '.codex/config.toml', '[mcp_servers.project_kb]\nurl="https://kb.example/mcp"\n')
-        p = n.plan(self.inspect(), desired=self.desired())
+        p = n.plan(self.inspect(), desired=self.desired(), codex_apps_checked=True)
         self.assertEqual(p['additions'], [])
         self.assertEqual(n.apply(p)['status'], 'unchanged')
         self.assertFalse((self.home / '.codex/config.toml').exists())
@@ -77,7 +103,7 @@ class NativeTests(unittest.TestCase):
     def test_codex_custom_config_home_is_explicit(self):
         custom = self.home / 'custom'
         observed = n.inspect('codex-desktop', 'local', self.home, self.project, custom)
-        n.apply(n.plan(observed, desired=self.desired()))
+        n.apply(n.plan(observed, desired=self.desired(), codex_apps_checked=True))
         self.assertTrue((custom / 'config.toml').exists())
         self.assertFalse((self.home / '.codex/config.toml').exists())
 
@@ -140,7 +166,7 @@ class NativeTests(unittest.TestCase):
         self.assertEqual(list(self.home.iterdir()), [])
 
     def test_stale_plan_and_unrelated_concurrent_edit_are_refused(self):
-        proposal = n.plan(self.inspect(), desired=self.desired())
+        proposal = n.plan(self.inspect(), desired=self.desired(), codex_apps_checked=True)
         self.write(self.home / '.codex/config.toml', 'model = "changed"\n')
         with self.assertRaises(n.SetupError):
             n.apply(proposal)
@@ -183,14 +209,14 @@ class NativeTests(unittest.TestCase):
         p.parent.mkdir()
         p.symlink_to(source)
         with self.assertRaises(n.SetupError):
-            n.apply(n.plan(self.inspect(), desired=self.desired()))
+            n.apply(n.plan(self.inspect(), desired=self.desired(), codex_apps_checked=True))
         self.assertEqual(source.read_text(), '')
 
     def test_incompatible_inline_toml_layout_is_not_reformatted(self):
         p = self.home / '.codex/config.toml'
         self.write(p, 'mcp_servers = {}\n')
         with self.assertRaises(ValueError):
-            n.apply(n.plan(self.inspect(), desired=self.desired()))
+            n.apply(n.plan(self.inspect(), desired=self.desired(), codex_apps_checked=True))
         self.assertEqual(p.read_text(), 'mcp_servers = {}\n')
 
     def test_endpoint_secrets_are_not_printed_or_accepted(self):
@@ -201,7 +227,7 @@ class NativeTests(unittest.TestCase):
             n.plan(self.inspect(), desired=self.desired(url='https://kb.example/mcp?token=PRIVATE'))
 
     def test_tampered_plan_cannot_write_an_arbitrary_target(self):
-        proposal = n.plan(self.inspect(), desired=self.desired())
+        proposal = n.plan(self.inspect(), desired=self.desired(), codex_apps_checked=True)
         proposal['target'] = str(self.home / 'unrelated.txt')
         with self.assertRaises(n.SetupError):
             n.apply(proposal)
@@ -210,7 +236,7 @@ class NativeTests(unittest.TestCase):
     def test_disabled_existing_server_is_not_silently_enabled_or_duplicated(self):
         self.write(self.home / '.codex/config.toml', '[mcp_servers.kb]\nurl="https://kb.example/mcp"\nenabled=false\n')
         with self.assertRaises(n.SetupError):
-            n.plan(self.inspect(), desired=self.desired())
+            n.plan(self.inspect(), desired=self.desired(), codex_apps_checked=True)
 
     def test_existing_writer_lock_is_preserved(self):
         p = self.home / '.codex/config.toml'
@@ -218,7 +244,7 @@ class NativeTests(unittest.TestCase):
         lock = p.with_name(p.name + '.kbs-setup.lock')
         lock.write_text('other writer')
         with self.assertRaises(n.SetupError):
-            n.apply(n.plan(self.inspect(), desired=self.desired()))
+            n.apply(n.plan(self.inspect(), desired=self.desired(), codex_apps_checked=True))
         self.assertEqual(lock.read_text(), 'other writer')
         self.assertEqual(p.read_text(), '')
 

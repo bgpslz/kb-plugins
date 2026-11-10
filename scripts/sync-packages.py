@@ -13,6 +13,8 @@ def resources(root):
     for platform in ('chatgpt', 'claude'):
         skill = root / platform / 'kbs/skills/setup-kbs'
         text = (root / 'setup/SKILL.md').read_bytes()
+        if platform == 'chatgpt':
+            yield skill / 'references/client-setup.md', (root / 'setup/openai-client-setup.md').read_bytes()
         if platform == 'claude':
             text = text.replace(b'\nmetadata:\n', b'\ndisable-model-invocation: true\nmetadata:\n', 1)
         yield skill / 'SKILL.md', text

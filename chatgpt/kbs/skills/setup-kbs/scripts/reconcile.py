@@ -147,7 +147,7 @@ def render_block(surface, execution, records, descriptor=None):
               'Restore them after compaction/resume or in a separate agent context if missing; do not append copies every turn.',
               'Use the existing authenticated MCP Service connection; do not reconcile registry inventory as a loading side effect.']
     if surface.startswith('codex'):
-        lines.append('Preserve separately configured Codex OAuth MCP servers; do not substitute ChatGPT bearer apps.')
+        lines.append('Preserve existing Codex OAuth connections, including PKB Service (OAuth) app-backed OAuth and native MCP servers; do not substitute cloud ChatGPT bearer apps or add duplicates based only on the native MCP list.')
     elif surface == 'chatgpt':
         lines.append('Preserve the configured ChatGPT service-local bearer-app connections; do not substitute Codex OAuth servers.')
     else:

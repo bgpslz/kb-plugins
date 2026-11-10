@@ -3,4 +3,4 @@ interface:
   short_description: "Configure connections and saved KB instructions"
   default_prompt: "Use $setup-kbs to set up or check my KB connections and saved instructions, reporting retrieval, guidance delivery and capture separately."
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

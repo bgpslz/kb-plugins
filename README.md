@@ -127,10 +127,10 @@ requires a client app-connection check before a new Codex native entry. The
 shared package no longer requires the token PKB app on every surface. See the
 [packaging decision, live-guidance handover and acceptance matrix](docs/pkb-connection-routing-20261110.md).
 
-Source **1.4.5 is an unpublished draft** correcting that registered-app preference
+Source **1.4.5 is published on GitHub** (implementation `9989668`), correcting that registered-app preference
 after native Codex recovery and a registered-app CIMD failure on 10 November.
 The complete manual/assistant-guided recipe covers native configuration, scopes,
 browser consent, exact-route reads, refresh and local mappings. Registered-app
 presence no longer forbids selecting native setup. See the
 [recovery evidence and release boundaries](docs/codex-native-setup-20261110.md).
-No installed cache, personal instruction, broker or backend is updated by this draft.
+Client installation, personal instructions, broker settings and backend guidance have separate acceptance boundaries.

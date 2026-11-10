@@ -1,10 +1,13 @@
 # Native Codex setup correction — 10 November 2026
 
-KBs 1.4.5 is an unpublished compatible patch draft over 1.4.4. The source now
+KBs 1.4.5 is a published compatible patch over 1.4.4 (implementation `9989668`). The source now
 contains the complete local Codex native OAuth configuration procedure rather
 than recommending a registered OAuth app and assuming connections already exist.
-No source commit, push, plugin installation, personal instruction edit or backend
-deployment is included in this draft.
+The implementation was committed and pushed on 10 November. The existing workspace
+marketplace was synced through OpenAI Console: revision `9989668d31c7a1ffaf82ba44dbacf9389ff48ecb`,
+Completed, one Updated, zero Failed. The refreshed KBs detail page reports 1.4.5.
+The current Mac mini chat still has its 1.4.4 cache; a fresh client chat must verify
+loading 1.4.5. Personal instructions, OAuth credentials and backend were not changed.
 
 ## Findings and verified boundaries
 
@@ -44,7 +47,7 @@ No disabled native entries or registered apps were deleted. The failed registere
 test app is not the working native PKB connection. Broker settings and token
 lifetimes were not changed.
 
-## Draft guidance changes
+## Released guidance changes
 
 - `setup/openai-client-setup.md` gives the non-technical user the actual Codex
   Settings path, every required connection field, blank fields, Save/Authenticate
@@ -73,23 +76,23 @@ lifetimes were not changed.
   `example.org` domains. Private deployment names and live addresses remain only
   in the development/operations history, not the distributed setup instructions.
 
-Proposed versions: shared OpenAI/Claude KBs packages **1.4.4 → 1.4.5**;
+Released versions: shared OpenAI/Claude KBs packages **1.4.4 → 1.4.5**;
 setup/bootstrap skills **1.3.7 → 1.3.8**. Other skills and collector remain unchanged.
 This is a compatible correction to setup guidance and generated local bindings;
 it changes no service protocol, server authorization or capture behavior.
 
 ## Separate rollout work
 
-Review and publish the draft, then update each client through its supported
-plugin manager. Do not edit installed caches. Reconcile local instructions only
+The workspace catalog is updated; verify each client through its supported
+plugin manager and a fresh chat. Do not edit installed caches. Reconcile local instructions only
 through an authorized setup operation and verify a fresh session. The shared
 system wiki is owned by personal-rag and needs its own reviewed update/release;
 this repository does not deploy it. The existing routing handover is historical
 evidence, not the current registered-app recommendation. Owner PKB project
-documentation must distinguish this unpublished source draft from installed or
-deployed guidance. No organisation-wiki publication is requested here.
+documentation must distinguish GitHub/catalog publication from client loading and
+backend deployment. No organisation-wiki publication is requested here.
 
-## Draft validation
+## Release validation
 
 All 95 setup tests passed, including separate local names for two machines and
 refusal to emit an unverified/misidentified registry binding. Canonical generation,
@@ -97,8 +100,7 @@ package checks and whitespace checks passed. These source checks do not install
 1.4.5 or prove MacBook acceptance. The native adapter still saves URL entries
 only; the guide explicitly completes scopes/login outside that adapter.
 
-The existing owner PKB component page has a proposed synthesis, change **115**,
-origin `91a9f8168d30475799fd38a02e5d7762`, status **pending human review**. Nothing
-has been published to that wiki by this draft. It preserves release history and
-distinguishes the recovered native routes, incompatible registered route and
-unpublished source. No organisation-wiki update was submitted.
+The owner PKB component page has release proposal **116**, origin
+`e6e81e04231842a6be58dc51db0351b8`, **pending human review**. It supersedes
+prepublication proposal 115; the reviewer should use 116 rather than the draft.
+No wiki publication or organisation-wiki update is claimed.

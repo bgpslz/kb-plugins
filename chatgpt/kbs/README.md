@@ -1,6 +1,6 @@
 # KBs plugin for ChatGPT and Codex
 
-Source 1.4.5 is an unpublished draft over published 1.4.4. `use-kbs` is a small instruction-based bootstrap
+Source 1.4.5 is published on GitHub (implementation `9989668`), superseding 1.4.4. `use-kbs` is a small instruction-based bootstrap
 for the system-wiki index plus applicable surface page; `setup-kbs` supplies
 setup adapters and the startup/cache core. Explicit `build-kb` and
 `maintain-project-docs` remain. `use-standard-kb` stays packaged until replacement

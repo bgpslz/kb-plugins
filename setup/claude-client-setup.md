@@ -22,6 +22,27 @@ Start by saying, in Claude Code or Claude Desktop:
 > need connecting. For each one that needs connecting, give me the name and
 > address to copy and walk me through the clicks.
 
+## Install the KBs plugin (once on Desktop, once on claude.ai)
+
+The plugin brings the setup and retrieval skills. Claude keeps separate lists
+for your computer and for your claude.ai account, so add it in **both** places.
+Both use the same steps and the same address: `bgpslz/kb-plugins` (the
+assistant gives you the current address). The repository must be public, or
+claude.ai cannot fetch it and shows only "Failed to add marketplace".
+
+1. **Claude Desktop (your computer):** open **Settings → Plugins**, choose
+   **Add marketplace**, enter the address, click **Sync**, then add **KBs**.
+2. **claude.ai (your account, for chat and Cowork):** open
+   [claude.ai](https://claude.ai) in a browser, go to **Customize → Plugins →
+   Add → Add marketplace**, enter the same address, then add **KBs**.
+3. Check: **KBs** appears with its version in both places, and a new Code
+   session lists its skills. If an old copy is stuck, remove it and add it
+   again rather than clicking Update.
+
+If "This marketplace is already added" appears although you see nothing in
+Desktop, an older copy exists on your claude.ai account. Remove that marketplace
+there first (**Customize → Plugins**), then add it again.
+
 ## Make a KB visible in Claude Desktop
 
 Use this when setup finds a KB you are entitled to that is not in your
@@ -33,9 +54,12 @@ list, so you never type them from memory.
 3. Paste the name and address the assistant gave you:
    * **Name:** `{KB name}`
    * **Address:** `{mcp_url}`
-4. Click **Add**. A sign-in page opens in your browser. Choose your usual
+4. If asked how to register, choose **CIMD**. If sign-in fails with CIMD,
+   remove the connector and add it again with **DCR**. Never choose the option
+   that asks for your own client ID or secret.
+5. Click **Add**. A sign-in page opens in your browser. Choose your usual
    account (normally Google) and approve if asked.
-5. Check it worked. Both of these should show the KB, with no commands needed:
+6. Check it worked. Both of these should show the KB, with no commands needed:
    * In **Customize → Connectors**, `{KB name}` is listed with a tick and no
      warning.
    * In a Code session, click **+ → Connectors**. `{KB name}` is listed with its
@@ -49,11 +73,9 @@ its own check.
 Repeat the five steps for each KB that needs connecting. Finish one sign-in
 before starting the next.
 
-**Claude Code needs nothing extra.** Code sessions in the Desktop app use your
-Desktop connectors, so a KB added here appears there too. On Claude on the web
-(claude.ai in a browser) the same Customize → Connectors screen is separate:
-the assistant will ask before sending you there, and you repeat the steps in
-that browser.
+**Connectors only need adding once.** A connector added in Desktop is saved to
+your account, so it also appears in Code sessions and, after a browser refresh,
+in claude.ai chat. (Plugins are different: install them in both places, above.)
 
 ## Notes for the assistant
 
@@ -70,6 +92,10 @@ that browser.
   diagnosis only; do not send the user to them as the normal check. After the
   user confirms, verify with a real authenticated read and report it separately
   (retrieval, instructions, capture are reported separately, as in the skill).
+- **CIMD first.** The sign-in server advertises both CIMD and DCR, and accepts
+  public clients with PKCE. CIMD worked in a live test on 13 November 2026 with
+  no extra steps; DCR is the fallback. Neither registration method is ever a
+  reason to ask for secrets.
 - **Confirm the wording.** The menu names above follow the current Claude Desktop
   and Claude documentation, but "Add custom connector" is unconfirmed against the
   live app. If the user sees different wording, follow what is on screen and

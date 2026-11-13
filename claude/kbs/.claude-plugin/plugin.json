@@ -1,6 +1,6 @@
 {
   "name": "kbs",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "description": "Set up KB connections, load system operating instructions and run explicit build/documentation workflows; verify local Code capture separately.",
   "author": {
     "name": "Bruno Prior"

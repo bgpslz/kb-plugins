@@ -17,6 +17,7 @@ def resources(root):
             yield skill / 'references/client-setup.md', (root / 'setup/openai-client-setup.md').read_bytes()
             yield skill / 'references/connection-reference.md', (root / 'setup/connection-reference.md').read_bytes().replace(b'(openai-client-setup.md)', b'(client-setup.md)')
         if platform == 'claude':
+            yield skill / 'references/client-setup.md', (root / 'setup/claude-client-setup.md').read_bytes()
             text = text.replace(b'\nmetadata:\n', b'\ndisable-model-invocation: true\nmetadata:\n', 1)
         yield skill / 'SKILL.md', text
         yield root / platform / 'kbs/skills/use-kbs/SKILL.md', (root / 'setup/bootstrap.md').read_bytes()

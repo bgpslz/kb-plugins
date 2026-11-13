@@ -30,6 +30,17 @@ on that helper being invoked.
 
 ## 1. Identify the client and preserve its existing setup
 
+Setup must work for a non-technical user. Do everything the tools allow yourself
+(inspect, compare, verify); give the user only the clicks and sign-ins that need
+them, as numbered plain-English steps with the exact button names, names and
+addresses to copy, and a visible success check. Never reply "ask the assistant"
+or send them to a command line for a normal step.
+
+For Claude, follow the client guide's Connectors flow: a missing KB is added as a
+connector in Customize → Connectors, using the name and `mcp_url` from the
+registry, and success is what the user sees on that screen and in a Code
+session's + → Connectors list.
+
 For local Codex, follow the client guide's step-by-step graphical setup flow.
 Read its technical notes and linked reference before doing the work. When user
 input is needed, provide the exact Settings path, server Name, Streamable HTTP

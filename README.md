@@ -134,3 +134,5 @@ browser consent, exact-route reads, refresh and local mappings. Registered-app
 presence no longer forbids selecting native setup. See the
 [recovery evidence and release boundaries](docs/codex-native-setup-20261110.md).
 Client installation, personal instructions, broker settings and backend guidance have separate acceptance boundaries.
+
+Source **1.4.6** (committed, not yet pushed or installed) adds a plain-English Claude setup guide ([setup/claude-client-setup.md](setup/claude-client-setup.md)): a missing KB is added as a Claude Desktop connector from registry values, with visual success checks. Button wording and connector/bundled-server duplicate behaviour are unverified in the live app.

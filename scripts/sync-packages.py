@@ -22,6 +22,7 @@ def resources(root):
         yield skill / 'SKILL.md', text
         yield root / platform / 'kbs/skills/use-kbs/SKILL.md', (root / 'setup/bootstrap.md').read_bytes()
         yield root / platform / 'kbs/skills/use-standard-kb/SKILL.md', (root / 'setup/retrieval.md').read_bytes()
+        yield root / platform / 'kbs/skills/maintain-project-docs/SKILL.md', (root / 'setup/project-docs.md').read_bytes()
         yield root / platform / 'kbs/skills/use-kbs/references/fallback.md', (root / 'setup/fallback.md').read_bytes()
         for source, target in (
             ('setup/reconcile.py', 'scripts/reconcile.py'),

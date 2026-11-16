@@ -31,7 +31,7 @@ Open WebUI server capture, local session capture and manual paste feed the same
 Capture Store and human review queue. See [local capture](local-capture/README.md).
 Source updates do not reconcile installed plugins or personal standing instructions.
 
-The development-only `maintain-project-docs` skill preserves full repository documentation, distils material updates into the configured owner PKB, and follows authorised organisation documentation workflows. Shared system-use guidance belongs in the system wiki. Owner/path approval requires the matching service implementation; source changes do not deploy that backend or update installed packages.
+The development-only `maintain-project-docs` skill preserves full repository documentation and follows each project's authorised documentation destinations. For this KB system, shared explanations, architecture, plans, decisions and development histories belong in personal-rag's system wiki, with current explanations and histories in separate linked files. My PKB retains Bruno's personal purposes, priorities, preferences and original source evidence; organisation-specific knowledge follows the relevant organisation KB's review rules. System-wiki changes use application source review and release; no system-wiki proposal interface is implemented. Source changes do not deploy content or update installed packages.
 
 ## Development workflow
 
@@ -45,9 +45,10 @@ explicitly, and distinguish review commits from publication on canonical main.
 
 Record material decisions when agreed, including workflow decisions without
 code changes, with rationale, scope and implementation/publication status.
-Maintain repository documentation and distilled personal project documentation
-through the configured wiki proposal service; report pending or failed updates
-explicitly. Source drafts and unreleased skills do not imply live publication.
+Maintain repository documentation and route shared KB-system knowledge to
+personal-rag's system wiki through source review and release. Use KB proposal
+services for authorised personal or organisation content; report pending or
+failed updates explicitly. Source drafts and unreleased skills do not imply live publication.
 
 ## Architecture alignment
 
@@ -89,7 +90,7 @@ version-bump rule, diagnostics and release boundaries.
 
 ## Source development
 
-Canonical setup helpers, bootstrap, retrieval helper, fallback and release inventory live in `setup/`.
+Canonical setup helpers, bootstrap, retrieval helper, project-documentation skill (`setup/project-docs.md`), fallback and release inventory live in `setup/`.
 Run `python3 scripts/sync-packages.py --write` to regenerate packaged copies;
 omit `--write` to check. `scripts/check-packages.py` checks both source versions,
 inventory and generated resource parity. These commands do not publish/install.
@@ -136,3 +137,7 @@ presence no longer forbids selecting native setup. See the
 Client installation, personal instructions, broker settings and backend guidance have separate acceptance boundaries.
 
 Source **1.4.7** (published on GitHub) adds a plain-English Claude setup guide ([setup/claude-client-setup.md](setup/claude-client-setup.md)): install the plugin on both Claude Desktop and claude.ai (the marketplace repository must be public), add each KB once as a Desktop connector using CIMD, and confirm on visible screens. Verified 13 November 2026 on a Mac mini: marketplace/plugin 1.4.6 on both surfaces, SLZKB connector via CIMD, authenticated wiki read. The Claude Desktop menu wording is partly unconfirmed and installed-plugin updates remain per-surface.
+
+Source **1.4.8 is unpublished**. It corrects `maintain-project-docs` destinations
+and adds its canonical source to package generation. See the
+[version and policy record](docs/service-versions.md#documentation-destination-correction--16-november-2026).

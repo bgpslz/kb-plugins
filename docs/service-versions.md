@@ -93,3 +93,38 @@ copies agree. Natural-language setup/onboarding selects the named local OAuth
 or cloud token app without requiring both, and new Codex native entries require
 a separate app-inventory check. Collector/backend versions are unchanged.
 Implementation `dabeab9` is published on GitHub; see [validation and pending live acceptance](pkb-connection-routing-20261110.md).
+
+## Documentation destination correction — 16 November 2026
+
+Proposed source KBs **1.4.7 → 1.4.8** and `maintain-project-docs`
+**1.3.5 → 1.3.6** are compatible instruction fixes. The source inventory and both
+package manifests carry the proposed patch; it is unpublished. Collector and
+backend versions are unchanged.
+
+Bruno's revised policy places shared KB-system explanations, architecture,
+plans, decisions and development histories in personal-rag's system wiki.
+Current explanations and histories are separate linked files, with plain English
+before technical detail. My PKB retains personal purposes, priorities,
+preferences and original source evidence; organisation-specific knowledge follows
+the relevant organisation KB's review rules. Other projects retain their own
+authorised documentation destinations.
+
+The controlling policy is in personal-rag's `AGENTS.md` and
+`docs/system_wiki.md`; `docs/wiki-reorganisation-20261115/REVIEW.md` records the
+coordinated migration. System-wiki edits use application source review and
+release, with no implemented proposal interface. Replacement system pages must
+be published and verified before the coordinated PKB reductions are merged.
+This skill correction does not perform that migration or create another PKB
+system-history proposal.
+
+The canonical skill is now `setup/project-docs.md`; `sync-packages.py` generates
+both distributions and package checks verify their parity with that source.
+Repository/package changes do not establish GitHub publication, marketplace
+refresh, installed-cache updates or system-wiki deployment. None is authorised
+by the version proposal.
+
+Validation: 95 setup tests and 8 collector regressions passed; generation/parity
+checks, both packaged skill validators and `git diff --check` passed. Skill
+validation used personal-rag's existing Python environment for PyYAML; no
+dependency was installed. These are local source checks, not publication or
+runtime acceptance.

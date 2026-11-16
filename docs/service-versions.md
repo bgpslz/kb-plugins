@@ -96,9 +96,9 @@ Implementation `dabeab9` is published on GitHub; see [validation and pending liv
 
 ## Documentation destination correction — 16 November 2026
 
-Proposed source KBs **1.4.7 → 1.4.8** and `maintain-project-docs`
+Source KBs **1.4.7 → 1.4.8** and `maintain-project-docs`
 **1.3.5 → 1.3.6** are compatible instruction fixes. The source inventory and both
-package manifests carry the proposed patch; it is unpublished. Collector and
+package manifests carry the patch. Collector and
 backend versions are unchanged.
 
 Bruno's revised policy places shared KB-system explanations, architecture,
@@ -128,3 +128,21 @@ checks, both packaged skill validators and `git diff --check` passed. Skill
 validation used personal-rag's existing Python environment for PyYAML; no
 dependency was installed. These are local source checks, not publication or
 runtime acceptance.
+
+Bruno authorised publication with “Deploy”. Implementation `f763afb` was pushed
+to `bgpslz/kb-plugins/main` and the remote ref was verified on 16 November.
+The release inventory now marks the source published. Both source distributions
+are available on GitHub; this receipt and generated inventory copies follow in
+a metadata/documentation commit.
+
+The existing Summerleaze workspace marketplace's **Sync now** completed with
+**Needs attention**, zero updated and one failed. Its error asks to check the
+repository, branch and GitHub connection access. The configured repository is
+`https://github.com/bgpslz/kb-plugins`, path repository root, ref `main`, matching
+the verified source. Last synced revision remains `c9b77b2`; the plugin detail
+page observed before the attempt reported 1.4.5. No GitHub permission or
+marketplace configuration was changed. Workspace publication remains blocked
+pending diagnosis/repair of that sync error; its cause is not established.
+
+Installed caches were not modified and active 1.4.8 loading is unverified.
+No system-wiki deployment or PKB migration/proposal was performed.

@@ -138,6 +138,8 @@ Client installation, personal instructions, broker settings and backend guidance
 
 Source **1.4.7** (published on GitHub) adds a plain-English Claude setup guide ([setup/claude-client-setup.md](setup/claude-client-setup.md)): install the plugin on both Claude Desktop and claude.ai (the marketplace repository must be public), add each KB once as a Desktop connector using CIMD, and confirm on visible screens. Verified 13 November 2026 on a Mac mini: marketplace/plugin 1.4.6 on both surfaces, SLZKB connector via CIMD, authenticated wiki read. The Claude Desktop menu wording is partly unconfirmed and installed-plugin updates remain per-surface.
 
-Source **1.4.8 is unpublished**. It corrects `maintain-project-docs` destinations
-and adds its canonical source to package generation. See the
+Source **1.4.8 is published on GitHub** (implementation `f763afb`). It corrects
+`maintain-project-docs` destinations and adds its canonical source to package
+generation. Workspace marketplace sync failed; installed-client loading remains
+unverified. See the
 [version and policy record](docs/service-versions.md#documentation-destination-correction--16-november-2026).

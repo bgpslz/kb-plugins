@@ -239,6 +239,14 @@ Validation:
 Bruno authorised publication on 18 November. Implementation `8b0d94b` was pushed
 to `bgpslz/kb-plugins/main` and the remote ref verified. The release inventory
 now marks the source published. On the maintainer's Mac, Claude Code's
-`kbs@kb-plugins` updated from 1.4.9 to 1.4.10 and loads on restart. No workspace
-marketplace sync was attempted. The Codex workspace copy and the Claude Desktop
-and claude.ai copies were not checked. No collector reinstall was needed.
+`kbs@kb-plugins` updated from 1.4.9 to 1.4.10 and loads on restart. No collector
+reinstall was needed.
+
+Later on 18 November, at Bruno's request, the Summerleaze workspace marketplace
+(Admin Console → Plugins → Marketplaces → `bgpslz/kb-plugins`, branch `main`,
+repository root, `.agents/plugins/marketplace.json`) was synced with **Sync
+now**. Its last synced revision moved from `5e1835e` (1.4.8) to `0d48aba`
+(1.4.10). The sync completed with 1 updated plugin (KBs) and no failures.
+Auto-sync is enabled. The 16 November sync failure recorded above has not
+recurred. Installed Codex copies update through the client and were not
+checked. Claude Desktop and claude.ai copies were not checked.

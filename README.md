@@ -152,5 +152,6 @@ through MCP Service's proposal tools. See the
 
 Source **1.4.10 is published on GitHub** (implementation `8b0d94b`). Its
 collector installer survives Codex rewriting the capture hook block, and it no
-longer escapes non-ASCII text in Claude settings. See the
+longer escapes non-ASCII text in Claude settings. The Summerleaze workspace
+marketplace has synced it. See the
 [version record](docs/service-versions.md#installer-tolerance-of-codex-config-rewrites--18-november-2026).

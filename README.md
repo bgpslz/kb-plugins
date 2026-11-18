@@ -143,3 +143,9 @@ Source **1.4.8 is published on GitHub** (implementation `f763afb`). It corrects
 generation. Workspace marketplace sync failed; installed-client loading remains
 unverified. See the
 [version and policy record](docs/service-versions.md#documentation-destination-correction--16-november-2026).
+
+Source **1.4.9 is published on GitHub** (implementation `54b34bd`). It keeps
+Claude Code app notices, compaction summaries and app events out of captured
+prompts (collector 1.1.1) and routes `maintain-project-docs` system-wiki updates
+through MCP Service's proposal tools. See the
+[version record](docs/service-versions.md#claude-code-collector-fix-and-system-wiki-proposal-routing--18-november-2026).

@@ -149,10 +149,10 @@ No system-wiki deployment or PKB migration/proposal was performed.
 
 ## Claude Code collector fix and system-wiki proposal routing — 18 November 2026
 
-Proposed collector **1.1.0 → 1.1.1** and source KBs **1.4.8 → 1.4.9** are
+Collector **1.1.0 → 1.1.1** and source KBs **1.4.8 → 1.4.9** are
 compatible fixes. KBs 1.4.9 also carries `maintain-project-docs`
 **1.3.6 → 1.4.0**, described below. The source inventory, both package manifests and the bundled
-`setup-kbs` collector copies carry them; they are unpublished.
+`setup-kbs` collector copies carry them.
 
 A check of the installed collector found that Claude Code turns could include
 text the user did not type. App notices (`<system-reminder>` blocks) inside a
@@ -184,3 +184,25 @@ detail, and material no longer current moves to linked history pages. Release
 version numbers are not hardcoded in explanations. Submitting a proposal does
 not approve, export, release or publish it. Both package READMEs and the root
 README describe the new routing.
+
+Bruno authorised publication and collector installation on 18 November.
+Implementation `54b34bd` was pushed to `bgpslz/kb-plugins/main` and the remote
+ref verified. The release inventory now marks the source published.
+
+- **Claude Code on the maintainer's Mac:** after a marketplace update, plugin
+  `kbs@kb-plugins` updated from 1.4.6 to 1.4.9 at `54b34bd`. It loads on restart.
+- **Codex:** the workspace-directory copy on that Mac reports 1.4.8. No workspace
+  marketplace sync was attempted for 1.4.9. Claude Desktop and claude.ai
+  distribution were not checked.
+- **Collector:** `install.py` refused to run because Codex had rewritten
+  `~/.codex/config.toml` when trusting the hooks. The rewrite kept the managed
+  block's hooks and trust entries but dropped its `# END kbs-local-capture`
+  marker. Nothing was written. Because the 1.1.1 hook commands, launchd job and
+  configuration are identical to 1.1.0, the runtime `capture.py` was copied into
+  `~/.local/share/kbs-capture/` instead; `--version` reports 1.1.1. Credentials,
+  receipts, exclusions, the capture start time, hooks and Codex trust are
+  unchanged. Reinstalling on any machine where Codex has trusted the hooks will
+  fail the same way until the installer tolerates that rewrite.
+- **Acceptance:** a launchd backstop sweep exited 0 and queued 55 corrected turns,
+  with no new failures. Afterwards, all 724 turns eligible since installation had
+  receipts. The corrected turns appear again in Capture Review.

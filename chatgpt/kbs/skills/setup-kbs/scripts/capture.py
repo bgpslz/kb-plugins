@@ -2,6 +2,8 @@
 """Fail-soft local Claude Code/Codex capture, independent of model instructions.
 
 Only recognised visible text and completed turns enter Capture Protocol v1.
+Claude Code app notices, compaction summaries and app-originated rows are not
+user prompts: they are removed or skipped, and they close a finished turn.
 Hooks detach a worker; a launchd sweep retries recent sessions. Credentials live
 in macOS Keychain. SQLite holds hashes/receipts, never transcript text or tokens.
 Unknown records are ignored and incomplete turns are held for the next trigger.
@@ -15,6 +17,7 @@ import fnmatch
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import sqlite3
 import subprocess
@@ -22,7 +25,7 @@ import sys
 import time
 from urllib.request import Request, urlopen
 
-VERSION = '1.1.0'
+VERSION = '1.1.1'
 try:
     BUILD_ID = 'sha256:' + hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 except OSError:
@@ -59,6 +62,26 @@ def records(path):
                 continue
 
 
+# Claude Code inserts app notices into user messages; they are not user text.
+CLAUDE_NOTICE = re.compile(r'<system-reminder>.*?</system-reminder>', re.DOTALL)
+IMAGE_ONLY = '[Image not captured]'
+
+
+def claude_user_text(row, content):
+    """Return what the person typed, or '' for app-generated user rows."""
+    if row.get('isCompactSummary') or row.get('isVisibleInTranscriptOnly'):
+        return ''
+    origin = row.get('origin')
+    if isinstance(origin, dict) and origin.get('kind') not in (None, 'human'):
+        return ''
+    text = CLAUDE_NOTICE.sub('', text_content(content)).strip()
+    if not text and isinstance(content, list) and any(
+            isinstance(x, dict) and x.get('type') == 'image' for x in content):
+        # Images are not captured, but the turn and its reply still are.
+        return IMAGE_ONLY
+    return text
+
+
 def parse_claude(rows):
     prompt, replies, meta, completed = [], [], {}, False
     result = []
@@ -76,12 +99,14 @@ def parse_claude(rows):
         if row.get('type') == 'user':
             if isinstance(content, list) and any(isinstance(x, dict) and x.get('type') == 'tool_result' for x in content):
                 continue
-            text = text_content(content)
-            if not text.strip():
-                continue
+            text = claude_user_text(row, content)
             if completed:
+                # An app event after a finished turn also ends it, so replies
+                # the assistant makes on its own are not added to that turn.
                 finish()
                 prompt, replies, completed = [], [], False
+            if not text:
+                continue
             prompt.append(text)
             meta = {'source': 'claude', 'surface': 'claude-code',
                     'kb_ref': row.get('sessionId'), 'cwd': row.get('cwd'),

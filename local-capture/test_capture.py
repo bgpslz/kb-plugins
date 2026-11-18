@@ -81,6 +81,44 @@ class CaptureTests(unittest.TestCase):
         self.assertEqual(turn['raw_user_text'], 'Prompt')
         self.assertEqual(turn['assistant_text'], 'Progress\n\nReply')
 
+    def test_claude_drops_app_notices_summaries_and_app_events(self):
+        base = {'type': 'user', 'sessionId': 'session', 'cwd': '/project', 'timestamp': '2026-10-12T14:00:00Z'}
+        def user(content, **flags):
+            return base | {'message': {'content': content}} | flags
+        def reply(text):
+            return {'type': 'assistant', 'message': {'model': 'claude-model', 'stop_reason': 'end_turn',
+                                                     'content': [{'type': 'text', 'text': text}]}}
+        notice = '<system-reminder>\nSession status: done\n</system-reminder>'
+        rows = [
+            # A notice block before the typed text, and an inline notice.
+            user([{'type': 'text', 'text': notice}, {'type': 'text', 'text': 'Prompt ' + notice + 'here'}],
+                 origin={'kind': 'human'}),
+            # A notice-only row mid-turn neither starts nor ends the turn.
+            user(notice),
+            reply('Reply'),
+            # App events after a finished turn end it; the replies to them are dropped.
+            user('<task-notification>done</task-notification>', origin={'kind': 'task-notification'}),
+            reply('Unprompted reply'),
+            user(notice),
+            reply('Another unprompted reply'),
+            user('This session is being continued from a previous conversation.',
+                 isCompactSummary=True, isVisibleInTranscriptOnly=True),
+            reply('Resuming'),
+            user('Second prompt'),
+            reply('Second reply'),
+            # A screenshot sent without text is still a turn of its own.
+            user([{'type': 'image', 'source': {'data': 'secret'}}], origin={'kind': 'human'}),
+            user('[Image: source: /tmp/shot.png]', isMeta=True),
+            reply('Image reply'),
+        ]
+        first, second, third = capture.parse_claude(rows)
+        self.assertEqual(first['raw_user_text'], 'Prompt here')
+        self.assertEqual(first['assistant_text'], 'Reply')
+        self.assertEqual(second['raw_user_text'], 'Second prompt')
+        self.assertEqual(second['assistant_text'], 'Second reply')
+        self.assertEqual(third['raw_user_text'], '[Image not captured]')
+        self.assertEqual(third['assistant_text'], 'Image reply')
+
     def test_sends_only_after_success_and_deduplicates_replays(self):
         turn = {'source': 'codex', 'raw_user_text': 'Prompt', 'assistant_text': 'Reply', 'kb_ref': 'session', 'cwd': '/project'}
         class Client:

@@ -35,7 +35,12 @@ and logs live in `~/Library/Application Support/kbs-capture` with private modes.
 A receipt is committed only after `structuredContent.status == "queued"`.
 Logs contain exception classes and size failures, never text, tokens or headers.
 Tool calls, outputs, file/image blocks, thinking, injected context and sidechains
-are excluded. Over-limit turns fail locally rather than being silently truncated.
+are excluded. For Claude Code that includes `<system-reminder>` notices inside a
+user message, compaction summaries and rows whose `origin.kind` is not `human`
+(such as task notifications); such a row after a finished turn closes it, so
+unprompted assistant replies are not appended to it. A screenshot sent without
+text is kept as a turn whose prompt reads `[Image not captured]`.
+Over-limit turns fail locally rather than being silently truncated.
 Unknown formats fail soft; update fixture tests when the transcript format changes.
 
 All projects are included by default from the first install timestamp; existing
@@ -68,6 +73,6 @@ References: [Codex hooks](https://learn.chatgpt.com/docs/hooks),
 [Claude Code hooks](https://code.claude.com/docs/en/hooks).
 No cloud hooks, scraping or Compliance API integration is part of this component.
 
-Source collector 1.1.0 supports `python3 local-capture/capture.py --version`
+Source collector 1.1.1 supports `python3 local-capture/capture.py --version`
 for side-effect-free version/source-hash inspection. This source change does
 not upgrade an installed collector or establish capture readiness.

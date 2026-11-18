@@ -146,3 +146,30 @@ pending diagnosis/repair of that sync error; its cause is not established.
 
 Installed caches were not modified and active 1.4.8 loading is unverified.
 No system-wiki deployment or PKB migration/proposal was performed.
+
+## Claude Code collector injected-text fix — 18 November 2026
+
+Proposed collector **1.1.0 → 1.1.1** and source KBs **1.4.8 → 1.4.9** are
+compatible fixes. The source inventory, both package manifests and the bundled
+`setup-kbs` collector copies carry them; they are unpublished.
+
+A check of the installed collector found that Claude Code turns could include
+text the user did not type. App notices (`<system-reminder>` blocks) inside a
+user message and compaction summaries were captured as prompts. Task
+notifications and similar app events started turns of their own. The collector
+now strips those notices, skips compaction summaries and rows whose
+`origin.kind` is not `human`, and closes a finished turn at such a row so
+unprompted replies are not appended to it. A screenshot sent without text,
+previously merged into the preceding turn, is now its own turn with the prompt
+`[Image not captured]`. Codex parsing is unchanged.
+
+Validation: 9 collector regressions, including a new fixture for these cases,
+the package generation and parity checks, and an offline comparison over the
+573 Claude Code turns on the maintainer's Mac since installation. No injected
+text remained in any prompt. Upgrading changes the content hash of 71 of those
+turns, so the first sweep after installation would queue them again for
+Capture Review. The installed collector, still 1.1.0, was not changed.
+Publication, marketplace refresh and installation remain separate operations.
+
+The pending `maintain-project-docs` wording changes in the working tree are not
+part of this release.

@@ -181,7 +181,7 @@ class CaptureTests(unittest.TestCase):
             config = home/'.codex/config.toml'
             config.write_text('notify = ["computer-use"]\n[[hooks.Stop]]\n[[hooks.Stop.hooks]]\ntype="command"\ncommand="existing"\n')
             (home/'.claude').mkdir()
-            (home/'.claude/settings.json').write_text('{"permissions":{"allow":["Read"]}}')
+            (home/'.claude/settings.json').write_text('{"permissions":{"allow":["Read"]},"note":"a \u2014 b"}', encoding='utf-8')
             policy = install.install(home, 'test@example.com')
             initial = config.read_text()
             collector_policy = json.loads(policy.read_text()) | {'excluded_projects': ['/private/*']}
@@ -192,7 +192,34 @@ class CaptureTests(unittest.TestCase):
             self.assertIn('command="existing"', initial)
             self.assertEqual(json.loads(policy.read_text())['excluded_projects'], ['/private/*'])
             self.assertEqual(json.loads((home/'.claude/settings.json').read_text())['permissions'], {'allow': ['Read']})
+            self.assertIn('a \u2014 b', (home/'.claude/settings.json').read_text(encoding='utf-8'))
             self.assertEqual(len(install.tomllib.loads(initial)['hooks']['Stop']), 2)
+
+    def test_codex_rewrite_without_end_marker_is_updated_in_place(self):
+        old = '/usr/bin/python3 /home/.local/share/kbs-capture/capture.py hook --source codex'
+        new = '/opt/python3.12 /home/.local/share/kbs-capture/capture.py hook --source codex'
+        def entry(event, command):
+            return (f'[[hooks.{event}]]\n[[hooks.{event}.hooks]]\ntype = "command"\n'
+                    f'command = "{command}"\ntimeout = 3\n')
+        # As Codex leaves it after the user trusts the hooks: END marker gone,
+        # trust records and other tables after the block.
+        rewritten = ('notify = ["computer-use"]\n\n# BEGIN kbs-local-capture\n'
+                     + entry('Stop', old) + '\n' + entry('SessionEnd', old)
+                     + '\n[hooks.state."config.toml:stop:0:0"]\ntrusted_hash = "sha256:abc"\n\n'
+                     + '[mcp_servers.kb]\nurl = "https://kb.example/mcp"\n')
+        result = install.codex_config(rewritten, new)
+        self.assertEqual(result, rewritten.replace(old, new))
+        self.assertEqual(install.codex_config(result, new), result)
+        # Without either marker, existing entries are still found rather than duplicated.
+        unmarked = rewritten.replace('# BEGIN kbs-local-capture\n', '')
+        self.assertEqual(install.codex_config(unmarked, new), unmarked.replace(old, new))
+
+    def test_codex_unrecognised_capture_entry_fails_closed(self):
+        # A reformatted entry is not recognised; adding a second would duplicate it.
+        reformatted = ('[[hooks.Stop]]\n[[hooks.Stop.hooks]]\ntype="command"\n'
+                       'command="python3 /h/.local/share/kbs-capture/capture.py hook --source codex"\n')
+        with self.assertRaises(ValueError):
+            install.codex_config(reformatted, 'python3 /h/.local/share/kbs-capture/capture.py hook --source codex')
 
 
 if __name__ == '__main__':

@@ -24,7 +24,11 @@ Token labels still use the existing service token type; no authentication-filter
 change accompanies this release.
 
 Codex hooks are written to `~/.codex/config.toml`; existing `notify` and hooks
-are preserved. Trust the new definitions through Codex `/hooks`. Claude hooks
+are preserved. Trust the new definitions through Codex `/hooks`. Trusting them
+lets Codex rewrite the file, which can drop the managed block's END marker, so
+reinstalling finds the capture entries by content and updates them in place,
+keeping Codex's trust records. An entry it cannot recognise stops the install
+rather than being duplicated. Claude hooks
 are written to `~/.claude/settings.json`, and the Claude plugin also ships hooks
 calling the same installed runtime. Duplicate triggers are harmless because the
 receipt store and server deduplicate. Verify the desktop Code tab separately.

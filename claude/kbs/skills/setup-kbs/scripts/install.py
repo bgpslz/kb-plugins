@@ -2,7 +2,8 @@
 """Idempotent macOS installer; prepare first, then activate hooks and daily sweep.
 
 Never changes notify or standing instructions. Preserves unrelated hooks and
-settings. Token entry is an interactive Keychain operation, never a CLI token
+settings. Codex capture hooks are recognised by content, so a Codex rewrite of
+the managed markers does not block reinstallation. Token entry is an interactive Keychain operation, never a CLI token
 argument. Use Python 3.11+ for TOML validation. --home permits isolated dry runs.
 The CLI rejects non-macOS platforms before writing any hook or runtime files.
 """
@@ -11,6 +12,7 @@ from datetime import datetime, timezone
 import json
 from pathlib import Path
 import plistlib
+import re
 import shlex
 import shutil
 import subprocess
@@ -19,25 +21,46 @@ import tomllib
 
 START = '# BEGIN kbs-local-capture'
 END = '# END kbs-local-capture'
+EVENTS = ('Stop', 'SessionEnd')
+OURS = 'kbs-capture/capture.py'
+# One generated hook entry. Codex may rewrite the file when the user trusts the
+# hooks (it has dropped the END marker), so entries are found by content, not
+# by the markers, and updated in place to keep Codex's trust records valid.
+STANZA = re.compile(r'^\[\[hooks\.(Stop|SessionEnd)\]\]\n\[\[hooks\.\1\.hooks\]\]\n'
+                    r'type = "command"\ncommand = ".*kbs-capture/capture\.py.*"\ntimeout = \d+\n', re.M)
+
+
+def stanza(event, command):
+    return '\n'.join([f'[[hooks.{event}]]', f'[[hooks.{event}.hooks]]', 'type = "command"',
+                      'command = ' + json.dumps(command), 'timeout = 3', ''])
+
+
+def hook_commands(parsed, ours):
+    hooks = parsed.get('hooks', {})
+    return {event: [h.get('command') for group in hooks.get(event, []) for h in group.get('hooks', [])
+                    if (OURS in str(h.get('command', ''))) == ours] for event in EVENTS}
 
 
 def codex_config(existing, command):
-    if existing.count(START) != existing.count(END) or existing.count(START) > 1:
-        raise ValueError('Malformed managed capture block')
-    if START in existing:
-        before, rest = existing.split(START, 1)
-        _, after = rest.split(END, 1)
-        existing = before.rstrip() + '\n' + after.lstrip('\n')
     parsed = tomllib.loads(existing)
     if parsed.get('features', {}).get('hooks') is False or parsed.get('allow_managed_hooks_only'):
         raise ValueError('Codex configuration disables local hooks; reconcile explicitly')
-    blocks = [START]
-    for event in ('Stop', 'SessionEnd'):
-        blocks += [f'[[hooks.{event}]]', f'[[hooks.{event}.hooks]]', 'type = "command"',
-                   'command = ' + json.dumps(command), 'timeout = 3', '']
-    blocks += [END]
-    result = existing.rstrip() + '\n\n' + '\n'.join(blocks) + '\n'
-    tomllib.loads(result)
+    seen = set()
+    def update(match):
+        if match.group(1) in seen:
+            return ''
+        seen.add(match.group(1))
+        return stanza(match.group(1), command)
+    result = STANZA.sub(update, existing)
+    missing = [event for event in EVENTS if event not in seen]
+    if missing:
+        block = '\n'.join([START] + [stanza(event, command) for event in missing] + [END])
+        result = result.rstrip() + '\n\n' + block + '\n'
+    updated = tomllib.loads(result)
+    # Fail closed if an edited entry was not recognised or another hook changed.
+    if (hook_commands(updated, False) != hook_commands(parsed, False)
+            or hook_commands(updated, True) != {event: [command] for event in EVENTS}):
+        raise ValueError('Codex capture hooks need explicit reconciliation')
     return result
 
 
@@ -56,7 +79,7 @@ def claude_config(existing, command):
                 cleaned.append(group)
         cleaned.append({'hooks': [{'type': 'command', 'command': command, 'timeout': 3}]})
         hooks[event] = cleaned
-    return json.dumps(config, indent=2) + '\n'
+    return json.dumps(config, indent=2, ensure_ascii=False) + '\n'
 
 
 def write(path, text):

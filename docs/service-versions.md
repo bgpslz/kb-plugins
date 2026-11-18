@@ -206,3 +206,32 @@ ref verified. The release inventory now marks the source published.
 - **Acceptance:** a launchd backstop sweep exited 0 and queued 55 corrected turns,
   with no new failures. Afterwards, all 724 turns eligible since installation had
   receipts. The corrected turns appear again in Capture Review.
+
+## Installer tolerance of Codex config rewrites — 18 November 2026
+
+Proposed source KBs **1.4.9 → 1.4.10** is a compatible installer fix. The source
+inventory, both package manifests and the bundled `setup-kbs` installer copies
+carry it, and it is unpublished. The collector runtime is unchanged at 1.1.1,
+so installed machines need no update.
+
+Trusting the capture hooks through Codex `/hooks` lets Codex rewrite
+`~/.codex/config.toml`. On the maintainer's Mac that rewrite kept the hooks and
+trust records but dropped the `# END kbs-local-capture` marker. The installer
+then refused to run ("Malformed managed capture block"). `install.py` now finds
+its Codex hook entries by content rather than by the markers and updates them in
+place, which keeps Codex's trust records valid. A first install still appends a
+marked block. If the result does not hold exactly one capture hook per event,
+or any other hook changed, the installer stops rather than adding a duplicate.
+
+The installer also stops escaping non-ASCII characters when it rewrites
+`~/.claude/settings.json`; the content was unchanged, but the file was rewritten
+on every install.
+
+Validation:
+- **Tests:** 11 collector and installer regressions pass, including new fixtures
+  for a Codex-rewritten config and an unrecognisable entry. Those tests fail
+  against the previous installer. The 95 setup tests, the package generation
+  and parity checks and `git diff --check` also pass.
+- **Dry run:** an isolated `--home` run against copies of the maintainer's real
+  Codex config, Claude settings and collector configuration produced files
+  identical apart from the temporary home path.

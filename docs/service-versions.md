@@ -147,10 +147,11 @@ pending diagnosis/repair of that sync error; its cause is not established.
 Installed caches were not modified and active 1.4.8 loading is unverified.
 No system-wiki deployment or PKB migration/proposal was performed.
 
-## Claude Code collector injected-text fix — 18 November 2026
+## Claude Code collector fix and system-wiki proposal routing — 18 November 2026
 
 Proposed collector **1.1.0 → 1.1.1** and source KBs **1.4.8 → 1.4.9** are
-compatible fixes. The source inventory, both package manifests and the bundled
+compatible fixes. KBs 1.4.9 also carries `maintain-project-docs`
+**1.3.6 → 1.4.0**, described below. The source inventory, both package manifests and the bundled
 `setup-kbs` collector copies carry them; they are unpublished.
 
 A check of the installed collector found that Claude Code turns could include
@@ -171,5 +172,15 @@ turns, so the first sweep after installation would queue them again for
 Capture Review. The installed collector, still 1.1.0, was not changed.
 Publication, marketplace refresh and installation remain separate operations.
 
-The pending `maintain-project-docs` wording changes in the working tree are not
-part of this release.
+`maintain-project-docs` 1.4.0 adds a compatible workflow: shared KB-system
+explanations, plans, decisions, history and outcomes are now submitted to the
+system wiki through MCP Service's maintainer-reviewed proposal tools
+(`get_system_documentation_status`, `read_system_documentation_page`,
+`propose_system_documentation_write`), replacing the instruction that no
+proposal interface existed. Personal KB wikis receive only the owner's personal
+purposes, priorities, preferences and source evidence, and zero personal-KB
+proposals is a valid outcome. When material is transposed it keeps its full
+detail, and material no longer current moves to linked history pages. Release
+version numbers are not hardcoded in explanations. Submitting a proposal does
+not approve, export, release or publish it. Both package READMEs and the root
+README describe the new routing.

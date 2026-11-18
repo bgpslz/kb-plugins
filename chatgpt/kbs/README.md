@@ -38,10 +38,12 @@ compatible service; organisation changes and protected policy pages require huma
 review even during bootstrap. Older reviewed services remain supported. The skill
 never performs the controller's lifecycle transition.
 
-`maintain-project-docs` preserves repository documentation and proposes distilled
-architecture, decisions, status and plans to the configured owner PKB. It reports
-pending/failed updates and maintains authorised organisation documentation.
-Shared system-use guidance belongs in the system wiki, not Summerleaze OKB wiki. Source release, backend
+`maintain-project-docs` preserves repository documentation and proposes shared
+KB-system explanations, plans, decisions, development history and outcomes to
+the system wiki through MCP Service's maintainer-reviewed proposal tools. The
+owner PKB receives only personal purposes, priorities, preferences and original
+source evidence; organisation knowledge follows that wiki's review rules. It
+reports pending/failed updates. Source release, backend
 deployment and installed-client acceptance are separate milestones.
 
 When migrating a working local capture route, preserve and verify its replacement

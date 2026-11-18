@@ -209,9 +209,9 @@ ref verified. The release inventory now marks the source published.
 
 ## Installer tolerance of Codex config rewrites — 18 November 2026
 
-Proposed source KBs **1.4.9 → 1.4.10** is a compatible installer fix. The source
+Source KBs **1.4.9 → 1.4.10** is a compatible installer fix. The source
 inventory, both package manifests and the bundled `setup-kbs` installer copies
-carry it, and it is unpublished. The collector runtime is unchanged at 1.1.1,
+carry it. The collector runtime is unchanged at 1.1.1,
 so installed machines need no update.
 
 Trusting the capture hooks through Codex `/hooks` lets Codex rewrite
@@ -235,3 +235,10 @@ Validation:
 - **Dry run:** an isolated `--home` run against copies of the maintainer's real
   Codex config, Claude settings and collector configuration produced files
   identical apart from the temporary home path.
+
+Bruno authorised publication on 18 November. Implementation `8b0d94b` was pushed
+to `bgpslz/kb-plugins/main` and the remote ref verified. The release inventory
+now marks the source published. On the maintainer's Mac, Claude Code's
+`kbs@kb-plugins` updated from 1.4.9 to 1.4.10 and loads on restart. No workspace
+marketplace sync was attempted. The Codex workspace copy and the Claude Desktop
+and claude.ai copies were not checked. No collector reinstall was needed.
